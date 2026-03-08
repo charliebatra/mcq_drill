@@ -468,12 +468,52 @@ if "start_time" not in st.session_state:
     st.session_state.start_time = None
 if "generating" not in st.session_state:
     st.session_state.generating = False
+if "textbook_docs" not in st.session_state:
+    st.session_state.textbook_docs = None  # loaded lazily
 
 stats = st.session_state.stats
 
 
 def nav(page):
     st.session_state.page = page
+
+
+# ── Textbook storage ──────────────────────────────────────────────────────────
+def load_textbook_docs() -> list:
+    try:
+        sb = get_supabase()
+        r = sb.table("textbook_store").select("*").execute()
+        if r.data:
+            return r.data
+    except Exception:
+        pass
+    return []
+
+
+def save_textbook_doc(name: str, topic: str, b64_data: str) -> bool:
+    try:
+        sb = get_supabase()
+        sb.table("textbook_store").insert({
+            "id": str(uuid.uuid4()),
+            "name": name,
+            "topic": topic,
+            "data": b64_data,
+            "uploaded": datetime.now().isoformat(),
+        }).execute()
+        return True
+    except Exception as e:
+        st.error(f"Could not save document: {e}")
+        return False
+
+
+def delete_textbook_doc(doc_id: str) -> bool:
+    try:
+        sb = get_supabase()
+        sb.table("textbook_store").delete().eq("id", doc_id).execute()
+        return True
+    except Exception as e:
+        st.error(f"Could not delete: {e}")
+        return False
 
 
 # ── Sidebar ───────────────────────────────────────────────────────────────────
@@ -489,6 +529,8 @@ with st.sidebar:
         nav("home")
     if st.button("📊  Performance", use_container_width=True):
         nav("stats")
+    if st.button("📖  Textbook", use_container_width=True):
+        nav("textbook")
 
     # Quick topic stats in sidebar
     st.markdown("""
@@ -874,3 +916,178 @@ elif st.session_state.page == "stats":
         save_stats(st.session_state.stats)
         st.success("Stats reset.")
         st.rerun()
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PAGE: TEXTBOOK
+# ─────────────────────────────────────────────────────────────────────────────
+elif st.session_state.page == "textbook":
+    import base64
+
+    st.markdown("""
+    <h2 style="font-family:\'Instrument Serif\',serif;font-size:32px;font-weight:400;
+               letter-spacing:-0.5px;margin-bottom:6px;">Textbook Library</h2>
+    <p style="color:#6b7280;font-size:14px;margin-bottom:28px;">
+        Upload your revision PDFs and read them here. Stored securely in your database.
+    </p>
+    """, unsafe_allow_html=True)
+
+    # Load docs if not yet loaded
+    if st.session_state.textbook_docs is None:
+        with st.spinner("Loading library…"):
+            st.session_state.textbook_docs = load_textbook_docs()
+
+    docs = st.session_state.textbook_docs
+
+    # ── Upload section ────────────────────────────────────────────────────────
+    with st.expander("➕ Upload New Document"):
+        col_u1, col_u2 = st.columns(2)
+        with col_u1:
+            upload_name = st.text_input("Document title", placeholder="e.g. CV Physiology — Primary FRCA", key="tb_name")
+        with col_u2:
+            upload_topic = st.selectbox(
+                "Topic",
+                ["Physiology", "Pharmacology", "Physics & Clinical Measurement", "Clinical Anaesthesia", "Other"],
+                key="tb_topic"
+            )
+        uploaded_file = st.file_uploader("PDF file", type=["pdf"], key="tb_file")
+
+        if uploaded_file and upload_name.strip():
+            if st.button("Upload to Library", key="tb_upload_btn"):
+                with st.spinner("Uploading…"):
+                    raw = uploaded_file.read()
+                    b64 = base64.b64encode(raw).decode("utf-8")
+                    ok = save_textbook_doc(upload_name.strip(), upload_topic, b64)
+                    if ok:
+                        st.success(f"\'{upload_name}\' uploaded!")
+                        st.session_state.textbook_docs = None  # force reload
+                        st.rerun()
+
+    st.markdown("")
+
+    if not docs:
+        st.markdown("""
+        <div style="text-align:center;padding:60px 0;color:#6b7280;">
+            <p style="font-size:40px;margin-bottom:12px;">📄</p>
+            <p style="font-size:15px;">No documents yet — upload your first PDF above.</p>
+            <p style="font-size:13px;margin-top:8px;">Tip: Start with your CV Physiology, Pharmacology, and Physics guides.</p>
+        </div>
+        """, unsafe_allow_html=True)
+    else:
+        # Group by topic
+        from collections import defaultdict
+        by_topic = defaultdict(list)
+        for doc in docs:
+            by_topic[doc.get("topic", "Other")].append(doc)
+
+        # Check if a doc is open
+        if "open_doc_id" not in st.session_state:
+            st.session_state.open_doc_id = None
+
+        open_id = st.session_state.open_doc_id
+        open_doc = next((d for d in docs if d["id"] == open_id), None)
+
+        if open_doc:
+            # ── PDF Viewer ────────────────────────────────────────────────────
+            col_back, col_title = st.columns([1, 5])
+            with col_back:
+                if st.button("← Back", key="tb_back"):
+                    st.session_state.open_doc_id = None
+                    st.rerun()
+            with col_title:
+                topic_colour = TOPICS.get(open_doc.get("topic", ""), {}).get("colour", "#06b6d4")
+                st.markdown(f"""
+                <div style="display:flex;align-items:center;gap:12px;">
+                    <h3 style="font-family:\'Instrument Serif\',serif;font-size:24px;font-weight:400;margin:0;">
+                        {open_doc["name"]}
+                    </h3>
+                    <span style="background:rgba(6,182,212,0.1);color:{topic_colour};
+                                 border:1px solid {topic_colour}44;border-radius:20px;
+                                 padding:2px 10px;font-size:11px;font-family:\'DM Mono\',monospace;">
+                        {open_doc.get("topic","Other")}
+                    </span>
+                </div>
+                """, unsafe_allow_html=True)
+
+            st.markdown("")
+
+            # Render PDF inline
+            b64 = open_doc["data"]
+            pdf_display = f"""
+            <div style="border:1px solid #252a38;border-radius:12px;overflow:hidden;background:#13161e;">
+                <iframe
+                    src="data:application/pdf;base64,{b64}"
+                    width="100%"
+                    height="900px"
+                    style="border:none;display:block;"
+                    type="application/pdf"
+                ></iframe>
+            </div>
+            <p style="font-size:11px;color:#6b7280;margin-top:8px;font-family:\'DM Mono\',monospace;">
+                If the PDF doesn\'t display, try a different browser. Works best on Chrome/Edge desktop.
+                On mobile, use the download button below.
+            </p>
+            """
+            st.markdown(pdf_display, unsafe_allow_html=True)
+
+            # Download button as fallback
+            st.markdown("")
+            st.download_button(
+                label="⬇ Download PDF",
+                data=base64.b64decode(b64),
+                file_name=f"{open_doc['name'].replace(' ', '_')}.pdf",
+                mime="application/pdf",
+                key="tb_download"
+            )
+
+        else:
+            # ── Library grid ─────────────────────────────────────────────────
+            topic_order = list(TOPICS.keys()) + ["Other"]
+            for topic in topic_order:
+                topic_docs = by_topic.get(topic, [])
+                if not topic_docs:
+                    continue
+
+                colour = TOPICS.get(topic, {}).get("colour", "#6b7280")
+                emoji  = TOPICS.get(topic, {}).get("emoji", "📄")
+                st.markdown(f"""
+                <div style="display:flex;align-items:center;gap:10px;margin:24px 0 12px;">
+                    <div style="width:3px;height:24px;background:{colour};border-radius:2px;"></div>
+                    <h3 style="font-size:16px;font-weight:500;margin:0;">{emoji} {topic}</h3>
+                    <span style="font-family:\'DM Mono\',monospace;font-size:11px;color:#6b7280;">
+                        {len(topic_docs)} doc{"s" if len(topic_docs) != 1 else ""}
+                    </span>
+                </div>
+                """, unsafe_allow_html=True)
+
+                for doc in topic_docs:
+                    uploaded_str = ""
+                    try:
+                        uploaded_str = datetime.fromisoformat(doc.get("uploaded","")).strftime("%d %b %Y")
+                    except Exception:
+                        pass
+
+                    col_info, col_open, col_del = st.columns([5, 1, 1])
+                    with col_info:
+                        st.markdown(f"""
+                        <div style="background:#13161e;border:1px solid #252a38;border-radius:10px;
+                                    padding:14px 18px;border-left:3px solid {colour};">
+                            <p style="font-size:15px;font-weight:500;margin:0 0 4px;">{doc["name"]}</p>
+                            <p style="font-family:\'DM Mono\',monospace;font-size:11px;color:#6b7280;margin:0;">
+                                Uploaded {uploaded_str}
+                            </p>
+                        </div>
+                        """, unsafe_allow_html=True)
+                    with col_open:
+                        st.markdown("<div style=\"margin-top:8px;\">", unsafe_allow_html=True)
+                        if st.button("Open", key=f"open_{doc['id']}", use_container_width=True):
+                            st.session_state.open_doc_id = doc["id"]
+                            st.rerun()
+                        st.markdown("</div>", unsafe_allow_html=True)
+                    with col_del:
+                        st.markdown("<div style=\"margin-top:8px;\">", unsafe_allow_html=True)
+                        if st.button("🗑", key=f"del_tb_{doc['id']}", use_container_width=True):
+                            if delete_textbook_doc(doc["id"]):
+                                st.session_state.textbook_docs = None
+                                st.rerun()
+                        st.markdown("</div>", unsafe_allow_html=True)
