@@ -602,6 +602,10 @@ if "chat_messages" not in st.session_state:
     st.session_state.chat_messages = []  # per-question chat history
 if "chat_q_id" not in st.session_state:
     st.session_state.chat_q_id = None  # which question the chat is about
+if "fc_editor_open" not in st.session_state:
+    st.session_state.fc_editor_open = False  # whether flashcard editor is showing
+if "fc_editor_q_id" not in st.session_state:
+    st.session_state.fc_editor_q_id = None
 
 stats = st.session_state.stats
 
@@ -1170,20 +1174,83 @@ Answer the student's follow-up question concisely and clearly. Focus on exam-rel
                 if st.button("+ Flashcard", key=f"fc_{q_id}", use_container_width=True):
                     if st.session_state.fc_data is None:
                         st.session_state.fc_data = load_flashcard_data()
-                    fc_data = st.session_state.fc_data
-                    deck = fc_data["decks"][0]
-                    back_text = q["answer"] + ". " + q["options"][q["answer"]] + "\n\n" + q["explanation"]
-                    new_card = {
-                        "id": f"mcq_{uuid.uuid4().hex[:8]}",
-                        "front": q["question"],
-                        "back": back_text,
-                        "topic": q["topic"],
-                        "interval": 1, "repetitions": 0, "ease_factor": 2.5,
-                        "next_review": None, "last_grade": None,
-                    }
-                    deck["cards"].append(new_card)
-                    save_flashcard_data(fc_data)
-                    st.toast("Saved to flashcards!")
+                    # Toggle editor open, reset if switching question
+                    if st.session_state.fc_editor_q_id != q_id:
+                        st.session_state.fc_editor_open = True
+                        st.session_state.fc_editor_q_id = q_id
+                    else:
+                        st.session_state.fc_editor_open = not st.session_state.fc_editor_open
+                    st.rerun()
+
+            # ── Flashcard editor panel ──────────────────────────────────────
+            if st.session_state.fc_editor_open and st.session_state.fc_editor_q_id == q_id:
+                if st.session_state.fc_data is None:
+                    st.session_state.fc_data = load_flashcard_data()
+                fc_data = st.session_state.fc_data
+                decks = fc_data.get("decks", [])
+
+                default_back = q["answer"] + ". " + q["options"][q["answer"]] + "\n\n" + q["explanation"]
+
+                st.markdown("""
+                <div style="background:#161b27;border:1px solid #252e42;border-radius:8px;
+                            padding:20px 24px;margin:12px 0;">
+                    <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#4f9cf9;
+                              text-transform:uppercase;letter-spacing:0.08em;margin:0 0 14px;">
+                        New Flashcard
+                    </p>
+                """, unsafe_allow_html=True)
+
+                # Deck selector
+                if decks:
+                    deck_names = [d["name"] for d in decks]
+                    chosen_deck_name = st.selectbox(
+                        "Deck", deck_names,
+                        key=f"fc_deck_sel_{q_id}",
+                        label_visibility="collapsed"
+                    )
+                    chosen_deck = next((d for d in decks if d["name"] == chosen_deck_name), decks[0])
+                    dc = chosen_deck.get("colour", "#4f9cf9")
+                    st.markdown(f'<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:{dc};margin:0 0 14px;">{len(chosen_deck["cards"])} cards in deck</p>', unsafe_allow_html=True)
+                else:
+                    st.warning("No decks found — create one in the Flashcards section first.")
+                    chosen_deck = None
+
+                st.markdown('<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 6px;">Front</p>', unsafe_allow_html=True)
+                edited_front = st.text_area(
+                    "Front", value=q["question"], height=100,
+                    key=f"fc_front_{q_id}", label_visibility="collapsed"
+                )
+
+                st.markdown('<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:0.08em;margin:6px 0;">Back</p>', unsafe_allow_html=True)
+                edited_back = st.text_area(
+                    "Back", value=default_back, height=160,
+                    key=f"fc_back_{q_id}", label_visibility="collapsed"
+                )
+
+                st.markdown("</div>", unsafe_allow_html=True)
+
+                save_col, cancel_col = st.columns(2)
+                with save_col:
+                    if st.button("Save Card", key=f"fc_save_{q_id}", use_container_width=True,
+                                 disabled=(chosen_deck is None)):
+                        new_card = {
+                            "id": f"mcq_{uuid.uuid4().hex[:8]}",
+                            "front": edited_front.strip(),
+                            "back": edited_back.strip(),
+                            "topic": q["topic"],
+                            "interval": 1, "repetitions": 0, "ease_factor": 2.5,
+                            "next_review": None, "last_grade": None,
+                        }
+                        chosen_deck["cards"].append(new_card)
+                        save_flashcard_data(fc_data)
+                        st.session_state.fc_data = fc_data
+                        st.session_state.fc_editor_open = False
+                        st.toast(f"Saved to {chosen_deck['name']}!")
+                        st.rerun()
+                with cancel_col:
+                    if st.button("Cancel", key=f"fc_cancel_{q_id}", use_container_width=True):
+                        st.session_state.fc_editor_open = False
+                        st.rerun()
 
             st.markdown("")
 
