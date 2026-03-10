@@ -30,24 +30,24 @@ st.markdown("""
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;1,300&family=IBM+Plex+Sans:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap');
 
 :root {
-    --bg: #f7f6f3;
-    --surface: #ffffff;
-    --surface2: #f0ede8;
-    --border: #e2ddd8;
-    --border2: #ccc8c2;
-    --accent: #1a6b5c;
-    --accent-light: #e8f2f0;
-    --text: #1c1917;
-    --muted: #78716c;
-    --green: #166534;
-    --green-bg: #f0fdf4;
-    --green-border: #bbf7d0;
-    --red: #991b1b;
-    --red-bg: #fef2f2;
-    --red-border: #fecaca;
-    --amber: #92400e;
-    --amber-bg: #fffbeb;
-    --amber-border: #fde68a;
+    --bg: #0e1117;
+    --surface: #161b27;
+    --surface2: #1e2535;
+    --border: #252e42;
+    --border2: #2e3a52;
+    --accent: #4f9cf9;
+    --accent-light: #1a2a40;
+    --text: #e8edf5;
+    --muted: #6b7a99;
+    --green: #4ade80;
+    --green-bg: #0d2018;
+    --green-border: #166534;
+    --red: #f87171;
+    --red-bg: #1f0e0e;
+    --red-border: #7f1d1d;
+    --amber: #fbbf24;
+    --amber-bg: #1f1600;
+    --amber-border: #78350f;
 }
 
 html, body, [class*="css"] {
@@ -636,9 +636,9 @@ def delete_textbook_doc(doc_id: str) -> bool:
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 with st.sidebar:
     st.markdown("""
-    <div style="padding:24px 16px 20px;border-bottom:1px solid #e2ddd8;margin-bottom:8px;">
-        <p style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#78716c;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 6px;">Primary FRCA</p>
-        <h2 style="font-family:'Fraunces',serif;color:#1c1917;font-size:24px;font-weight:300;margin:0;letter-spacing:-0.02em;">MCQ Drill</h2>
+    <div style="padding:24px 16px 20px;border-bottom:1px solid #252e42;margin-bottom:8px;">
+        <p style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#6b7a99;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 6px;">Primary FRCA</p>
+        <h2 style="font-family:'Fraunces',serif;color:#e8edf5;font-size:24px;font-weight:300;margin:0;letter-spacing:-0.02em;">MCQ Drill</h2>
     </div>
     """, unsafe_allow_html=True)
 
@@ -651,7 +651,7 @@ with st.sidebar:
 
     # Quick topic stats in sidebar
     st.markdown("""
-    <p style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#78716c;
+    <p style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#6b7a99;
               text-transform:uppercase;letter-spacing:0.08em;margin:24px 16px 10px;padding:0;">Topic Scores</p>
     """, unsafe_allow_html=True)
 
@@ -662,10 +662,10 @@ with st.sidebar:
         st.markdown(f"""
         <div style="margin:0 16px 10px;">
             <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;">
-                <span style="color:#1c1917;font-size:12px;">{topic.split(' &')[0].split(' ')[0]}</span>
+                <span style="color:#e8edf5;font-size:12px;">{topic.split(' &')[0].split(' ')[0]}</span>
                 <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:{bar_colour};">{pct}%</span>
             </div>
-            <div style="background:#e2ddd8;border-radius:1px;height:2px;">
+            <div style="background:#252e42;border-radius:1px;height:2px;">
                 <div style="width:{pct}%;height:2px;background:{bar_colour};border-radius:1px;"></div>
             </div>
         </div>
@@ -677,10 +677,10 @@ with st.sidebar:
 # ─────────────────────────────────────────────────────────────────────────────
 if st.session_state.page == "home":
     st.markdown("""
-    <div style="padding-bottom:32px;border-bottom:1px solid #e2ddd8;margin-bottom:32px;">
-        <p style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#78716c;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 10px;">Primary FRCA</p>
-        <h1 style="font-family:'Fraunces',serif;font-size:42px;font-weight:300;letter-spacing:-0.03em;margin:0 0 10px;color:#1c1917;">MCQ Drill</h1>
-        <p style="color:#78716c;font-size:14px;margin:0;font-weight:300;">Timed SBA practice &middot; Fixed bank + AI-generated questions &middot; Per-topic tracking</p>
+    <div style="padding-bottom:32px;border-bottom:1px solid #252e42;margin-bottom:32px;">
+        <p style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#6b7a99;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 10px;">Primary FRCA</p>
+        <h1 style="font-family:'Fraunces',serif;font-size:42px;font-weight:300;letter-spacing:-0.03em;margin:0 0 10px;color:#e8edf5;">MCQ Drill</h1>
+        <p style="color:#6b7a99;font-size:14px;margin:0;font-weight:300;">Timed SBA practice &middot; Fixed bank + AI-generated questions &middot; Per-topic tracking</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -778,10 +778,10 @@ elif st.session_state.page == "quiz":
         result_bg = "#f0fdf4" if pct >= 60 else "#fef2f2"
         result_label = "Pass territory" if pct >= 60 else "Below pass mark"
         st.markdown(f"""
-        <div style="text-align:center;padding:48px 0 32px;border-bottom:1px solid #e2ddd8;margin-bottom:32px;">
-            <p style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#78716c;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 16px;">Session complete</p>
-            <h2 style="font-family:'Fraunces',serif;font-size:72px;font-weight:300;letter-spacing:-0.04em;margin:0 0 12px;color:#1c1917;line-height:1;">
-                {correct}<span style="font-size:32px;color:#78716c;">/{done}</span>
+        <div style="text-align:center;padding:48px 0 32px;border-bottom:1px solid #252e42;margin-bottom:32px;">
+            <p style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#6b7a99;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 16px;">Session complete</p>
+            <h2 style="font-family:'Fraunces',serif;font-size:72px;font-weight:300;letter-spacing:-0.04em;margin:0 0 12px;color:#e8edf5;line-height:1;">
+                {correct}<span style="font-size:32px;color:#6b7a99;">/{done}</span>
             </h2>
             <span style="display:inline-block;background:{result_bg};color:{result_colour};border-radius:4px;padding:4px 14px;font-size:13px;font-family:'IBM Plex Mono',monospace;letter-spacing:0.04em;">
                 {result_label} &mdash; {pct}%
@@ -947,9 +947,9 @@ elif st.session_state.page == "quiz":
 
             # Explanation
             st.markdown(f"""
-            <div style="background:#f7f6f3;border:1px solid #e2ddd8;border-left:3px solid #1a6b5c;
-                        border-radius:0 6px 6px 0;padding:20px 24px;margin:20px 0;font-size:14px;line-height:1.8;color:#1c1917;">
-                <p style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#78716c;
+            <div style="background:#0e1117;border:1px solid #252e42;border-left:3px solid #1a6b5c;
+                        border-radius:0 6px 6px 0;padding:20px 24px;margin:20px 0;font-size:14px;line-height:1.8;color:#e8edf5;">
+                <p style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#6b7a99;
                           text-transform:uppercase;letter-spacing:0.08em;margin:0 0 10px;">Explanation</p>
                 {q['explanation']}
             </div>
@@ -1002,15 +1002,15 @@ elif st.session_state.page == "stats":
         pct = int(t["correct"] / t["total"] * 100) if t["total"] else 0
         c = meta["colour"]
         st.markdown(f"""
-        <div style="background:#ffffff;border:1px solid #e2ddd8;border-radius:8px;
+        <div style="background:#161b27;border:1px solid #252e42;border-radius:8px;
                     padding:18px 22px;margin-bottom:8px;border-left:3px solid {c};">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-                <span style="font-size:14px;font-weight:500;color:#1c1917;">{topic}</span>
+                <span style="font-size:14px;font-weight:500;color:#e8edf5;">{topic}</span>
                 <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:{c};">
                     {t['correct']}/{t['total']} &middot; {pct}%
                 </span>
             </div>
-            <div style="background:#e2ddd8;border-radius:1px;height:3px;">
+            <div style="background:#252e42;border-radius:1px;height:3px;">
                 <div style="width:{pct}%;height:3px;background:{c};border-radius:1px;"></div>
             </div>
         </div>
@@ -1046,9 +1046,9 @@ elif st.session_state.page == "textbook":
     import base64
 
     st.markdown("""
-    <div style="padding-bottom:28px;border-bottom:1px solid #e2ddd8;margin-bottom:28px;">
-        <p style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#78716c;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 8px;">Reference</p>
-        <h2 style="font-family:'Fraunces',serif;font-size:36px;font-weight:300;letter-spacing:-0.03em;margin:0;color:#1c1917;">Textbook Library</h2>
+    <div style="padding-bottom:28px;border-bottom:1px solid #252e42;margin-bottom:28px;">
+        <p style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#6b7a99;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 8px;">Reference</p>
+        <h2 style="font-family:'Fraunces',serif;font-size:36px;font-weight:300;letter-spacing:-0.03em;margin:0;color:#e8edf5;">Textbook Library</h2>
     </div>
     """, unsafe_allow_html=True)
 
@@ -1159,10 +1159,10 @@ elif st.session_state.page == "textbook":
                 colour = TOPICS.get(topic, {}).get("colour", "#6b7280")
                 emoji  = TOPICS.get(topic, {}).get("emoji", "📄")
                 st.markdown(f"""
-                <div style="display:flex;align-items:center;gap:12px;margin:28px 0 12px;padding-bottom:10px;border-bottom:1px solid #e2ddd8;">
+                <div style="display:flex;align-items:center;gap:12px;margin:28px 0 12px;padding-bottom:10px;border-bottom:1px solid #252e42;">
                     <div style="width:2px;height:20px;background:{colour};border-radius:1px;"></div>
-                    <h3 style="font-size:13px;font-weight:500;margin:0;letter-spacing:0.01em;color:#1c1917;">{topic}</h3>
-                    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#78716c;">
+                    <h3 style="font-size:13px;font-weight:500;margin:0;letter-spacing:0.01em;color:#e8edf5;">{topic}</h3>
+                    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#6b7a99;">
                         {len(topic_docs)} doc{"s" if len(topic_docs) != 1 else ""}
                     </span>
                 </div>
@@ -1178,10 +1178,10 @@ elif st.session_state.page == "textbook":
                     col_info, col_open, col_del = st.columns([5, 1, 1])
                     with col_info:
                         st.markdown(f"""
-                        <div style="background:#ffffff;border:1px solid #e2ddd8;border-radius:6px;
+                        <div style="background:#161b27;border:1px solid #252e42;border-radius:6px;
                                     padding:14px 18px;border-left:3px solid {colour};">
-                            <p style="font-size:14px;font-weight:500;margin:0 0 4px;color:#1c1917;">{doc["name"]}</p>
-                            <p style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#78716c;margin:0;">
+                            <p style="font-size:14px;font-weight:500;margin:0 0 4px;color:#e8edf5;">{doc["name"]}</p>
+                            <p style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#6b7a99;margin:0;">
                                 Uploaded {uploaded_str}
                             </p>
                         </div>
