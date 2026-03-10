@@ -1346,46 +1346,109 @@ elif st.session_state.page == "textbook":
         open_doc = next((d for d in docs if d["id"] == open_id), None)
 
         if open_doc:
-            # ── PDF Viewer ────────────────────────────────────────────────────
-            col_back, col_title = st.columns([1, 5])
-            with col_back:
+            # ── Split-screen: PDF + Flashcard panel ───────────────────────────
+            topic_colour = TOPICS.get(open_doc.get("topic", ""), {}).get("colour", "#4f9cf9")
+
+            # Header bar
+            hc1, hc2, hc3 = st.columns([1, 4, 2])
+            with hc1:
                 if st.button("← Back", key="tb_back"):
                     st.session_state.open_doc_id = None
                     st.rerun()
-            with col_title:
-                topic_colour = TOPICS.get(open_doc.get("topic", ""), {}).get("colour", "#06b6d4")
+            with hc2:
                 st.markdown(f"""
-                <div style="display:flex;align-items:center;gap:12px;">
-                    <h3 style="font-family:\'Instrument Serif\',serif;font-size:24px;font-weight:400;margin:0;">
-                        {open_doc["name"]}
-                    </h3>
-                    <span style="background:rgba(6,182,212,0.1);color:{topic_colour};
-                                 border:1px solid {topic_colour}44;border-radius:20px;
-                                 padding:2px 10px;font-size:11px;font-family:\'DM Mono\',monospace;">
-                        {open_doc.get("topic","Other")}
-                    </span>
+                <div style="display:flex;align-items:center;gap:10px;padding:4px 0;">
+                    <div style="width:3px;height:20px;background:{topic_colour};border-radius:2px;flex-shrink:0;"></div>
+                    <span style="font-family:Fraunces,serif;font-size:20px;font-weight:300;color:#e8edf5;letter-spacing:-0.02em;">{open_doc["name"]}</span>
+                    <span style="font-family:IBM Plex Mono,monospace;font-size:10px;color:{topic_colour};border:1px solid {topic_colour}55;border-radius:3px;padding:2px 8px;flex-shrink:0;">{open_doc.get("topic","Other")}</span>
+                </div>
+                """, unsafe_allow_html=True)
+            with hc3:
+                b64 = open_doc["data"]
+                raw_bytes = base64.b64decode(b64)
+                st.download_button("Download PDF", data=raw_bytes,
+                    file_name=f"{open_doc['name'].replace(' ','_')}.pdf",
+                    mime="application/pdf", key="tb_dl", use_container_width=True)
+
+            st.markdown('<div style="border-bottom:1px solid #252e42;margin:12px 0 20px;"></div>', unsafe_allow_html=True)
+
+            # Load flashcard data
+            if st.session_state.fc_data is None:
+                st.session_state.fc_data = load_flashcard_data()
+            fc_data = st.session_state.fc_data
+            decks = fc_data.get("decks", [])
+
+            # Split layout: PDF left (60%), flashcard panel right (40%)
+            pdf_col, fc_col = st.columns([3, 2], gap="large")
+
+            with pdf_col:
+                try:
+                    from streamlit_pdf_viewer import pdf_viewer
+                    pdf_viewer(input=raw_bytes, width=700, height=860, key=f"pdf_{open_doc['id']}")
+                except ImportError:
+                    st.warning("PDF viewer not installed.")
+
+            with fc_col:
+                st.markdown("""
+                <div style="padding-bottom:12px;border-bottom:1px solid #252e42;margin-bottom:16px;">
+                    <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 4px;">Quick Add</p>
+                    <p style="font-family:Fraunces,serif;font-size:18px;font-weight:300;color:#e8edf5;margin:0;">Flashcard Panel</p>
                 </div>
                 """, unsafe_allow_html=True)
 
-            st.markdown("")
-            # Render PDF using streamlit-pdf-viewer
-            b64 = open_doc["data"]
-            raw_bytes = base64.b64decode(b64)
-            try:
-                from streamlit_pdf_viewer import pdf_viewer
-                pdf_viewer(input=raw_bytes, width=900, height=900, key=f"pdf_{open_doc['id']}")
-            except ImportError:
-                st.warning("PDF viewer component not installed. Use the download button below.")
+                if decks:
+                    deck_names = [d["name"] for d in decks]
+                    selected_deck_name = st.selectbox("Deck", deck_names, key="tb_fc_deck", label_visibility="collapsed")
+                    active_deck = next((d for d in decks if d["name"] == selected_deck_name), decks[0])
+                    deck_colour = active_deck.get("colour", "#4f9cf9")
+                    st.markdown(f"""<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:{deck_colour};margin:0 0 16px;">{len(active_deck["cards"])} cards &middot; {sum(1 for c in active_deck["cards"] if fc_is_due(c))} due today</p>""", unsafe_allow_html=True)
+                else:
+                    st.info("No decks yet — create one in Flashcards first.")
+                    active_deck = None
 
-            st.markdown("")
-            st.download_button(
-                label="⬇ Download / Open PDF",
-                data=raw_bytes,
-                file_name=f"{open_doc['name'].replace(' ', '_')}.pdf",
-                mime="application/pdf",
-                key="tb_download"
-            )
+                st.markdown('<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 6px;">Front</p>', unsafe_allow_html=True)
+                tb_front = st.text_area("Front", height=100,
+                    placeholder="Concept or question from what you just read...",
+                    key="tb_fc_front", label_visibility="collapsed")
 
+                st.markdown('<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:0.08em;margin:6px 0;">Back</p>', unsafe_allow_html=True)
+                tb_back = st.text_area("Back", height=120,
+                    placeholder="Answer, mechanism, or key values...",
+                    key="tb_fc_back", label_visibility="collapsed")
+
+                if st.button("Save Card", key="tb_fc_save", use_container_width=True,
+                             disabled=(not (tb_front.strip() and tb_back.strip()) or active_deck is None)):
+                    new_card = {
+                        "id": str(uuid.uuid4()),
+                        "front": tb_front.strip(),
+                        "back": tb_back.strip(),
+                        "topic": open_doc.get("topic", ""),
+                        "interval": 1, "repetitions": 0, "ease_factor": 2.5,
+                        "next_review": None, "last_grade": None,
+                    }
+                    active_deck["cards"].append(new_card)
+                    save_flashcard_data(fc_data)
+                    st.session_state.fc_data = fc_data
+                    st.toast("Card saved!")
+                    st.rerun()
+
+                st.markdown('<div style="border-top:1px solid #252e42;margin:20px 0 14px;"></div>', unsafe_allow_html=True)
+                st.markdown('<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 10px;">Cards in this deck</p>', unsafe_allow_html=True)
+
+                if active_deck and active_deck["cards"]:
+                    recent_cards = list(reversed(active_deck["cards"]))[:6]
+                    for rc in recent_cards:
+                        due_colour = "#4ade80" if fc_is_due(rc) else "#6b7a99"
+                        due_label  = "Due" if fc_is_due(rc) else fc_days_until(rc)
+                        front_preview = rc["front"][:55] + ("..." if len(rc["front"]) > 55 else "")
+                        st.markdown(f"""
+                        <div style="background:#161b27;border:1px solid #252e42;border-radius:6px;padding:10px 14px;margin-bottom:6px;">
+                            <p style="font-size:13px;color:#e8edf5;margin:0 0 4px;line-height:1.4;">{front_preview}</p>
+                            <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:{due_colour};margin:0;">{due_label}</p>
+                        </div>
+                        """, unsafe_allow_html=True)
+                else:
+                    st.markdown('<p style="font-size:13px;color:#6b7a99;text-align:center;padding:20px 0;">No cards yet in this deck.</p>', unsafe_allow_html=True)
         else:
             # ── Library grid ─────────────────────────────────────────────────
             topic_order = list(TOPICS.keys()) + ["Other"]
