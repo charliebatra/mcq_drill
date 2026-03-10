@@ -2,3 +2,4 @@ streamlit
 pandas
 supabase
 anthropic
+streamlit-pdf-viewer
