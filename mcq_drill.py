@@ -59,12 +59,19 @@ html, body, [class*="css"] {
 }
 
 /* ── Sidebar ── */
+/* ── Sidebar ── */
+section[data-testid="stSidebar"],
 [data-testid="stSidebar"] {
     background: var(--surface) !important;
     border-right: 1px solid var(--border) !important;
+    min-width: 240px !important;
 }
-[data-testid="stSidebar"] * { color: var(--text) !important; }
-[data-testid="stSidebar"] .stButton > button {
+[data-testid="stSidebar"] *,
+[data-testid="stSidebarContent"] * { color: var(--text) !important; }
+[data-testid="stSidebarCollapseButton"] { display: none !important; }
+[data-testid="collapsedControl"] { display: none !important; }
+[data-testid="stSidebar"] .stButton > button,
+[data-testid="stSidebarContent"] .stButton > button {
     background: transparent !important;
     border: none !important;
     border-radius: 6px !important;
@@ -74,8 +81,10 @@ html, body, [class*="css"] {
     text-align: left !important;
     padding: 8px 12px !important;
     justify-content: flex-start !important;
+    width: 100% !important;
 }
-[data-testid="stSidebar"] .stButton > button:hover {
+[data-testid="stSidebar"] .stButton > button:hover,
+[data-testid="stSidebarContent"] .stButton > button:hover {
     background: var(--surface2) !important;
     color: var(--text) !important;
 }
