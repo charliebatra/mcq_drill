@@ -27,76 +27,193 @@ st.set_page_config(
 # ── CSS ───────────────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;1,300&family=IBM+Plex+Sans:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap');
 
 :root {
-    --bg: #0d0f14; --surface: #13161e; --surface2: #1a1e28;
-    --border: #252a38; --accent: #06b6d4; --text: #e8eaf0;
-    --muted: #6b7280; --green: #34d399; --yellow: #fbbf24;
-    --red: #f87171; --orange: #fb923c; --indigo: #818cf8;
+    --bg: #f7f6f3;
+    --surface: #ffffff;
+    --surface2: #f0ede8;
+    --border: #e2ddd8;
+    --border2: #ccc8c2;
+    --accent: #1a6b5c;
+    --accent-light: #e8f2f0;
+    --text: #1c1917;
+    --muted: #78716c;
+    --green: #166534;
+    --green-bg: #f0fdf4;
+    --green-border: #bbf7d0;
+    --red: #991b1b;
+    --red-bg: #fef2f2;
+    --red-border: #fecaca;
+    --amber: #92400e;
+    --amber-bg: #fffbeb;
+    --amber-border: #fde68a;
 }
+
 html, body, [class*="css"] {
-    font-family: 'Outfit', sans-serif !important;
+    font-family: 'IBM Plex Sans', sans-serif !important;
     background: var(--bg) !important;
     color: var(--text) !important;
+    letter-spacing: -0.01em !important;
 }
+
+/* ── Sidebar ── */
 [data-testid="stSidebar"] {
-    background: #13161e !important;
+    background: var(--surface) !important;
     border-right: 1px solid var(--border) !important;
 }
 [data-testid="stSidebar"] * { color: var(--text) !important; }
-.stButton > button {
-    font-family: 'Outfit', sans-serif !important;
-    font-weight: 500 !important;
-    border-radius: 8px !important;
-    border: 1px solid var(--border) !important;
+[data-testid="stSidebar"] .stButton > button {
+    background: transparent !important;
+    border: none !important;
+    border-radius: 6px !important;
+    color: var(--muted) !important;
+    font-weight: 400 !important;
+    font-size: 13px !important;
+    text-align: left !important;
+    padding: 8px 12px !important;
+    justify-content: flex-start !important;
+}
+[data-testid="stSidebar"] .stButton > button:hover {
     background: var(--surface2) !important;
     color: var(--text) !important;
-    transition: all 0.15s !important;
 }
-.stButton > button:hover { border-color: var(--accent) !important; color: var(--accent) !important; }
-.stRadio label { color: var(--text) !important; font-size: 15px !important; }
-.stRadio > div { gap: 8px !important; }
-[data-testid="metric-container"] {
-    background: #13161e !important;
+
+/* ── Buttons ── */
+.stButton > button {
+    font-family: 'IBM Plex Sans', sans-serif !important;
+    font-weight: 500 !important;
+    font-size: 13px !important;
+    border-radius: 6px !important;
+    border: 1px solid var(--border2) !important;
+    background: var(--surface) !important;
+    color: var(--text) !important;
+    transition: all 0.12s ease !important;
+    letter-spacing: 0 !important;
+    padding: 8px 16px !important;
+}
+.stButton > button:hover {
+    background: var(--accent) !important;
+    border-color: var(--accent) !important;
+    color: white !important;
+}
+
+/* ── Inputs ── */
+.stTextArea textarea, .stTextInput input {
+    background: var(--surface) !important;
     border: 1px solid var(--border) !important;
-    border-radius: 12px !important;
-    padding: 16px !important;
+    border-radius: 6px !important;
+    color: var(--text) !important;
+    font-family: 'IBM Plex Sans', sans-serif !important;
+    font-size: 14px !important;
+}
+.stTextArea textarea:focus, .stTextInput input:focus {
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 0 3px rgba(26,107,92,0.08) !important;
+}
+.stTextArea label, .stTextInput label, .stFileUploader label {
+    color: var(--muted) !important;
+    font-size: 11px !important;
+    font-family: 'IBM Plex Mono', monospace !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.06em !important;
+}
+
+/* ── Radio ── */
+.stRadio label {
+    color: var(--text) !important;
+    font-size: 14px !important;
+    font-family: 'IBM Plex Sans', sans-serif !important;
+}
+.stRadio > div { gap: 6px !important; }
+
+/* ── Metrics ── */
+[data-testid="metric-container"] {
+    background: var(--surface) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 8px !important;
+    padding: 20px !important;
 }
 [data-testid="metric-container"] label {
     color: var(--muted) !important;
-    font-family: 'DM Mono', monospace !important;
-    font-size: 11px !important;
+    font-family: 'IBM Plex Mono', monospace !important;
+    font-size: 10px !important;
     text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
 }
 [data-testid="metric-container"] [data-testid="stMetricValue"] {
-    font-family: 'Instrument Serif', serif !important;
-    font-size: 32px !important;
+    font-family: 'Fraunces', serif !important;
+    font-size: 36px !important;
+    font-weight: 300 !important;
     color: var(--accent) !important;
 }
+
+/* ── Progress ── */
 .stProgress > div > div {
-    background: linear-gradient(90deg, #06b6d4, #818cf8) !important;
-    border-radius: 2px !important;
+    background: var(--accent) !important;
+    border-radius: 1px !important;
 }
-.stProgress > div { background: var(--border) !important; border-radius: 2px !important; height: 5px !important; }
+.stProgress > div {
+    background: var(--border) !important;
+    border-radius: 1px !important;
+    height: 3px !important;
+}
+
+/* ── Select ── */
 .stSelectbox > div > div {
-    background: var(--surface2) !important;
+    background: var(--surface) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 6px !important;
+    color: var(--text) !important;
+    font-size: 14px !important;
+}
+
+/* ── Expander ── */
+.streamlit-expanderHeader {
+    background: var(--surface) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 6px !important;
+    color: var(--text) !important;
+    font-size: 13px !important;
+}
+
+/* ── DataFrame ── */
+[data-testid="stDataFrame"] {
+    background: var(--surface) !important;
     border: 1px solid var(--border) !important;
     border-radius: 8px !important;
-    color: var(--text) !important;
 }
-[data-testid="stDataFrame"] { background: var(--surface) !important; }
+
+/* ── File uploader ── */
+[data-testid="stFileUploader"] {
+    background: var(--surface) !important;
+    border: 1.5px dashed var(--border2) !important;
+    border-radius: 8px !important;
+}
+
+/* ── Alerts ── */
+.stAlert {
+    border-radius: 6px !important;
+    border: none !important;
+    font-size: 13px !important;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+hr { border-color: var(--border) !important; margin: 24px 0 !important; }
 #MainMenu, footer, header { visibility: hidden; }
-hr { border-color: var(--border) !important; }
 </style>
 """, unsafe_allow_html=True)
 
 # ── Topic colours ─────────────────────────────────────────────────────────────
 TOPICS = {
-    "Physiology":                   {"colour": "#06b6d4", "emoji": "🫀"},
-    "Pharmacology":                 {"colour": "#818cf8", "emoji": "💊"},
-    "Physics & Clinical Measurement": {"colour": "#34d399", "emoji": "⚗️"},
-    "Clinical Anaesthesia":         {"colour": "#fbbf24", "emoji": "🩺"},
+    "Physiology":                   {"colour": "#1a6b5c", "emoji": ""},
+    "Pharmacology":                 {"colour": "#5046a0", "emoji": ""},
+    "Physics & Clinical Measurement": {"colour": "#0f5f8a", "emoji": ""},
+    "Clinical Anaesthesia":         {"colour": "#92400e", "emoji": ""},
 }
 
 # ── Fixed question bank ───────────────────────────────────────────────────────
@@ -519,23 +636,23 @@ def delete_textbook_doc(doc_id: str) -> bool:
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 with st.sidebar:
     st.markdown("""
-    <div style="padding-bottom:20px;border-bottom:1px solid #252a38;margin-bottom:16px;">
-        <h2 style="font-family:'Instrument Serif',serif;color:#06b6d4;font-size:26px;margin:0;">FRCA Drill</h2>
-        <p style="font-family:'DM Mono',monospace;font-size:11px;color:#6b7280;margin:4px 0 0;">Primary MCQ Practice</p>
+    <div style="padding:24px 16px 20px;border-bottom:1px solid #e2ddd8;margin-bottom:8px;">
+        <p style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#78716c;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 6px;">Primary FRCA</p>
+        <h2 style="font-family:'Fraunces',serif;color:#1c1917;font-size:24px;font-weight:300;margin:0;letter-spacing:-0.02em;">MCQ Drill</h2>
     </div>
     """, unsafe_allow_html=True)
 
-    if st.button("🏠  Home", use_container_width=True):
+    if st.button("Home", use_container_width=True):
         nav("home")
-    if st.button("📊  Performance", use_container_width=True):
+    if st.button("Performance", use_container_width=True):
         nav("stats")
-    if st.button("📖  Textbook", use_container_width=True):
+    if st.button("Textbook", use_container_width=True):
         nav("textbook")
 
     # Quick topic stats in sidebar
     st.markdown("""
-    <p style="font-family:'DM Mono',monospace;font-size:10px;color:#6b7280;
-              text-transform:uppercase;letter-spacing:1px;margin:20px 0 10px;">Topic Scores</p>
+    <p style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#78716c;
+              text-transform:uppercase;letter-spacing:0.08em;margin:24px 16px 10px;padding:0;">Topic Scores</p>
     """, unsafe_allow_html=True)
 
     for topic, meta in TOPICS.items():
@@ -543,13 +660,13 @@ with st.sidebar:
         pct = int(t["correct"] / t["total"] * 100) if t["total"] else 0
         bar_colour = meta["colour"]
         st.markdown(f"""
-        <div style="margin-bottom:10px;">
-            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px;">
-                <span style="color:#e8eaf0;">{meta['emoji']} {topic.split(' &')[0].split(' ')[0]}</span>
-                <span style="font-family:'DM Mono',monospace;color:{bar_colour};">{pct}%</span>
+        <div style="margin:0 16px 10px;">
+            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;">
+                <span style="color:#1c1917;font-size:12px;">{topic.split(' &')[0].split(' ')[0]}</span>
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:{bar_colour};">{pct}%</span>
             </div>
-            <div style="background:#252a38;border-radius:2px;height:4px;">
-                <div style="width:{pct}%;height:4px;background:{bar_colour};border-radius:2px;"></div>
+            <div style="background:#e2ddd8;border-radius:1px;height:2px;">
+                <div style="width:{pct}%;height:2px;background:{bar_colour};border-radius:1px;"></div>
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -560,11 +677,11 @@ with st.sidebar:
 # ─────────────────────────────────────────────────────────────────────────────
 if st.session_state.page == "home":
     st.markdown("""
-    <h2 style="font-family:'Instrument Serif',serif;font-size:36px;font-weight:400;
-               letter-spacing:-0.5px;margin-bottom:6px;">Primary FRCA MCQ Drill</h2>
-    <p style="color:#6b7280;font-size:15px;margin-bottom:36px;">
-        Timed SBA practice · Fixed bank + AI-generated questions · Per-topic tracking
-    </p>
+    <div style="padding-bottom:32px;border-bottom:1px solid #e2ddd8;margin-bottom:32px;">
+        <p style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#78716c;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 10px;">Primary FRCA</p>
+        <h1 style="font-family:'Fraunces',serif;font-size:42px;font-weight:300;letter-spacing:-0.03em;margin:0 0 10px;color:#1c1917;">MCQ Drill</h1>
+        <p style="color:#78716c;font-size:14px;margin:0;font-weight:300;">Timed SBA practice &middot; Fixed bank + AI-generated questions &middot; Per-topic tracking</p>
+    </div>
     """, unsafe_allow_html=True)
 
     # Config columns
@@ -657,14 +774,18 @@ elif st.session_state.page == "quiz":
         correct = sum(1 for r in session["results"] if r["correct"])
         pct = int(correct / done * 100)
 
+        result_colour = "#166534" if pct >= 60 else "#991b1b"
+        result_bg = "#f0fdf4" if pct >= 60 else "#fef2f2"
+        result_label = "Pass territory" if pct >= 60 else "Below pass mark"
         st.markdown(f"""
-        <div style="text-align:center;padding:40px 0 20px;">
-            <h2 style="font-family:'Instrument Serif',serif;font-size:42px;margin-bottom:8px;">
-                {correct}/{done}
+        <div style="text-align:center;padding:48px 0 32px;border-bottom:1px solid #e2ddd8;margin-bottom:32px;">
+            <p style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#78716c;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 16px;">Session complete</p>
+            <h2 style="font-family:'Fraunces',serif;font-size:72px;font-weight:300;letter-spacing:-0.04em;margin:0 0 12px;color:#1c1917;line-height:1;">
+                {correct}<span style="font-size:32px;color:#78716c;">/{done}</span>
             </h2>
-            <p style="font-size:20px;color:{'#34d399' if pct >= 60 else '#f87171'};">
-                {'✅ Pass territory' if pct >= 60 else '❌ Below pass mark'} — {pct}%
-            </p>
+            <span style="display:inline-block;background:{result_bg};color:{result_colour};border-radius:4px;padding:4px 14px;font-size:13px;font-family:'IBM Plex Mono',monospace;letter-spacing:0.04em;">
+                {result_label} &mdash; {pct}%
+            </span>
         </div>
         """, unsafe_allow_html=True)
 
@@ -708,11 +829,11 @@ elif st.session_state.page == "quiz":
         st.markdown("")
         c1, c2 = st.columns(2)
         with c1:
-            if st.button("🏠 Home", use_container_width=True):
+            if st.button("Home", use_container_width=True):
                 nav("home")
                 st.rerun()
         with c2:
-            if st.button("📊 View Stats", use_container_width=True):
+            if st.button("View Stats", use_container_width=True):
                 nav("stats")
                 st.rerun()
 
@@ -826,10 +947,10 @@ elif st.session_state.page == "quiz":
 
             # Explanation
             st.markdown(f"""
-            <div style="background:#1a1e28;border-left:3px solid #06b6d4;padding:16px 20px;
-                        border-radius:0 10px 10px 0;margin:16px 0;font-size:14px;line-height:1.7;">
-                <p style="font-family:'DM Mono',monospace;font-size:10px;color:#6b7280;
-                          text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Explanation</p>
+            <div style="background:#f7f6f3;border:1px solid #e2ddd8;border-left:3px solid #1a6b5c;
+                        border-radius:0 6px 6px 0;padding:20px 24px;margin:20px 0;font-size:14px;line-height:1.8;color:#1c1917;">
+                <p style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#78716c;
+                          text-transform:uppercase;letter-spacing:0.08em;margin:0 0 10px;">Explanation</p>
                 {q['explanation']}
             </div>
             """, unsafe_allow_html=True)
@@ -881,16 +1002,16 @@ elif st.session_state.page == "stats":
         pct = int(t["correct"] / t["total"] * 100) if t["total"] else 0
         c = meta["colour"]
         st.markdown(f"""
-        <div style="background:#13161e;border:1px solid #252a38;border-radius:12px;
-                    padding:16px 20px;margin-bottom:10px;border-left:4px solid {c};">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-                <span style="font-size:15px;font-weight:500;">{meta['emoji']} {topic}</span>
-                <span style="font-family:'DM Mono',monospace;font-size:13px;color:{c};">
-                    {t['correct']}/{t['total']} · {pct}%
+        <div style="background:#ffffff;border:1px solid #e2ddd8;border-radius:8px;
+                    padding:18px 22px;margin-bottom:8px;border-left:3px solid {c};">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                <span style="font-size:14px;font-weight:500;color:#1c1917;">{topic}</span>
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:{c};">
+                    {t['correct']}/{t['total']} &middot; {pct}%
                 </span>
             </div>
-            <div style="background:#252a38;border-radius:3px;height:6px;">
-                <div style="width:{pct}%;height:6px;background:{c};border-radius:3px;"></div>
+            <div style="background:#e2ddd8;border-radius:1px;height:3px;">
+                <div style="width:{pct}%;height:3px;background:{c};border-radius:1px;"></div>
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -925,11 +1046,10 @@ elif st.session_state.page == "textbook":
     import base64
 
     st.markdown("""
-    <h2 style="font-family:\'Instrument Serif\',serif;font-size:32px;font-weight:400;
-               letter-spacing:-0.5px;margin-bottom:6px;">Textbook Library</h2>
-    <p style="color:#6b7280;font-size:14px;margin-bottom:28px;">
-        Upload your revision PDFs and read them here. Stored securely in your database.
-    </p>
+    <div style="padding-bottom:28px;border-bottom:1px solid #e2ddd8;margin-bottom:28px;">
+        <p style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#78716c;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 8px;">Reference</p>
+        <h2 style="font-family:'Fraunces',serif;font-size:36px;font-weight:300;letter-spacing:-0.03em;margin:0;color:#1c1917;">Textbook Library</h2>
+    </div>
     """, unsafe_allow_html=True)
 
     # Load docs if not yet loaded
@@ -1039,10 +1159,10 @@ elif st.session_state.page == "textbook":
                 colour = TOPICS.get(topic, {}).get("colour", "#6b7280")
                 emoji  = TOPICS.get(topic, {}).get("emoji", "📄")
                 st.markdown(f"""
-                <div style="display:flex;align-items:center;gap:10px;margin:24px 0 12px;">
-                    <div style="width:3px;height:24px;background:{colour};border-radius:2px;"></div>
-                    <h3 style="font-size:16px;font-weight:500;margin:0;">{emoji} {topic}</h3>
-                    <span style="font-family:\'DM Mono\',monospace;font-size:11px;color:#6b7280;">
+                <div style="display:flex;align-items:center;gap:12px;margin:28px 0 12px;padding-bottom:10px;border-bottom:1px solid #e2ddd8;">
+                    <div style="width:2px;height:20px;background:{colour};border-radius:1px;"></div>
+                    <h3 style="font-size:13px;font-weight:500;margin:0;letter-spacing:0.01em;color:#1c1917;">{topic}</h3>
+                    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#78716c;">
                         {len(topic_docs)} doc{"s" if len(topic_docs) != 1 else ""}
                     </span>
                 </div>
@@ -1058,10 +1178,10 @@ elif st.session_state.page == "textbook":
                     col_info, col_open, col_del = st.columns([5, 1, 1])
                     with col_info:
                         st.markdown(f"""
-                        <div style="background:#13161e;border:1px solid #252a38;border-radius:10px;
+                        <div style="background:#ffffff;border:1px solid #e2ddd8;border-radius:6px;
                                     padding:14px 18px;border-left:3px solid {colour};">
-                            <p style="font-size:15px;font-weight:500;margin:0 0 4px;">{doc["name"]}</p>
-                            <p style="font-family:\'DM Mono\',monospace;font-size:11px;color:#6b7280;margin:0;">
+                            <p style="font-size:14px;font-weight:500;margin:0 0 4px;color:#1c1917;">{doc["name"]}</p>
+                            <p style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#78716c;margin:0;">
                                 Uploaded {uploaded_str}
                             </p>
                         </div>
