@@ -14,8 +14,9 @@ import json
 import uuid
 import random
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 from anthropic import Anthropic
+import math
 
 st.set_page_config(
     page_title="FRCA MCQ Drill",
@@ -586,7 +587,21 @@ if "start_time" not in st.session_state:
 if "generating" not in st.session_state:
     st.session_state.generating = False
 if "textbook_docs" not in st.session_state:
-    st.session_state.textbook_docs = None  # loaded lazily
+    st.session_state.textbook_docs = None
+if "fc_data" not in st.session_state:
+    st.session_state.fc_data = None  # loaded lazily
+if "fc_study_queue" not in st.session_state:
+    st.session_state.fc_study_queue = []
+if "fc_study_idx" not in st.session_state:
+    st.session_state.fc_study_idx = 0
+if "fc_flipped" not in st.session_state:
+    st.session_state.fc_flipped = False
+if "fc_session_stats" not in st.session_state:
+    st.session_state.fc_session_stats = {"again": 0, "hard": 0, "good": 0, "easy": 0}
+if "chat_messages" not in st.session_state:
+    st.session_state.chat_messages = []  # per-question chat history
+if "chat_q_id" not in st.session_state:
+    st.session_state.chat_q_id = None  # which question the chat is about
 
 stats = st.session_state.stats
 
@@ -632,13 +647,96 @@ def delete_textbook_doc(doc_id: str) -> bool:
         st.error(f"Could not delete: {e}")
         return False
 
+# ── SM-2 Spaced Repetition ────────────────────────────────────────────────────
+def sm2(card: dict, grade: int) -> dict:
+    """grade: 0=Again, 1=Hard, 2=Good, 3=Easy"""
+    interval    = card.get("interval", 1)
+    repetitions = card.get("repetitions", 0)
+    ease_factor = card.get("ease_factor", 2.5)
+    if grade == 0:
+        interval = 1; repetitions = 0
+    else:
+        if repetitions == 0:   interval = 1
+        elif repetitions == 1: interval = 6
+        else:                  interval = math.ceil(interval * ease_factor)
+        repetitions += 1
+    ef = ease_factor + (0.1 - (3 - grade) * (0.08 + (3 - grade) * 0.02))
+    ease_factor = max(1.3, round(ef, 3))
+    next_review = (datetime.now() + timedelta(days=interval)).isoformat()
+    return {**card, "interval": interval, "repetitions": repetitions,
+            "ease_factor": ease_factor, "next_review": next_review, "last_grade": grade}
+
+def fc_is_due(card: dict) -> bool:
+    if not card.get("next_review"): return True
+    return datetime.fromisoformat(card["next_review"]) <= datetime.now()
+
+def fc_days_until(card: dict) -> str:
+    if not card.get("next_review"): return "Now"
+    delta = datetime.fromisoformat(card["next_review"]) - datetime.now()
+    d = delta.days
+    return "Now" if d <= 0 else ("Tomorrow" if d == 1 else f"{d}d")
+
+# ── Flashcard Supabase ────────────────────────────────────────────────────────
+def load_flashcard_data() -> dict:
+    try:
+        sb = get_supabase()
+        r = sb.table("frca_flashcards").select("data").eq("id", 1).execute()
+        if r.data and r.data[0]["data"]:
+            d = r.data[0]["data"]
+            return d if isinstance(d, dict) else json.loads(d)
+    except Exception:
+        pass
+    return {"decks": [{"id": "default", "name": "FRCA Revision", "colour": "#4f9cf9", "cards": []}]}
+
+def save_flashcard_data(fc_data: dict):
+    try:
+        sb = get_supabase()
+        sb.table("frca_flashcards").upsert({"id": 1, "data": fc_data}).execute()
+    except Exception as e:
+        st.error(f"Could not save flashcards: {e}")
+
+# ── Session Resume Supabase ───────────────────────────────────────────────────
+def save_session_state(session: dict):
+    try:
+        sb = get_supabase()
+        payload = {
+            "id": 1,
+            "session": json.dumps(session),
+            "saved_at": datetime.now().isoformat(),
+        }
+        sb.table("session_resume").upsert(payload).execute()
+    except Exception:
+        pass
+
+def load_saved_session() -> dict | None:
+    try:
+        sb = get_supabase()
+        r = sb.table("session_resume").select("*").eq("id", 1).execute()
+        if r.data and r.data[0].get("session"):
+            s = r.data[0]["session"]
+            parsed = json.loads(s) if isinstance(s, str) else s
+            # Only resume if incomplete
+            if parsed and len(parsed.get("results", [])) < parsed.get("n_target", 0):
+                return parsed
+    except Exception:
+        pass
+    return None
+
+def clear_saved_session():
+    try:
+        sb = get_supabase()
+        sb.table("session_resume").upsert({"id": 1, "session": None, "saved_at": None}).execute()
+    except Exception:
+        pass
+
+
 
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 with st.sidebar:
     st.markdown("""
     <div style="padding:24px 16px 20px;border-bottom:1px solid #252e42;margin-bottom:8px;">
-        <p style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#6b7a99;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 6px;">Primary FRCA</p>
-        <h2 style="font-family:'Fraunces',serif;color:#e8edf5;font-size:24px;font-weight:300;margin:0;letter-spacing:-0.02em;">MCQ Drill</h2>
+        <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 6px;">Primary FRCA</p>
+        <h2 style="font-family:Fraunces,serif;color:#e8edf5;font-size:24px;font-weight:300;margin:0;letter-spacing:-0.02em;">MCQ Drill</h2>
     </div>
     """, unsafe_allow_html=True)
 
@@ -648,10 +746,12 @@ with st.sidebar:
         nav("stats")
     if st.button("Textbook", use_container_width=True):
         nav("textbook")
+    if st.button("Flashcards", use_container_width=True):
+        nav("flashcards")
 
     # Quick topic stats in sidebar
     st.markdown("""
-    <p style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#6b7a99;
+    <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;
               text-transform:uppercase;letter-spacing:0.08em;margin:24px 16px 10px;padding:0;">Topic Scores</p>
     """, unsafe_allow_html=True)
 
@@ -663,7 +763,7 @@ with st.sidebar:
         <div style="margin:0 16px 10px;">
             <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;">
                 <span style="color:#e8edf5;font-size:12px;">{topic.split(' &')[0].split(' ')[0]}</span>
-                <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:{bar_colour};">{pct}%</span>
+                <span style="font-family:IBM Plex Mono,monospace;font-size:11px;color:{bar_colour};">{pct}%</span>
             </div>
             <div style="background:#252e42;border-radius:1px;height:2px;">
                 <div style="width:{pct}%;height:2px;background:{bar_colour};border-radius:1px;"></div>
@@ -678,11 +778,53 @@ with st.sidebar:
 if st.session_state.page == "home":
     st.markdown("""
     <div style="padding-bottom:32px;border-bottom:1px solid #252e42;margin-bottom:32px;">
-        <p style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#6b7a99;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 10px;">Primary FRCA</p>
-        <h1 style="font-family:'Fraunces',serif;font-size:42px;font-weight:300;letter-spacing:-0.03em;margin:0 0 10px;color:#e8edf5;">MCQ Drill</h1>
+        <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 10px;">Primary FRCA</p>
+        <h1 style="font-family:Fraunces,serif;font-size:42px;font-weight:300;letter-spacing:-0.03em;margin:0 0 10px;color:#e8edf5;">MCQ Drill</h1>
         <p style="color:#6b7a99;font-size:14px;margin:0;font-weight:300;">Timed SBA practice &middot; Fixed bank + AI-generated questions &middot; Per-topic tracking</p>
     </div>
     """, unsafe_allow_html=True)
+
+    # ── Resume banner ──────────────────────────────────────────────────────────
+    if "resume_checked" not in st.session_state:
+        st.session_state.resume_checked = False
+    if not st.session_state.resume_checked:
+        saved = load_saved_session()
+        st.session_state.resume_checked = True
+        if saved:
+            st.session_state._saved_session = saved
+    if hasattr(st.session_state, "_saved_session") and st.session_state._saved_session:
+        saved = st.session_state._saved_session
+        done_n = len(saved.get("results", []))
+        total_n = saved.get("n_target", 0)
+        topic_label = saved.get("topic_filter") or "All Topics"
+        st.markdown(f"""
+        <div style="background:#161b27;border:1px solid #2e3a52;border-left:3px solid #4f9cf9;
+                    border-radius:6px;padding:16px 20px;margin-bottom:24px;display:flex;
+                    align-items:center;justify-content:space-between;">
+            <div>
+                <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;
+                          text-transform:uppercase;letter-spacing:0.08em;margin:0 0 4px;">Incomplete session</p>
+                <p style="font-size:14px;color:#e8edf5;margin:0;">{topic_label} &mdash; {done_n}/{total_n} completed</p>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        rc1, rc2 = st.columns(2)
+        with rc1:
+            if st.button("Resume session →", use_container_width=True, key="resume_btn"):
+                st.session_state.session = saved
+                st.session_state.current_q = None
+                st.session_state.selected_answer = None
+                st.session_state.submitted = False
+                st.session_state.chat_messages = []
+                st.session_state._saved_session = None
+                nav("quiz")
+                st.rerun()
+        with rc2:
+            if st.button("Discard", use_container_width=True, key="discard_btn"):
+                clear_saved_session()
+                st.session_state._saved_session = None
+                st.rerun()
+        st.markdown("---")
 
     # Config columns
     col1, col2, col3 = st.columns(3)
@@ -779,11 +921,11 @@ elif st.session_state.page == "quiz":
         result_label = "Pass territory" if pct >= 60 else "Below pass mark"
         st.markdown(f"""
         <div style="text-align:center;padding:48px 0 32px;border-bottom:1px solid #252e42;margin-bottom:32px;">
-            <p style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#6b7a99;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 16px;">Session complete</p>
-            <h2 style="font-family:'Fraunces',serif;font-size:72px;font-weight:300;letter-spacing:-0.04em;margin:0 0 12px;color:#e8edf5;line-height:1;">
+            <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 16px;">Session complete</p>
+            <h2 style="font-family:Fraunces,serif;font-size:72px;font-weight:300;letter-spacing:-0.04em;margin:0 0 12px;color:#e8edf5;line-height:1;">
                 {correct}<span style="font-size:32px;color:#6b7a99;">/{done}</span>
             </h2>
-            <span style="display:inline-block;background:{result_bg};color:{result_colour};border-radius:4px;padding:4px 14px;font-size:13px;font-family:'IBM Plex Mono',monospace;letter-spacing:0.04em;">
+            <span style="display:inline-block;background:{result_bg};color:{result_colour};border-radius:4px;padding:4px 14px;font-size:13px;font-family:IBM Plex Mono,monospace;letter-spacing:0.04em;">
                 {result_label} &mdash; {pct}%
             </span>
         </div>
@@ -808,6 +950,7 @@ elif st.session_state.page == "quiz":
                 stats["topic_totals"][t]["correct"] += 1
 
         save_stats(stats)
+        clear_saved_session()
 
         # Per-question review
         st.markdown("#### Answer Review")
@@ -893,7 +1036,7 @@ elif st.session_state.page == "quiz":
         st.markdown(f"""
         <div style="background:#13161e;border:1px solid #252a38;border-radius:14px;
                     padding:28px 32px;margin:16px 0 20px;border-left:4px solid {colour};">
-            <p style="font-size:18px;font-family:'Outfit',sans-serif;font-weight:500;
+            <p style="font-size:18px;font-family:Outfit,sans-serif;font-weight:500;
                       line-height:1.6;margin:0;">{q['question']}</p>
         </div>
         """, unsafe_allow_html=True)
@@ -949,15 +1092,105 @@ elif st.session_state.page == "quiz":
             st.markdown(f"""
             <div style="background:#0e1117;border:1px solid #252e42;border-left:3px solid #1a6b5c;
                         border-radius:0 6px 6px 0;padding:20px 24px;margin:20px 0;font-size:14px;line-height:1.8;color:#e8edf5;">
-                <p style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#6b7a99;
+                <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;
                           text-transform:uppercase;letter-spacing:0.08em;margin:0 0 10px;">Explanation</p>
                 {q['explanation']}
             </div>
             """, unsafe_allow_html=True)
 
+            # ── Post-answer chat ────────────────────────────────────────────
+            st.markdown("""
+            <div style="margin:24px 0 8px;padding-top:20px;border-top:1px solid #252e42;">
+                <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;
+                          text-transform:uppercase;letter-spacing:0.08em;margin:0 0 4px;">Ask a follow-up</p>
+                <p style="font-size:12px;color:#6b7a99;margin:0 0 12px;">Ask Claude anything about this question or topic.</p>
+            </div>
+            """, unsafe_allow_html=True)
+
+            # Reset chat if on a new question
+            q_id = q.get("id", q["question"][:30])
+            if st.session_state.chat_q_id != q_id:
+                st.session_state.chat_messages = []
+                st.session_state.chat_q_id = q_id
+
+            # Show chat history
+            for msg in st.session_state.chat_messages:
+                role_label = "You" if msg["role"] == "user" else "Claude"
+                role_colour = "#e8edf5" if msg["role"] == "user" else "#4f9cf9"
+                bg_colour = "#1e2535" if msg["role"] == "user" else "#161b27"
+                st.markdown(f"""
+                <div style="background:{bg_colour};border:1px solid #252e42;border-radius:6px;
+                            padding:12px 16px;margin:6px 0;">
+                    <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:{role_colour};
+                              margin:0 0 6px;text-transform:uppercase;letter-spacing:0.06em;">{role_label}</p>
+                    <p style="font-size:14px;color:#e8edf5;margin:0;line-height:1.6;">{msg["content"]}</p>
+                </div>
+                """, unsafe_allow_html=True)
+
+            chat_input = st.text_input(
+                "Your question",
+                placeholder="e.g. Why does alkalosis shift the curve leftward?",
+                key=f"chat_input_{q_id}",
+                label_visibility="collapsed"
+            )
+            chat_col1, chat_col2 = st.columns([3, 1])
+            with chat_col1:
+                if st.button("Ask Claude", key=f"ask_{q_id}", use_container_width=True):
+                    if chat_input.strip():
+                        st.session_state.chat_messages.append({"role": "user", "content": chat_input.strip()})
+                        # Build context for Claude
+                        ctx = f"""You are a Primary FRCA exam tutor. The student just answered this MCQ:
+
+Question: {q["question"]}
+Options: {json.dumps(q["options"])}
+Correct answer: {q["answer"]}
+Student's answer: {sel} ({"correct" if correct else "incorrect"})
+Explanation: {q["explanation"]}
+
+Answer the student's follow-up question concisely and clearly. Focus on exam-relevant detail. Be direct."""
+                        msgs = [{"role": "system", "content": ctx}] if False else []
+                        history = [{"role": m["role"], "content": m["content"]}
+                                   for m in st.session_state.chat_messages]
+                        try:
+                            client = Anthropic(api_key=st.secrets["ANTHROPIC_API_KEY"])
+                            resp = client.messages.create(
+                                model="claude-sonnet-4-20250514",
+                                max_tokens=400,
+                                system=ctx,
+                                messages=history,
+                            )
+                            reply = resp.content[0].text.strip()
+                            st.session_state.chat_messages.append({"role": "assistant", "content": reply})
+                        except Exception as e:
+                            st.session_state.chat_messages.append({"role": "assistant", "content": f"Error: {e}"})
+                        st.rerun()
+
+            # ── Save as flashcard ───────────────────────────────────────────
+            with chat_col2:
+                if st.button("+ Flashcard", key=f"fc_{q_id}", use_container_width=True):
+                    if st.session_state.fc_data is None:
+                        st.session_state.fc_data = load_flashcard_data()
+                    fc_data = st.session_state.fc_data
+                    deck = fc_data["decks"][0]
+                    back_text = q["answer"] + ". " + q["options"][q["answer"]] + "\n\n" + q["explanation"]
+                    new_card = {
+                        "id": f"mcq_{uuid.uuid4().hex[:8]}",
+                        "front": q["question"],
+                        "back": back_text,
+                        "topic": q["topic"],
+                        "interval": 1, "repetitions": 0, "ease_factor": 2.5,
+                        "next_review": None, "last_grade": None,
+                    }
+                    deck["cards"].append(new_card)
+                    save_flashcard_data(fc_data)
+                    st.toast("Saved to flashcards!")
+
+            st.markdown("")
+
+            # ── Navigation ─────────────────────────────────────────────────
             if st.button("Next Question →", use_container_width=True):
                 # Record result
-                session["results"].append({
+                result_entry = {
                     "question": q["question"],
                     "options": q["options"],
                     "answer": q["answer"],
@@ -965,12 +1198,17 @@ elif st.session_state.page == "quiz":
                     "correct": correct,
                     "topic": q["topic"],
                     "explanation": q["explanation"],
-                })
+                }
+                session["results"].append(result_entry)
                 session["idx"] += 1
+                # Save for resume
+                save_session_state(session)
                 st.session_state.current_q = None
                 st.session_state.selected_answer = None
                 st.session_state.submitted = False
                 st.session_state.start_time = None
+                st.session_state.chat_messages = []
+                st.session_state.chat_q_id = None
                 st.rerun()
 
 
@@ -1006,7 +1244,7 @@ elif st.session_state.page == "stats":
                     padding:18px 22px;margin-bottom:8px;border-left:3px solid {c};">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
                 <span style="font-size:14px;font-weight:500;color:#e8edf5;">{topic}</span>
-                <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:{c};">
+                <span style="font-family:IBM Plex Mono,monospace;font-size:12px;color:{c};">
                     {t['correct']}/{t['total']} &middot; {pct}%
                 </span>
             </div>
@@ -1047,8 +1285,8 @@ elif st.session_state.page == "textbook":
 
     st.markdown("""
     <div style="padding-bottom:28px;border-bottom:1px solid #252e42;margin-bottom:28px;">
-        <p style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#6b7a99;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 8px;">Reference</p>
-        <h2 style="font-family:'Fraunces',serif;font-size:36px;font-weight:300;letter-spacing:-0.03em;margin:0;color:#e8edf5;">Textbook Library</h2>
+        <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 8px;">Reference</p>
+        <h2 style="font-family:Fraunces,serif;font-size:36px;font-weight:300;letter-spacing:-0.03em;margin:0;color:#e8edf5;">Textbook Library</h2>
     </div>
     """, unsafe_allow_html=True)
 
@@ -1162,7 +1400,7 @@ elif st.session_state.page == "textbook":
                 <div style="display:flex;align-items:center;gap:12px;margin:28px 0 12px;padding-bottom:10px;border-bottom:1px solid #252e42;">
                     <div style="width:2px;height:20px;background:{colour};border-radius:1px;"></div>
                     <h3 style="font-size:13px;font-weight:500;margin:0;letter-spacing:0.01em;color:#e8edf5;">{topic}</h3>
-                    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#6b7a99;">
+                    <span style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;">
                         {len(topic_docs)} doc{"s" if len(topic_docs) != 1 else ""}
                     </span>
                 </div>
@@ -1181,7 +1419,7 @@ elif st.session_state.page == "textbook":
                         <div style="background:#161b27;border:1px solid #252e42;border-radius:6px;
                                     padding:14px 18px;border-left:3px solid {colour};">
                             <p style="font-size:14px;font-weight:500;margin:0 0 4px;color:#e8edf5;">{doc["name"]}</p>
-                            <p style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#6b7a99;margin:0;">
+                            <p style="font-family:IBM Plex Mono,monospace;font-size:11px;color:#6b7a99;margin:0;">
                                 Uploaded {uploaded_str}
                             </p>
                         </div>
@@ -1199,3 +1437,270 @@ elif st.session_state.page == "textbook":
                                 st.session_state.textbook_docs = None
                                 st.rerun()
                         st.markdown("</div>", unsafe_allow_html=True)
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PAGE: FLASHCARDS
+# ─────────────────────────────────────────────────────────────────────────────
+elif st.session_state.page == "flashcards":
+
+    # Load data lazily
+    if st.session_state.fc_data is None:
+        st.session_state.fc_data = load_flashcard_data()
+    fc_data = st.session_state.fc_data
+    decks = fc_data.get("decks", [])
+    if not decks:
+        decks = [{"id": "default", "name": "FRCA Revision", "colour": "#4f9cf9", "cards": []}]
+        fc_data["decks"] = decks
+
+    st.markdown("""
+    <div style="padding-bottom:28px;border-bottom:1px solid #252e42;margin-bottom:28px;">
+        <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 8px;">Spaced Repetition</p>
+        <h2 style="font-family:Fraunces,serif;font-size:36px;font-weight:300;letter-spacing:-0.03em;margin:0;color:#e8edf5;">Flashcards</h2>
+    </div>
+    """, unsafe_allow_html=True)
+
+    fc_view = st.session_state.get("fc_view", "decks")
+
+    if fc_view == "decks":
+        # ── Deck list ────────────────────────────────────────────────────────
+        # New deck expander
+        with st.expander("+ New Deck"):
+            nd_name = st.text_input("Deck name", placeholder="e.g. Pharmacology — Drug Mechanisms", key="nd_name")
+            nd_colours = {"Blue": "#4f9cf9", "Green": "#4ade80", "Amber": "#fbbf24",
+                          "Red": "#f87171", "Purple": "#a78bfa", "Teal": "#2dd4bf"}
+            nd_colour = st.selectbox("Colour", list(nd_colours.keys()), key="nd_colour")
+            if st.button("Create Deck", key="nd_create"):
+                if nd_name.strip():
+                    new_deck = {"id": str(uuid.uuid4()), "name": nd_name.strip(),
+                                "colour": nd_colours[nd_colour], "cards": []}
+                    fc_data["decks"].append(new_deck)
+                    save_flashcard_data(fc_data)
+                    st.session_state.fc_data = fc_data
+                    st.success(f"Deck '{nd_name}' created!")
+                    st.rerun()
+
+        st.markdown("")
+
+        for deck in decks:
+            total  = len(deck["cards"])
+            due    = sum(1 for c in deck["cards"] if fc_is_due(c))
+            colour = deck.get("colour", "#4f9cf9")
+
+            st.markdown(f"""
+            <div style="background:#161b27;border:1px solid #252e42;border-radius:8px;
+                        padding:18px 22px;margin-bottom:8px;border-left:3px solid {colour};">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <div>
+                        <p style="font-size:15px;font-weight:500;color:#e8edf5;margin:0 0 4px;">{deck["name"]}</p>
+                        <p style="font-family:IBM Plex Mono,monospace;font-size:11px;color:#6b7a99;margin:0;">
+                            {total} cards &middot; <span style="color:{colour};">{due} due</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+
+            dc1, dc2, dc3, dc4 = st.columns([2, 2, 2, 1])
+            with dc1:
+                if st.button("Study", key=f"fc_study_{deck['id']}", use_container_width=True):
+                    due_cards = [c for c in deck["cards"] if fc_is_due(c)]
+                    if due_cards:
+                        st.session_state.fc_study_queue = [c["id"] for c in due_cards]
+                        st.session_state.fc_study_idx = 0
+                        st.session_state.fc_flipped = False
+                        st.session_state.fc_session_stats = {"again": 0, "hard": 0, "good": 0, "easy": 0}
+                        st.session_state.fc_active_deck_id = deck["id"]
+                        st.session_state.fc_view = "study"
+                        st.rerun()
+                    else:
+                        st.toast("No cards due in this deck!")
+            with dc2:
+                if st.button("Browse", key=f"fc_browse_{deck['id']}", use_container_width=True):
+                    st.session_state.fc_active_deck_id = deck["id"]
+                    st.session_state.fc_view = "browse"
+                    st.rerun()
+            with dc3:
+                if st.button("Add Card", key=f"fc_add_{deck['id']}", use_container_width=True):
+                    st.session_state.fc_active_deck_id = deck["id"]
+                    st.session_state.fc_view = "add"
+                    st.rerun()
+            with dc4:
+                if st.button("🗑", key=f"fc_del_{deck['id']}", use_container_width=True):
+                    fc_data["decks"] = [d for d in fc_data["decks"] if d["id"] != deck["id"]]
+                    save_flashcard_data(fc_data)
+                    st.session_state.fc_data = fc_data
+                    st.rerun()
+
+    elif fc_view == "add":
+        # ── Add card ─────────────────────────────────────────────────────────
+        deck = next((d for d in decks if d["id"] == st.session_state.get("fc_active_deck_id")), decks[0])
+        if st.button("← Back to Decks", key="fc_back_add"):
+            st.session_state.fc_view = "decks"
+            st.rerun()
+        st.markdown(f"""
+        <h3 style="font-family:Fraunces,serif;font-size:22px;font-weight:300;
+                   color:#e8edf5;margin:16px 0 24px;">Add Card — {deck["name"]}</h3>
+        """, unsafe_allow_html=True)
+        fc1, fc2 = st.columns(2)
+        with fc1:
+            st.markdown('<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Front</p>', unsafe_allow_html=True)
+            new_front = st.text_area("Front", height=140, placeholder="Question or concept...", key="fc_new_front", label_visibility="collapsed")
+        with fc2:
+            st.markdown('<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Back</p>', unsafe_allow_html=True)
+            new_back  = st.text_area("Back",  height=140, placeholder="Answer or explanation...", key="fc_new_back",  label_visibility="collapsed")
+        st.markdown("")
+        if st.button("Save Card", use_container_width=True, key="fc_save_card",
+                     disabled=not (new_front.strip() and new_back.strip())):
+            card = {"id": str(uuid.uuid4()), "front": new_front.strip(), "back": new_back.strip(),
+                    "topic": deck["name"], "interval": 1, "repetitions": 0,
+                    "ease_factor": 2.5, "next_review": None, "last_grade": None}
+            deck["cards"].append(card)
+            save_flashcard_data(fc_data)
+            st.session_state.fc_data = fc_data
+            st.toast("Card saved!")
+            st.rerun()
+
+    elif fc_view == "browse":
+        # ── Browse cards ──────────────────────────────────────────────────────
+        deck = next((d for d in decks if d["id"] == st.session_state.get("fc_active_deck_id")), decks[0])
+        if st.button("← Back", key="fc_back_browse"):
+            st.session_state.fc_view = "decks"
+            st.rerun()
+        st.markdown(f"""
+        <h3 style="font-family:Fraunces,serif;font-size:22px;font-weight:300;
+                   color:#e8edf5;margin:16px 0 8px;">{deck["name"]}</h3>
+        <p style="font-family:IBM Plex Mono,monospace;font-size:11px;color:#6b7a99;margin:0 0 24px;">
+            {len(deck["cards"])} cards &middot; {sum(1 for c in deck["cards"] if fc_is_due(c))} due
+        </p>
+        """, unsafe_allow_html=True)
+
+        if not deck["cards"]:
+            st.markdown('<p style="color:#6b7a99;text-align:center;padding:40px 0;">No cards yet.</p>', unsafe_allow_html=True)
+        else:
+            for card in deck["cards"]:
+                due_label = "Due" if fc_is_due(card) else fc_days_until(card)
+                colour = "#4ade80" if fc_is_due(card) else "#6b7a99"
+                with st.expander(f"{card['front'][:70]}{'…' if len(card['front']) > 70 else ''}"):
+                    bc1, bc2 = st.columns(2)
+                    with bc1:
+                        st.markdown(f'<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Front</p>', unsafe_allow_html=True)
+                        st.markdown(f'<div style="background:#1e2535;border:1px solid #252e42;border-radius:6px;padding:14px;font-size:14px;color:#e8edf5;line-height:1.6;white-space:pre-wrap;">{card["front"]}</div>', unsafe_allow_html=True)
+                    with bc2:
+                        st.markdown(f'<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Back</p>', unsafe_allow_html=True)
+                        st.markdown(f'<div style="background:#1e2535;border:1px solid #252e42;border-radius:6px;padding:14px;font-size:14px;color:#e8edf5;line-height:1.6;white-space:pre-wrap;">{card["back"]}</div>', unsafe_allow_html=True)
+                    st.markdown(f'<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:{colour};margin-top:8px;">Next review: {due_label} &middot; Interval: {card.get("interval",1)}d &middot; EF: {card.get("ease_factor",2.5):.2f}</p>', unsafe_allow_html=True)
+                    if st.button("Delete", key=f"fc_del_card_{card['id']}"):
+                        deck["cards"] = [c for c in deck["cards"] if c["id"] != card["id"]]
+                        save_flashcard_data(fc_data)
+                        st.session_state.fc_data = fc_data
+                        st.rerun()
+
+    elif fc_view == "study":
+        # ── Study session ─────────────────────────────────────────────────────
+        deck = next((d for d in decks if d["id"] == st.session_state.get("fc_active_deck_id")), decks[0])
+        queue_ids = st.session_state.fc_study_queue
+        idx       = st.session_state.fc_study_idx
+        ss        = st.session_state.fc_session_stats
+
+        if not queue_ids or idx >= len(queue_ids):
+            # Session complete
+            total_reviewed = idx
+            st.markdown(f"""
+            <div style="text-align:center;padding:48px 0 32px;border-bottom:1px solid #252e42;margin-bottom:32px;">
+                <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 16px;">Session complete</p>
+                <h2 style="font-family:Fraunces,serif;font-size:60px;font-weight:300;letter-spacing:-0.04em;margin:0 0 20px;color:#e8edf5;">{total_reviewed}</h2>
+                <p style="font-size:14px;color:#6b7a99;margin:0;">cards reviewed</p>
+            </div>
+            """, unsafe_allow_html=True)
+            sc1, sc2, sc3, sc4 = st.columns(4)
+            for col, (label, key, colour) in zip(
+                [sc1, sc2, sc3, sc4],
+                [("Again", "again", "#f87171"), ("Hard", "hard", "#fb923c"),
+                 ("Good", "good", "#fbbf24"), ("Easy", "easy", "#4ade80")]
+            ):
+                with col:
+                    st.markdown(f"""
+                    <div style="background:#161b27;border:1px solid #252e42;border-radius:8px;padding:16px;text-align:center;">
+                        <p style="font-family:Fraunces,serif;font-size:28px;font-weight:300;color:{colour};margin:0 0 4px;">{ss[key]}</p>
+                        <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:0.06em;margin:0;">{label}</p>
+                    </div>
+                    """, unsafe_allow_html=True)
+            st.markdown("")
+            if st.button("Back to Decks", use_container_width=True, key="fc_back_done"):
+                st.session_state.fc_view = "decks"
+                st.session_state.fc_study_queue = []
+                st.session_state.fc_study_idx = 0
+                st.session_state.fc_session_stats = {"again": 0, "hard": 0, "good": 0, "easy": 0}
+                st.rerun()
+        else:
+            card_id = queue_ids[idx]
+            card = next((c for c in deck["cards"] if c["id"] == card_id), None)
+            if not card:
+                st.session_state.fc_study_idx += 1
+                st.rerun()
+
+            # Progress
+            st.progress(idx / len(queue_ids))
+            st.markdown(f'<p style="font-family:IBM Plex Mono,monospace;font-size:11px;color:#6b7a99;margin-bottom:20px;">{idx + 1} of {len(queue_ids)}</p>', unsafe_allow_html=True)
+
+            colour = TOPICS.get(card.get("topic", ""), {}).get("colour", "#4f9cf9")
+
+            if not st.session_state.fc_flipped:
+                # Front
+                st.markdown(f"""
+                <div style="background:#161b27;border:1px solid #252e42;border-radius:10px;
+                            padding:44px 40px;text-align:center;min-height:220px;
+                            display:flex;flex-direction:column;align-items:center;justify-content:center;
+                            border-top:3px solid {colour};">
+                    <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;
+                              text-transform:uppercase;letter-spacing:0.08em;margin:0 0 20px;">Question</p>
+                    <p style="font-family:Fraunces,serif;font-size:22px;font-weight:300;
+                              line-height:1.6;color:#e8edf5;margin:0;white-space:pre-wrap;">{card["front"]}</p>
+                </div>
+                """, unsafe_allow_html=True)
+                st.markdown("")
+                if st.button("Reveal Answer →", use_container_width=True, key="fc_reveal"):
+                    st.session_state.fc_flipped = True
+                    st.rerun()
+            else:
+                # Back
+                st.markdown(f"""
+                <div style="background:#1e2535;border:1px solid {colour};border-radius:10px;
+                            padding:44px 40px;text-align:center;min-height:220px;
+                            box-shadow:0 0 32px rgba(79,156,249,0.08);">
+                    <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;
+                              text-transform:uppercase;letter-spacing:0.08em;margin:0 0 20px;">Answer</p>
+                    <p style="font-family:IBM Plex Sans,sans-serif;font-size:16px;font-weight:300;
+                              line-height:1.8;color:#e8edf5;margin:0;white-space:pre-wrap;text-align:left;">{card["back"]}</p>
+                </div>
+                """, unsafe_allow_html=True)
+
+                st.markdown('<p style="font-family:IBM Plex Mono,monospace;font-size:11px;color:#6b7a99;text-align:center;margin:20px 0 8px;">How well did you recall this?</p>', unsafe_allow_html=True)
+
+                ef = card.get("ease_factor", 2.5)
+                intv = card.get("interval", 1)
+                previews = ["<1d", "~1d", f"~{max(1,round(intv*ef))}d", f"~{max(1,round(intv*ef*1.3))}d"]
+                grades = [("Again", "again", 0, "#f87171"), ("Hard", "hard", 1, "#fb923c"),
+                          ("Good", "good",  2, "#fbbf24"), ("Easy", "easy", 3, "#4ade80")]
+
+                g_cols = st.columns(4)
+                for col, (label, key, grade, colour_g) in zip(g_cols, grades):
+                    with col:
+                        st.markdown(f'<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;text-align:center;margin-bottom:4px;">{previews[grade]}</p>', unsafe_allow_html=True)
+                        if st.button(label, key=f"fc_grade_{grade}", use_container_width=True):
+                            # Apply SM-2
+                            updated = sm2(card, grade)
+                            card_idx = next((i for i, c in enumerate(deck["cards"]) if c["id"] == card["id"]), None)
+                            if card_idx is not None:
+                                deck["cards"][card_idx] = updated
+                            save_flashcard_data(fc_data)
+                            st.session_state.fc_data = fc_data
+                            st.session_state.fc_session_stats[key] += 1
+                            st.session_state.fc_study_idx += 1
+                            st.session_state.fc_flipped = False
+                            st.rerun()
+
+    # Persist fc_view in session state
+    if "fc_view" not in st.session_state:
+        st.session_state.fc_view = "decks"
