@@ -1027,7 +1027,6 @@ elif st.session_state.page == "textbook":
                 mime="application/pdf",
                 key="tb_download"
             )
-            )
 
         else:
             # ── Library grid ─────────────────────────────────────────────────
