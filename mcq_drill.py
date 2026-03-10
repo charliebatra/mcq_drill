@@ -1010,34 +1010,23 @@ elif st.session_state.page == "textbook":
                 """, unsafe_allow_html=True)
 
             st.markdown("")
-
-            # Render PDF inline
+            # Render PDF using streamlit-pdf-viewer
             b64 = open_doc["data"]
-            pdf_display = f"""
-            <div style="border:1px solid #252a38;border-radius:12px;overflow:hidden;background:#13161e;">
-                <iframe
-                    src="data:application/pdf;base64,{b64}"
-                    width="100%"
-                    height="900px"
-                    style="border:none;display:block;"
-                    type="application/pdf"
-                ></iframe>
-            </div>
-            <p style="font-size:11px;color:#6b7280;margin-top:8px;font-family:\'DM Mono\',monospace;">
-                If the PDF doesn\'t display, try a different browser. Works best on Chrome/Edge desktop.
-                On mobile, use the download button below.
-            </p>
-            """
-            st.markdown(pdf_display, unsafe_allow_html=True)
+            raw_bytes = base64.b64decode(b64)
+            try:
+                from streamlit_pdf_viewer import pdf_viewer
+                pdf_viewer(input=raw_bytes, width=900, height=900, key=f"pdf_{open_doc['id']}")
+            except ImportError:
+                st.warning("PDF viewer component not installed. Use the download button below.")
 
-            # Download button as fallback
             st.markdown("")
             st.download_button(
-                label="⬇ Download PDF",
-                data=base64.b64decode(b64),
+                label="⬇ Download / Open PDF",
+                data=raw_bytes,
                 file_name=f"{open_doc['name'].replace(' ', '_')}.pdf",
                 mime="application/pdf",
                 key="tb_download"
+            )
             )
 
         else:
