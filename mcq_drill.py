@@ -65,6 +65,7 @@ section[data-testid="stSidebar"],
     background: var(--surface) !important;
     border-right: 1px solid var(--border) !important;
     min-width: 240px !important;
+    transition: transform 0.25s ease, width 0.25s ease !important;
 }
 [data-testid="stSidebar"] *,
 [data-testid="stSidebarContent"] * { color: var(--text) !important; }
@@ -87,6 +88,23 @@ section[data-testid="stSidebar"],
 [data-testid="stSidebarContent"] .stButton > button:hover {
     background: var(--surface2) !important;
     color: var(--text) !important;
+}
+/* ── Floating menu toggle button ── */
+.menu-toggle-btn {
+    position: fixed !important;
+    top: 14px !important;
+    left: 14px !important;
+    z-index: 9999 !important;
+    background: var(--surface2) !important;
+    border: 1px solid var(--border2) !important;
+    border-radius: 8px !important;
+    width: 40px !important;
+    height: 40px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.3) !important;
 }
 
 /* ── Buttons ── */
@@ -611,6 +629,8 @@ if "chat_messages" not in st.session_state:
     st.session_state.chat_messages = []  # per-question chat history
 if "chat_q_id" not in st.session_state:
     st.session_state.chat_q_id = None  # which question the chat is about
+if "sidebar_open" not in st.session_state:
+    st.session_state.sidebar_open = True
 if "fc_editor_open" not in st.session_state:
     st.session_state.fc_editor_open = False  # whether flashcard editor is showing
 if "fc_editor_q_id" not in st.session_state:
@@ -745,13 +765,44 @@ def clear_saved_session():
 
 
 # ── Sidebar ───────────────────────────────────────────────────────────────────
+# ── Sidebar toggle (floating button in main area) ────────────────────────────
+# Use a small fixed-position button via JS injection
+toggle_icon = "✕" if st.session_state.sidebar_open else "☰"
+toggle_label = "Close menu" if st.session_state.sidebar_open else "Open menu"
+
+st.markdown(f"""
+<style>
+section[data-testid="stSidebar"] {{
+    {'display: flex' if st.session_state.sidebar_open else 'display: none'} !important;
+}}
+/* push toggle button right when sidebar is open */
+#menu-toggle-container {{
+    position: fixed;
+    top: 12px;
+    left: {'258px' if st.session_state.sidebar_open else '12px'};
+    z-index: 9999;
+    transition: left 0.25s ease;
+}}
+</style>
+<div id="menu-toggle-container"></div>
+""", unsafe_allow_html=True)
+
 with st.sidebar:
-    st.markdown("""
-    <div style="padding:24px 16px 20px;border-bottom:1px solid #252e42;margin-bottom:8px;">
-        <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 6px;">Primary FRCA</p>
-        <h2 style="font-family:Fraunces,serif;color:#e8edf5;font-size:24px;font-weight:300;margin:0;letter-spacing:-0.02em;">MCQ Drill</h2>
-    </div>
-    """, unsafe_allow_html=True)
+    # Close button at top of sidebar
+    close_col, logo_col = st.columns([1, 4])
+    with close_col:
+        if st.button("✕", key="sb_close", help="Close menu"):
+            st.session_state.sidebar_open = False
+            st.rerun()
+    with logo_col:
+        st.markdown("""
+        <div style="padding:16px 0 16px;">
+            <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 4px;">Primary FRCA</p>
+            <h2 style="font-family:Fraunces,serif;color:#e8edf5;font-size:20px;font-weight:300;margin:0;letter-spacing:-0.02em;">MCQ Drill</h2>
+        </div>
+        """, unsafe_allow_html=True)
+
+    st.markdown('<div style="border-bottom:1px solid #252e42;margin-bottom:8px;"></div>', unsafe_allow_html=True)
 
     if st.button("Home", use_container_width=True):
         nav("home")
@@ -784,6 +835,20 @@ with st.sidebar:
         </div>
         """, unsafe_allow_html=True)
 
+
+# ─────────────────────────────────────────────────────────────────────────────
+# FLOATING MENU BUTTON (all pages)
+# ─────────────────────────────────────────────────────────────────────────────
+if not st.session_state.sidebar_open:
+    st.markdown("""
+    <style>
+    section[data-testid="stSidebar"] { display: none !important; }
+    </style>
+    """, unsafe_allow_html=True)
+    if st.button("☰  Menu", key="sb_open_float"):
+        st.session_state.sidebar_open = True
+        st.rerun()
+    st.markdown('<div style="margin-bottom:8px;"></div>', unsafe_allow_html=True)
 
 # ─────────────────────────────────────────────────────────────────────────────
 # PAGE: HOME
@@ -887,6 +952,7 @@ if st.session_state.page == "home":
             "idx": 0,
             "results": [],
             "n_target": n_questions,
+            "shown_ids": [q["id"] for q in fixed_qs],
         }
         st.session_state.current_q = None
         st.session_state.selected_answer = None
@@ -997,17 +1063,23 @@ elif st.session_state.page == "quiz":
         # Load next question
         if st.session_state.current_q is None:
             queue = session["queue"]
+            shown_ids = session.get("shown_ids", [])
+
             if idx < len(queue):
+                # Serve pre-built queue
                 st.session_state.current_q = queue[idx]
                 st.session_state.selected_answer = None
                 st.session_state.submitted = False
                 st.session_state.start_time = time.time()
+
             elif session["use_ai"] and session["ai_needed"] > 0:
                 # Generate AI question
-                with st.spinner("🤖 Generating question…"):
+                with st.spinner("Generating question…"):
                     topic = session["topic_filter"] or random.choice(list(TOPICS.keys()))
-                    q = generate_question(topic, [])
+                    q = generate_question(topic, shown_ids)
                     if q:
+                        shown_ids.append(q["id"])
+                        session["shown_ids"] = shown_ids
                         st.session_state.current_q = q
                         st.session_state.selected_answer = None
                         st.session_state.submitted = False
@@ -1017,9 +1089,28 @@ elif st.session_state.page == "quiz":
                         st.error("Could not generate question. Check ANTHROPIC_API_KEY.")
                         st.stop()
                 st.rerun()
+
             else:
-                # Pad with more fixed questions if needed
-                st.session_state.current_q = random.choice(FIXED_BANK)
+                # Fixed bank fallback — never repeat a seen question if avoidable
+                topic_filter = session.get("topic_filter")
+                candidate_pool = [
+                    q for q in FIXED_BANK
+                    if (not topic_filter or q["topic"] == topic_filter)
+                    and q["id"] not in shown_ids
+                ]
+                # If all fixed questions exhausted, reset and allow repeats
+                if not candidate_pool:
+                    candidate_pool = [
+                        q for q in FIXED_BANK
+                        if (not topic_filter or q["topic"] == topic_filter)
+                    ]
+                    if not candidate_pool:
+                        candidate_pool = list(FIXED_BANK)
+
+                next_q = random.choice(candidate_pool)
+                shown_ids.append(next_q["id"])
+                session["shown_ids"] = shown_ids
+                st.session_state.current_q = next_q
                 st.session_state.selected_answer = None
                 st.session_state.submitted = False
                 st.session_state.start_time = time.time()
