@@ -61,14 +61,10 @@ html, body, [class*="css"] {
 section[data-testid="stSidebar"] {
     background: var(--surface) !important;
     border-right: 1px solid var(--border) !important;
-    width: 260px !important;
-    min-width: 260px !important;
-    max-width: 260px !important;
-    transform: none !important;
-    visibility: visible !important;
-    opacity: 1 !important;
+    transition: transform 0.25s ease, width 0.25s ease !important;
+    overflow: hidden !important;
 }
-/* Hide collapse/expand controls */
+/* Hide Streamlit's own collapse controls — we use our own */
 [data-testid="stSidebarCollapseButton"],
 [data-testid="collapsedControl"],
 button[aria-label="Close sidebar"],
@@ -290,46 +286,42 @@ if "sidebar_visible" not in st.session_state:
 
 # ── Sidebar JS controller ─────────────────────────────────────────────────────
 sidebar_open = st.session_state.sidebar_visible
-st.markdown(f"""
+_sb_css = """
+    [data-testid="stSidebar"],
+    [data-testid="stSidebar"] > div,
+    section[data-testid="stSidebar"] {
+        width: 260px !important;
+        min-width: 260px !important;
+        transform: none !important;
+        visibility: visible !important;
+    }
+""" if sidebar_open else """
+    [data-testid="stSidebar"],
+    [data-testid="stSidebar"] > div,
+    section[data-testid="stSidebar"] {
+        width: 0px !important;
+        min-width: 0px !important;
+        transform: translateX(-260px) !important;
+        visibility: hidden !important;
+    }
+"""
+st.markdown(f"<style>{_sb_css}</style>", unsafe_allow_html=True)
+
+st.markdown("""
 <script>
-(function controlSidebar() {{
-    var OPEN = {str(sidebar_open).lower()};
-
-    function apply() {{
-        var sidebar = document.querySelector('[data-testid="stSidebar"]');
-        var main    = document.querySelector('[data-testid="stAppViewContainer"] > .main');
-
-        // Always hide Streamlit's own collapse controls
+(function hideSteamControls() {
+    function run() {
         ['[data-testid="stSidebarCollapseButton"]',
          '[data-testid="collapsedControl"]',
-         'button[kind="header"]'].forEach(function(sel) {{
-            document.querySelectorAll(sel).forEach(function(el) {{
+         'button[kind="header"]'].forEach(function(sel) {
+            document.querySelectorAll(sel).forEach(function(el) {
                 el.style.display = 'none';
-            }});
-        }});
-
-        if (!sidebar) return;
-
-        if (OPEN) {{
-            sidebar.style.transform  = 'none';
-            sidebar.style.width      = '260px';
-            sidebar.style.minWidth   = '260px';
-            sidebar.style.visibility = 'visible';
-            sidebar.style.position   = '';
-        }} else {{
-            sidebar.style.transform  = 'translateX(-260px)';
-            sidebar.style.width      = '0px';
-            sidebar.style.minWidth   = '0px';
-            sidebar.style.overflow   = 'hidden';
-        }}
-    }}
-
-    apply();
-    setTimeout(apply, 200);
-    setTimeout(apply, 600);
-    var obs = new MutationObserver(apply);
-    obs.observe(document.body, {{childList:true, subtree:true, attributes:true}});
-}})();
+            });
+        });
+    }
+    run(); setTimeout(run, 400); setTimeout(run, 1000);
+    new MutationObserver(run).observe(document.body, {childList:true, subtree:true});
+})();
 </script>
 """, unsafe_allow_html=True)
 
