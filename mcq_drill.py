@@ -36,29 +36,25 @@ st.markdown("""
     --surface2: #1e2535;
     --border: #252e42;
     --border2: #2e3a52;
-    --accent: #4f9cf9;
-    --accent-light: #1a2a40;
+    --nav: #4f9cf9;       /* accent ONLY for nav/interactive */
     --text: #e8edf5;
     --muted: #6b7a99;
     --green: #4ade80;
-    --green-bg: #0d2018;
-    --green-border: #166534;
+    --green-bg: #0a1f14;
+    --green-border: #14532d;
     --red: #f87171;
-    --red-bg: #1f0e0e;
+    --red-bg: #1c0a0a;
     --red-border: #7f1d1d;
-    --amber: #fbbf24;
-    --amber-bg: #1f1600;
-    --amber-border: #78350f;
 }
 
 html, body, [class*="css"] {
     font-family: 'IBM Plex Sans', sans-serif !important;
+    font-size: 16px !important;
     background: var(--bg) !important;
     color: var(--text) !important;
     letter-spacing: -0.01em !important;
 }
 
-/* ── Sidebar ── */
 /* ── Sidebar ── */
 section[data-testid="stSidebar"],
 [data-testid="stSidebar"] {
@@ -77,12 +73,14 @@ section[data-testid="stSidebar"],
     border: none !important;
     border-radius: 6px !important;
     color: var(--muted) !important;
+    font-family: 'IBM Plex Sans', sans-serif !important;
     font-weight: 400 !important;
-    font-size: 13px !important;
+    font-size: 14px !important;
     text-align: left !important;
-    padding: 8px 12px !important;
+    padding: 10px 14px !important;
     justify-content: flex-start !important;
     width: 100% !important;
+    transition: all 0.1s ease !important;
 }
 [data-testid="stSidebar"] .stButton > button:hover,
 [data-testid="stSidebarContent"] .stButton > button:hover {
@@ -90,38 +88,50 @@ section[data-testid="stSidebar"],
     color: var(--text) !important;
 }
 
-
-/* ── Buttons ── */
+/* ── Buttons — default ── */
 .stButton > button {
     font-family: 'IBM Plex Sans', sans-serif !important;
     font-weight: 500 !important;
-    font-size: 13px !important;
-    border-radius: 6px !important;
+    font-size: 14px !important;
+    border-radius: 8px !important;
     border: 1px solid var(--border2) !important;
     background: var(--surface) !important;
     color: var(--text) !important;
     transition: all 0.12s ease !important;
     letter-spacing: 0 !important;
-    padding: 8px 16px !important;
+    padding: 10px 18px !important;
+    min-height: 44px !important;
 }
 .stButton > button:hover {
-    background: var(--accent) !important;
-    border-color: var(--accent) !important;
-    color: white !important;
+    background: var(--surface2) !important;
+    border-color: var(--nav) !important;
+    color: var(--text) !important;
+}
+
+/* ── Answer option cards (target .answer-opt class via button key naming) ── */
+button[kind="secondary"] {
+    text-align: left !important;
+    justify-content: flex-start !important;
+    padding: 14px 18px !important;
+    min-height: 52px !important;
+    white-space: normal !important;
+    height: auto !important;
+    line-height: 1.5 !important;
 }
 
 /* ── Inputs ── */
 .stTextArea textarea, .stTextInput input {
     background: var(--surface) !important;
     border: 1px solid var(--border) !important;
-    border-radius: 6px !important;
+    border-radius: 8px !important;
     color: var(--text) !important;
     font-family: 'IBM Plex Sans', sans-serif !important;
-    font-size: 14px !important;
+    font-size: 15px !important;
+    padding: 12px 14px !important;
 }
 .stTextArea textarea:focus, .stTextInput input:focus {
-    border-color: var(--accent) !important;
-    box-shadow: 0 0 0 3px rgba(26,107,92,0.08) !important;
+    border-color: var(--nav) !important;
+    box-shadow: 0 0 0 2px rgba(79,156,249,0.15) !important;
 }
 .stTextArea label, .stTextInput label, .stFileUploader label {
     color: var(--muted) !important;
@@ -131,20 +141,22 @@ section[data-testid="stSidebar"],
     letter-spacing: 0.06em !important;
 }
 
-/* ── Radio ── */
-.stRadio label {
-    color: var(--text) !important;
-    font-size: 14px !important;
-    font-family: 'IBM Plex Sans', sans-serif !important;
+/* ── Slider ── */
+.stSlider [data-baseweb="slider"] { padding: 0 !important; }
+.stSlider label {
+    font-family: 'IBM Plex Mono', monospace !important;
+    font-size: 11px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.06em !important;
+    color: var(--muted) !important;
 }
-.stRadio > div { gap: 6px !important; }
 
 /* ── Metrics ── */
 [data-testid="metric-container"] {
     background: var(--surface) !important;
     border: 1px solid var(--border) !important;
-    border-radius: 8px !important;
-    padding: 20px !important;
+    border-radius: 10px !important;
+    padding: 20px 24px !important;
 }
 [data-testid="metric-container"] label {
     color: var(--muted) !important;
@@ -155,38 +167,44 @@ section[data-testid="stSidebar"],
 }
 [data-testid="metric-container"] [data-testid="stMetricValue"] {
     font-family: 'Fraunces', serif !important;
-    font-size: 36px !important;
+    font-size: 38px !important;
     font-weight: 300 !important;
-    color: var(--accent) !important;
+    color: var(--text) !important;
 }
 
-/* ── Progress ── */
-.stProgress > div > div {
-    background: var(--accent) !important;
-    border-radius: 1px !important;
-}
+/* ── Progress bar ── */
+.stProgress > div > div { border-radius: 2px !important; }
 .stProgress > div {
     background: var(--border) !important;
-    border-radius: 1px !important;
+    border-radius: 2px !important;
     height: 3px !important;
 }
 
-/* ── Select ── */
+/* ── Selectbox ── */
 .stSelectbox > div > div {
     background: var(--surface) !important;
     border: 1px solid var(--border) !important;
-    border-radius: 6px !important;
+    border-radius: 8px !important;
     color: var(--text) !important;
-    font-size: 14px !important;
+    font-size: 15px !important;
+    min-height: 44px !important;
+}
+.stSelectbox label {
+    font-family: 'IBM Plex Mono', monospace !important;
+    font-size: 11px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.06em !important;
+    color: var(--muted) !important;
 }
 
 /* ── Expander ── */
 .streamlit-expanderHeader {
     background: var(--surface) !important;
     border: 1px solid var(--border) !important;
-    border-radius: 6px !important;
+    border-radius: 8px !important;
     color: var(--text) !important;
-    font-size: 13px !important;
+    font-size: 14px !important;
+    padding: 12px 16px !important;
 }
 
 /* ── DataFrame ── */
@@ -203,29 +221,29 @@ section[data-testid="stSidebar"],
     border-radius: 8px !important;
 }
 
-/* ── Alerts ── */
+/* ── Alerts / toast ── */
 .stAlert {
-    border-radius: 6px !important;
+    border-radius: 8px !important;
     border: none !important;
-    font-size: 13px !important;
+    font-size: 14px !important;
 }
 
 /* ── Scrollbar ── */
-::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
 
-hr { border-color: var(--border) !important; margin: 24px 0 !important; }
+hr { border-color: var(--border) !important; margin: 28px 0 !important; }
 #MainMenu, footer, header { visibility: hidden; }
 </style>
 """, unsafe_allow_html=True)
 
 # ── Topic colours ─────────────────────────────────────────────────────────────
 TOPICS = {
-    "Physiology":                   {"colour": "#1a6b5c", "emoji": ""},
-    "Pharmacology":                 {"colour": "#5046a0", "emoji": ""},
-    "Physics & Clinical Measurement": {"colour": "#0f5f8a", "emoji": ""},
-    "Clinical Anaesthesia":         {"colour": "#92400e", "emoji": ""},
+    "Physiology":                   {"colour": "#2dd4bf", "emoji": ""},
+    "Pharmacology":                 {"colour": "#a78bfa", "emoji": ""},
+    "Physics & Clinical Measurement": {"colour": "#38bdf8", "emoji": ""},
+    "Clinical Anaesthesia":         {"colour": "#fb923c", "emoji": ""},
 }
 
 # ── Fixed question bank ───────────────────────────────────────────────────────
@@ -841,29 +859,34 @@ if st.session_state.page == "home":
                 st.rerun()
         st.markdown("---")
 
-    # Config columns
+    st.markdown("""
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px 28px 20px;margin-bottom:24px;">
+        <p style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin:0 0 16px;">New Session</p>
+    """, unsafe_allow_html=True)
+
     col1, col2, col3 = st.columns(3)
     with col1:
         topic_choice = st.selectbox(
-            "TOPIC", ["All Topics"] + list(TOPICS.keys()), key="cfg_topic"
+            "Topic", ["All Topics"] + list(TOPICS.keys()), key="cfg_topic"
         )
     with col2:
         mode_choice = st.selectbox(
-            "QUESTION SOURCE",
+            "Source",
             ["Mixed (Fixed + AI)", "Fixed bank only", "AI-generated only"],
             key="cfg_mode",
         )
     with col3:
         timing_choice = st.selectbox(
-            "TIMING",
-            ["Timed — 90s per question", "Untimed"],
+            "Timing",
+            ["Timed — 90s", "Untimed"],
             key="cfg_timing",
         )
 
-    n_questions = st.slider("Number of questions", 5, 30, 10, key="cfg_n")
-    st.markdown("")
+    n_questions = st.slider("Questions", 5, 30, 10, key="cfg_n")
 
-    if st.button("▶  Start Session", use_container_width=True):
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    if st.button("Start Session →", use_container_width=True):
         # Build question queue
         topic_filter = None if topic_choice == "All Topics" else topic_choice
 
@@ -884,7 +907,7 @@ if st.session_state.page == "home":
             "topic_filter": topic_filter,
             "use_ai": use_ai,
             "ai_needed": ai_needed,
-            "timed": timing_choice.startswith("Timed"),
+            "timed": "Timed" in timing_choice,
             "queue": fixed_qs,
             "idx": 0,
             "results": [],
@@ -897,21 +920,31 @@ if st.session_state.page == "home":
         nav("quiz")
         st.rerun()
 
-    # Recent performance summary
+    # Recent sessions
     if stats["sessions"]:
-        st.markdown("---")
-        st.markdown("#### Recent Sessions")
+        st.markdown("""
+        <p style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);
+                  text-transform:uppercase;letter-spacing:0.08em;margin:28px 0 12px;">Recent Sessions</p>
+        """, unsafe_allow_html=True)
         recent = stats["sessions"][-5:][::-1]
-        import pandas as pd
-        rows = []
         for s in recent:
-            rows.append({
-                "Date": datetime.fromisoformat(s["ts"]).strftime("%d %b %H:%M"),
-                "Topic": s.get("topic", "All"),
-                "Score": f"{s['correct']}/{s['total']}",
-                "Pct": f"{int(s['correct']/s['total']*100)}%" if s['total'] else "—",
-            })
-        st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+            pct = int(s["correct"] / s["total"] * 100) if s["total"] else 0
+            bar_c = "#4ade80" if pct >= 60 else "#f87171"
+            topic_label = s.get("topic", "All")
+            date_str = datetime.fromisoformat(s["ts"]).strftime("%d %b %H:%M")
+            st.markdown(f"""
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;
+                        padding:14px 18px;margin-bottom:6px;display:flex;align-items:center;gap:16px;">
+                <div style="flex:1;">
+                    <p style="font-size:14px;color:var(--text);margin:0 0 2px;">{topic_label}</p>
+                    <p style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);margin:0;">{date_str}</p>
+                </div>
+                <div style="text-align:right;">
+                    <p style="font-family:'Fraunces',serif;font-size:22px;font-weight:300;color:{bar_c};margin:0;line-height:1;">{pct}%</p>
+                    <p style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);margin:0;">{s["correct"]}/{s["total"]}</p>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -1057,47 +1090,89 @@ elif st.session_state.page == "quiz":
             st.rerun()
 
         # Header
-        progress = done / total_target
-        st.progress(progress)
-        col_h1, col_h2, col_h3 = st.columns([2, 1, 1])
-        with col_h1:
-            st.markdown(f'<p style="font-family:\'DM Mono\',monospace;font-size:12px;color:#6b7280;">Q{done+1} of {total_target}</p>', unsafe_allow_html=True)
-        with col_h2:
-            colour = TOPICS.get(q["topic"], {}).get("colour", "#06b6d4")
-            emoji  = TOPICS.get(q["topic"], {}).get("emoji", "")
-            st.markdown(f'<span style="color:{colour};font-size:12px;font-family:\'DM Mono\',monospace;">{emoji} {q["topic"]}</span>', unsafe_allow_html=True)
-        with col_h3:
-            if session["timed"] and not st.session_state.submitted:
-                elapsed = time.time() - (st.session_state.start_time or time.time())
-                remaining = max(0, 90 - elapsed)
-                time_colour = "#f87171" if remaining < 20 else "#fbbf24" if remaining < 45 else "#34d399"
-                st.markdown(f'<p style="font-family:\'DM Mono\',monospace;font-size:14px;color:{time_colour};text-align:right;">⏱ {int(remaining)}s</p>', unsafe_allow_html=True)
+        colour = TOPICS.get(q["topic"], {}).get("colour", "#4f9cf9")
+        progress_pct = int(done / total_target * 100)
+
+        if session["timed"] and not st.session_state.submitted:
+            elapsed = time.time() - (st.session_state.start_time or time.time())
+            remaining = max(0, 90 - elapsed)
+            time_colour = "#f87171" if remaining < 20 else "#fbbf24" if remaining < 45 else "#4ade80"
+            circumference = 2 * 3.14159 * 20
+            dash = circumference * remaining / 90
+            timer_html = f'''
+            <div style="display:flex;align-items:center;gap:6px;">
+                <svg width="52" height="52" viewBox="0 0 52 52" style="transform:rotate(-90deg);">
+                    <circle cx="26" cy="26" r="20" fill="none" stroke="#252e42" stroke-width="3"/>
+                    <circle cx="26" cy="26" r="20" fill="none" stroke="{time_colour}" stroke-width="3"
+                            stroke-dasharray="{dash:.1f} {circumference:.1f}" stroke-linecap="round"/>
+                </svg>
+                <span style="font-family:IBM Plex Mono,monospace;font-size:20px;font-weight:500;color:{time_colour};">{int(remaining)}</span>
+            </div>'''
+        else:
+            timer_html = ""
+
+        st.markdown(f"""
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+            <div>
+                <p style="font-family:IBM Plex Mono,monospace;font-size:11px;color:#6b7a99;
+                          margin:0 0 5px;text-transform:uppercase;letter-spacing:0.06em;">Question {done+1} of {total_target}</p>
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <div style="width:3px;height:16px;background:{colour};border-radius:2px;"></div>
+                    <span style="font-family:IBM Plex Mono,monospace;font-size:12px;color:{colour};">{q["topic"]}</span>
+                </div>
+            </div>
+            {timer_html}
+        </div>
+        <div style="background:#252e42;border-radius:2px;height:3px;margin-bottom:24px;">
+            <div style="width:{progress_pct}%;height:3px;background:{colour};border-radius:2px;"></div>
+        </div>
+        """, unsafe_allow_html=True)
 
         # Question box
         st.markdown(f"""
-        <div style="background:#13161e;border:1px solid #252a38;border-radius:14px;
-                    padding:28px 32px;margin:16px 0 20px;border-left:4px solid {colour};">
-            <p style="font-size:18px;font-family:Outfit,sans-serif;font-weight:500;
-                      line-height:1.6;margin:0;">{q['question']}</p>
+        <div style="background:#161b27;border:1px solid #252e42;border-radius:12px;
+                    padding:28px 32px;margin-bottom:24px;border-top:3px solid {colour};">
+            <p style="font-family:IBM Plex Sans,sans-serif;font-size:18px;font-weight:400;
+                      line-height:1.7;margin:0;color:#e8edf5;">{q["question"]}</p>
         </div>
         """, unsafe_allow_html=True)
 
         if not st.session_state.submitted:
-            selected = st.radio(
-                "Select your answer:",
-                options=list(q["options"].keys()),
-                format_func=lambda k: f"{k}.  {q['options'][k]}",
-                key=f"radio_{done}",
-                label_visibility="collapsed",
-            )
+            # Track selected via session state for card highlighting
+            if f"sel_{done}" not in st.session_state:
+                st.session_state[f"sel_{done}"] = None
+            cur_sel = st.session_state.get(f"sel_{done}")
+
+            for opt, text in q["options"].items():
+                is_sel = cur_sel == opt
+                border_c = colour if is_sel else "#252e42"
+                bg_c = "#1e2a3a" if is_sel else "#161b27"
+                label_c = colour if is_sel else "#6b7a99"
+                dot = f'<div style="width:8px;height:8px;border-radius:50%;background:{colour};margin-top:3px;flex-shrink:0;"></div>' if is_sel else f'<div style="width:8px;height:8px;border-radius:50%;border:1.5px solid #2e3a52;margin-top:3px;flex-shrink:0;"></div>'
+                st.markdown(f"""
+                <div style="background:{bg_c};border:1.5px solid {border_c};border-radius:10px;
+                            padding:16px 20px;margin:6px 0;cursor:pointer;">
+                    <div style="display:flex;gap:14px;align-items:flex-start;">
+                        {dot}
+                        <div>
+                            <span style="font-family:IBM Plex Mono,monospace;font-size:11px;color:{label_c};
+                                          text-transform:uppercase;letter-spacing:0.06em;">{opt}</span>
+                            <p style="font-family:IBM Plex Sans,sans-serif;font-size:15px;color:#e8edf5;
+                                      margin:4px 0 0;line-height:1.5;">{text}</p>
+                        </div>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+                st.markdown('<div style="height:2px;margin:-2px 0 6px;overflow:hidden;opacity:0;">', unsafe_allow_html=True)
+                if st.button(f"{opt}", key=f"opt_{done}_{opt}", use_container_width=True):
+                    st.session_state[f"sel_{done}"] = opt
+                    st.rerun()
+                st.markdown('</div>', unsafe_allow_html=True)
+
             st.markdown("")
-            if st.button("Submit Answer →", use_container_width=True):
-                # Auto-submit on timer expiry too
-                timed_out = (
-                    session["timed"]
-                    and (time.time() - (st.session_state.start_time or time.time())) >= 90
-                )
-                st.session_state.selected_answer = selected
+            submit_disabled = cur_sel is None
+            if st.button("Submit →", use_container_width=True, disabled=submit_disabled):
+                st.session_state.selected_answer = cur_sel
                 st.session_state.submitted = True
                 st.rerun()
 
@@ -1105,7 +1180,7 @@ elif st.session_state.page == "quiz":
             if session["timed"] and st.session_state.start_time:
                 elapsed = time.time() - st.session_state.start_time
                 if elapsed >= 90 and not st.session_state.submitted:
-                    st.session_state.selected_answer = list(q["options"].keys())[0]
+                    st.session_state.selected_answer = cur_sel or list(q["options"].keys())[0]
                     st.session_state.submitted = True
                     st.rerun()
 
@@ -1116,26 +1191,41 @@ elif st.session_state.page == "quiz":
 
             for opt, text in q["options"].items():
                 if opt == q["answer"]:
-                    bg, border, col = "#0f2a1e", "#34d399", "#34d399"
+                    bg, border_c, text_c = "#0a1f14", "#14532d", "#4ade80"
+                    icon = "✓"
                 elif opt == sel and not correct:
-                    bg, border, col = "#2a0f0f", "#f87171", "#f87171"
+                    bg, border_c, text_c = "#1c0a0a", "#7f1d1d", "#f87171"
+                    icon = "✗"
                 else:
-                    bg, border, col = "#1a1e28", "#252a38", "#6b7280"
-                prefix = "✓ " if opt == q["answer"] else ("✗ " if opt == sel and not correct else "   ")
+                    bg, border_c, text_c = "#161b27", "#252e42", "#6b7a99"
+                    icon = ""
+                label_weight = "600" if opt in [q["answer"], sel] else "400"
                 st.markdown(f"""
-                <div style="background:{bg};border:1px solid {border};border-radius:8px;
-                            padding:12px 16px;margin:6px 0;color:{col};font-size:15px;">
-                    <strong>{prefix}{opt}.</strong> {text}
+                <div style="background:{bg};border:1.5px solid {border_c};border-radius:10px;
+                            padding:16px 20px;margin:6px 0;">
+                    <div style="display:flex;gap:12px;align-items:flex-start;">
+                        <span style="font-family:IBM Plex Mono,monospace;font-size:13px;
+                                     color:{text_c};flex-shrink:0;width:20px;margin-top:1px;">{icon or opt}</span>
+                        <p style="font-family:IBM Plex Sans,sans-serif;font-size:15px;
+                                  color:{text_c};margin:0;line-height:1.5;font-weight:{label_weight};">{text}</p>
+                    </div>
                 </div>
                 """, unsafe_allow_html=True)
 
-            # Explanation
+            result_icon = "✓" if correct else "✗"
+            result_c = "#4ade80" if correct else "#f87171"
+            result_word = "Correct" if correct else "Incorrect"
             st.markdown(f"""
-            <div style="background:#0e1117;border:1px solid #252e42;border-left:3px solid #1a6b5c;
-                        border-radius:0 6px 6px 0;padding:20px 24px;margin:20px 0;font-size:14px;line-height:1.8;color:#e8edf5;">
+            <div style="display:flex;align-items:center;gap:10px;margin:20px 0 4px;">
+                <span style="font-size:20px;color:{result_c};">{result_icon}</span>
+                <span style="font-family:IBM Plex Mono,monospace;font-size:13px;color:{result_c};
+                             text-transform:uppercase;letter-spacing:0.06em;">{result_word}</span>
+            </div>
+            <div style="background:#161b27;border:1px solid #252e42;border-left:3px solid {colour};
+                        border-radius:0 8px 8px 0;padding:20px 24px;margin:8px 0 20px;line-height:1.8;color:#e8edf5;">
                 <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;
                           text-transform:uppercase;letter-spacing:0.08em;margin:0 0 10px;">Explanation</p>
-                {q['explanation']}
+                <p style="font-family:IBM Plex Sans,sans-serif;font-size:15px;margin:0;line-height:1.8;">{q["explanation"]}</p>
             </div>
             """, unsafe_allow_html=True)
 
@@ -1321,59 +1411,116 @@ Answer the student's follow-up question concisely and clearly. Focus on exam-rel
 # ─────────────────────────────────────────────────────────────────────────────
 elif st.session_state.page == "stats":
     st.markdown("""
-    <h2 style="font-family:'Instrument Serif',serif;font-size:32px;font-weight:400;
-               letter-spacing:-0.5px;margin-bottom:6px;">Performance</h2>
-    <p style="color:#6b7280;font-size:14px;margin-bottom:28px;">Your MCQ history and topic breakdown.</p>
+    <div style="padding-bottom:28px;border-bottom:1px solid #252e42;margin-bottom:28px;">
+        <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 8px;">Analytics</p>
+        <h2 style="font-family:Fraunces,serif;font-size:36px;font-weight:300;letter-spacing:-0.03em;margin:0;color:#e8edf5;">Performance</h2>
+    </div>
     """, unsafe_allow_html=True)
 
-    total_q   = sum(v["total"] for v in stats["topic_totals"].values())
-    total_c   = sum(v["correct"] for v in stats["topic_totals"].values())
-    overall   = int(total_c / total_q * 100) if total_q else 0
+    total_q    = sum(v["total"] for v in stats["topic_totals"].values())
+    total_c    = sum(v["correct"] for v in stats["topic_totals"].values())
+    overall    = int(total_c / total_q * 100) if total_q else 0
     n_sessions = len(stats["sessions"])
 
+    # ── Top metrics ──────────────────────────────────────────────────────────
     c1, c2, c3 = st.columns(3)
-    c1.metric("Questions Answered", total_q)
-    c2.metric("Overall Score",      f"{overall}%")
-    c3.metric("Sessions",           n_sessions)
+    c1.metric("Questions", total_q)
+    c2.metric("Overall", f"{overall}%")
+    c3.metric("Sessions", n_sessions)
 
-    st.markdown("---")
-    st.markdown("#### By Topic")
+    # ── Weakest topic callout ─────────────────────────────────────────────────
+    topic_pcts = {
+        t: int(v["correct"] / v["total"] * 100) if v["total"] else None
+        for t, v in stats["topic_totals"].items()
+    }
+    scored = {t: p for t, p in topic_pcts.items() if p is not None}
+    if scored:
+        weakest = min(scored, key=scored.get)
+        strongest = max(scored, key=scored.get)
+        w_colour = TOPICS[weakest]["colour"] if weakest in TOPICS else "#f87171"
+        s_colour = TOPICS[strongest]["colour"] if strongest in TOPICS else "#4ade80"
+        wc1, wc2 = st.columns(2)
+        with wc1:
+            st.markdown(f"""
+            <div style="background:#1c0a0a;border:1px solid #7f1d1d;border-radius:10px;padding:18px 22px;margin-top:12px;">
+                <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#f87171;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 6px;">Focus here</p>
+                <p style="font-size:15px;color:#e8edf5;margin:0 0 2px;font-weight:500;">{weakest}</p>
+                <p style="font-family:Fraunces,serif;font-size:28px;font-weight:300;color:#f87171;margin:0;">{scored[weakest]}%</p>
+            </div>
+            """, unsafe_allow_html=True)
+        with wc2:
+            st.markdown(f"""
+            <div style="background:#0a1f14;border:1px solid #14532d;border-radius:10px;padding:18px 22px;margin-top:12px;">
+                <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#4ade80;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 6px;">Strongest</p>
+                <p style="font-size:15px;color:#e8edf5;margin:0 0 2px;font-weight:500;">{strongest}</p>
+                <p style="font-family:Fraunces,serif;font-size:28px;font-weight:300;color:#4ade80;margin:0;">{scored[strongest]}%</p>
+            </div>
+            """, unsafe_allow_html=True)
+
+    # ── Sparkline — last 10 sessions ─────────────────────────────────────────
+    if len(stats["sessions"]) >= 2:
+        recent_10 = stats["sessions"][-10:]
+        pts = [int(s["correct"] / s["total"] * 100) if s["total"] else 0 for s in recent_10]
+        n = len(pts)
+        W, H = 600, 80
+        x_step = W / max(n - 1, 1)
+        coords = [(i * x_step, H - (p / 100 * H)) for i, p in enumerate(pts)]
+        polyline = " ".join(f"{x:.1f},{y:.1f}" for x, y in coords)
+        # fill path
+        fill_path = f"M {coords[0][0]:.1f},{H} " + " ".join(f"L {x:.1f},{y:.1f}" for x, y in coords) + f" L {coords[-1][0]:.1f},{H} Z"
+        trend = pts[-1] - pts[0]
+        trend_c = "#4ade80" if trend >= 0 else "#f87171"
+        trend_str = f"+{trend}%" if trend >= 0 else f"{trend}%"
+        st.markdown(f"""
+        <div style="background:#161b27;border:1px solid #252e42;border-radius:10px;padding:20px 24px;margin:20px 0;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:0.08em;margin:0;">Score trend — last {n} sessions</p>
+                <span style="font-family:IBM Plex Mono,monospace;font-size:12px;color:{trend_c};">{trend_str}</span>
+            </div>
+            <svg viewBox="0 0 {W} {H}" width="100%" height="80" preserveAspectRatio="none">
+                <defs>
+                    <linearGradient id="spark_fill" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#4f9cf9" stop-opacity="0.25"/>
+                        <stop offset="100%" stop-color="#4f9cf9" stop-opacity="0"/>
+                    </linearGradient>
+                </defs>
+                <path d="{fill_path}" fill="url(#spark_fill)"/>
+                <polyline points="{polyline}" fill="none" stroke="#4f9cf9" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+                {"".join(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="4" fill="#4f9cf9"/>' for x, y in [coords[-1]])}
+                <line x1="0" y1="{H - 60/100*H:.1f}" x2="{W}" y2="{H - 60/100*H:.1f}"
+                      stroke="#252e42" stroke-width="1" stroke-dasharray="4,4"/>
+            </svg>
+            <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;margin:4px 0 0;text-align:right;">60% pass mark shown</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+    # ── By topic ─────────────────────────────────────────────────────────────
+    st.markdown("""
+    <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;
+              text-transform:uppercase;letter-spacing:0.08em;margin:8px 0 14px;">By Topic</p>
+    """, unsafe_allow_html=True)
 
     for topic, meta in TOPICS.items():
         t = stats["topic_totals"].get(topic, {"correct": 0, "total": 0})
         pct = int(t["correct"] / t["total"] * 100) if t["total"] else 0
         c = meta["colour"]
         st.markdown(f"""
-        <div style="background:#161b27;border:1px solid #252e42;border-radius:8px;
+        <div style="background:#161b27;border:1px solid #252e42;border-radius:10px;
                     padding:18px 22px;margin-bottom:8px;border-left:3px solid {c};">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-                <span style="font-size:14px;font-weight:500;color:#e8edf5;">{topic}</span>
-                <span style="font-family:IBM Plex Mono,monospace;font-size:12px;color:{c};">
-                    {t['correct']}/{t['total']} &middot; {pct}%
-                </span>
+                <span style="font-family:IBM Plex Sans,sans-serif;font-size:15px;font-weight:400;color:#e8edf5;">{topic}</span>
+                <div style="text-align:right;">
+                    <span style="font-family:Fraunces,serif;font-size:22px;font-weight:300;color:{c};">{pct}%</span>
+                    <span style="font-family:IBM Plex Mono,monospace;font-size:11px;color:#6b7a99;margin-left:8px;">{t["correct"]}/{t["total"]}</span>
+                </div>
             </div>
-            <div style="background:#252e42;border-radius:1px;height:3px;">
-                <div style="width:{pct}%;height:3px;background:{c};border-radius:1px;"></div>
+            <div style="background:#252e42;border-radius:2px;height:4px;">
+                <div style="width:{pct}%;height:4px;background:{c};border-radius:2px;"></div>
             </div>
         </div>
         """, unsafe_allow_html=True)
 
-    if stats["sessions"]:
-        st.markdown("---")
-        st.markdown("#### Session History")
-        import pandas as pd
-        rows = [
-            {
-                "Date":    datetime.fromisoformat(s["ts"]).strftime("%d %b %Y %H:%M"),
-                "Topic":   s.get("topic", "All"),
-                "Correct": s["correct"],
-                "Total":   s["total"],
-                "Score":   f"{int(s['correct']/s['total']*100)}%" if s["total"] else "—",
-            }
-            for s in reversed(stats["sessions"])
-        ]
-        st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
-
+    st.markdown('<div style="height:16px;"></div>', unsafe_allow_html=True)
     if st.button("Reset All Stats", key="reset_stats"):
         st.session_state.stats = default_stats()
         save_stats(st.session_state.stats)
