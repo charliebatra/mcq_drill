@@ -228,6 +228,41 @@ button[kind="secondary"] {
     font-size: 14px !important;
 }
 
+/* ── Radio answer cards ── */
+.stRadio > div {
+    gap: 0 !important;
+    flex-direction: column !important;
+}
+.stRadio > div > label {
+    background: #161b27 !important;
+    border: 1.5px solid #252e42 !important;
+    border-radius: 10px !important;
+    padding: 16px 20px !important;
+    margin: 5px 0 !important;
+    cursor: pointer !important;
+    transition: border-color 0.1s, background 0.1s !important;
+    align-items: flex-start !important;
+    min-height: 52px !important;
+}
+.stRadio > div > label:hover {
+    border-color: #4f9cf9 !important;
+    background: #1e2535 !important;
+}
+.stRadio > div > label[data-checked="true"],
+.stRadio > div > label:has(input:checked) {
+    border-color: #4f9cf9 !important;
+    background: #1a2a40 !important;
+}
+.stRadio > div > label > div:first-child {
+    margin-top: 4px !important;
+}
+.stRadio > div > label p {
+    font-family: 'IBM Plex Sans', sans-serif !important;
+    font-size: 15px !important;
+    line-height: 1.5 !important;
+    color: #e8edf5 !important;
+    margin: 0 !important;
+}
 /* ── Scrollbar ── */
 ::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
@@ -1093,94 +1128,73 @@ elif st.session_state.page == "quiz":
         colour = TOPICS.get(q["topic"], {}).get("colour", "#4f9cf9")
         progress_pct = int(done / total_target * 100)
 
+        # Build timer string separately — no nested f-strings
         if session["timed"] and not st.session_state.submitted:
             elapsed = time.time() - (st.session_state.start_time or time.time())
             remaining = max(0, 90 - elapsed)
             time_colour = "#f87171" if remaining < 20 else "#fbbf24" if remaining < 45 else "#4ade80"
-            circumference = 2 * 3.14159 * 20
-            dash = circumference * remaining / 90
-            timer_html = f'''
-            <div style="display:flex;align-items:center;gap:6px;">
-                <svg width="52" height="52" viewBox="0 0 52 52" style="transform:rotate(-90deg);">
-                    <circle cx="26" cy="26" r="20" fill="none" stroke="#252e42" stroke-width="3"/>
-                    <circle cx="26" cy="26" r="20" fill="none" stroke="{time_colour}" stroke-width="3"
-                            stroke-dasharray="{dash:.1f} {circumference:.1f}" stroke-linecap="round"/>
-                </svg>
-                <span style="font-family:IBM Plex Mono,monospace;font-size:20px;font-weight:500;color:{time_colour};">{int(remaining)}</span>
-            </div>'''
+            timer_secs = int(remaining)
+            timer_block = (
+                '<div style="text-align:center;min-width:56px;">'
+                '<p style="font-family:IBM Plex Mono,monospace;font-size:28px;font-weight:500;'
+                'margin:0;line-height:1;color:' + time_colour + ';">' + str(timer_secs) + '</p>'
+                '<p style="font-family:IBM Plex Mono,monospace;font-size:9px;color:#6b7a99;'
+                'text-transform:uppercase;letter-spacing:0.06em;margin:2px 0 0;">sec</p>'
+                '</div>'
+            )
         else:
-            timer_html = ""
+            timer_block = ""
 
-        st.markdown(f"""
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-            <div>
-                <p style="font-family:IBM Plex Mono,monospace;font-size:11px;color:#6b7a99;
-                          margin:0 0 5px;text-transform:uppercase;letter-spacing:0.06em;">Question {done+1} of {total_target}</p>
-                <div style="display:flex;align-items:center;gap:8px;">
-                    <div style="width:3px;height:16px;background:{colour};border-radius:2px;"></div>
-                    <span style="font-family:IBM Plex Mono,monospace;font-size:12px;color:{colour};">{q["topic"]}</span>
-                </div>
-            </div>
-            {timer_html}
-        </div>
-        <div style="background:#252e42;border-radius:2px;height:3px;margin-bottom:24px;">
-            <div style="width:{progress_pct}%;height:3px;background:{colour};border-radius:2px;"></div>
-        </div>
-        """, unsafe_allow_html=True)
+        st.markdown(
+            '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">'
+            '<div>'
+            '<p style="font-family:IBM Plex Mono,monospace;font-size:11px;color:#6b7a99;'
+            'margin:0 0 5px;text-transform:uppercase;letter-spacing:0.06em;">'
+            'Question ' + str(done+1) + ' of ' + str(total_target) + '</p>'
+            '<div style="display:flex;align-items:center;gap:8px;">'
+            '<div style="width:3px;height:16px;background:' + colour + ';border-radius:2px;"></div>'
+            '<span style="font-family:IBM Plex Mono,monospace;font-size:12px;color:' + colour + ';">' + q["topic"] + '</span>'
+            '</div>'
+            '</div>'
+            + timer_block +
+            '</div>'
+            '<div style="background:#252e42;border-radius:2px;height:3px;margin-bottom:24px;">'
+            '<div style="width:' + str(progress_pct) + '%;height:3px;background:' + colour + ';border-radius:2px;"></div>'
+            '</div>',
+            unsafe_allow_html=True
+        )
 
         # Question box
-        st.markdown(f"""
-        <div style="background:#161b27;border:1px solid #252e42;border-radius:12px;
-                    padding:28px 32px;margin-bottom:24px;border-top:3px solid {colour};">
-            <p style="font-family:IBM Plex Sans,sans-serif;font-size:18px;font-weight:400;
-                      line-height:1.7;margin:0;color:#e8edf5;">{q["question"]}</p>
-        </div>
-        """, unsafe_allow_html=True)
+        st.markdown(
+            '<div style="background:#161b27;border:1px solid #252e42;border-radius:12px;'
+            'padding:28px 32px;margin-bottom:24px;border-top:3px solid ' + colour + ';">'
+            '<p style="font-family:IBM Plex Sans,sans-serif;font-size:18px;font-weight:400;'
+            'line-height:1.7;margin:0;color:#e8edf5;">' + q["question"] + '</p>'
+            '</div>',
+            unsafe_allow_html=True
+        )
 
         if not st.session_state.submitted:
-            # Track selected via session state for card highlighting
-            if f"sel_{done}" not in st.session_state:
-                st.session_state[f"sel_{done}"] = None
-            cur_sel = st.session_state.get(f"sel_{done}")
-
-            for opt, text in q["options"].items():
-                is_sel = cur_sel == opt
-                border_c = colour if is_sel else "#252e42"
-                bg_c = "#1e2a3a" if is_sel else "#161b27"
-                label_c = colour if is_sel else "#6b7a99"
-                dot = f'<div style="width:8px;height:8px;border-radius:50%;background:{colour};margin-top:3px;flex-shrink:0;"></div>' if is_sel else f'<div style="width:8px;height:8px;border-radius:50%;border:1.5px solid #2e3a52;margin-top:3px;flex-shrink:0;"></div>'
-                st.markdown(f"""
-                <div style="background:{bg_c};border:1.5px solid {border_c};border-radius:10px;
-                            padding:16px 20px;margin:6px 0;cursor:pointer;">
-                    <div style="display:flex;gap:14px;align-items:flex-start;">
-                        {dot}
-                        <div>
-                            <span style="font-family:IBM Plex Mono,monospace;font-size:11px;color:{label_c};
-                                          text-transform:uppercase;letter-spacing:0.06em;">{opt}</span>
-                            <p style="font-family:IBM Plex Sans,sans-serif;font-size:15px;color:#e8edf5;
-                                      margin:4px 0 0;line-height:1.5;">{text}</p>
-                        </div>
-                    </div>
-                </div>
-                """, unsafe_allow_html=True)
-                st.markdown('<div style="height:2px;margin:-2px 0 6px;overflow:hidden;opacity:0;">', unsafe_allow_html=True)
-                if st.button(f"{opt}", key=f"opt_{done}_{opt}", use_container_width=True):
-                    st.session_state[f"sel_{done}"] = opt
-                    st.rerun()
-                st.markdown('</div>', unsafe_allow_html=True)
-
+            # Radio styled as cards via CSS
+            selected = st.radio(
+                "Select your answer:",
+                options=list(q["options"].keys()),
+                format_func=lambda k: f"{k}.   {q['options'][k]}",
+                key=f"radio_{done}",
+                label_visibility="collapsed",
+            )
             st.markdown("")
-            submit_disabled = cur_sel is None
-            if st.button("Submit →", use_container_width=True, disabled=submit_disabled):
-                st.session_state.selected_answer = cur_sel
+            if st.button("Submit →", use_container_width=True):
+                st.session_state.selected_answer = selected
                 st.session_state.submitted = True
                 st.rerun()
 
             # Auto-submit on timer
             if session["timed"] and st.session_state.start_time:
-                elapsed = time.time() - st.session_state.start_time
-                if elapsed >= 90 and not st.session_state.submitted:
-                    st.session_state.selected_answer = cur_sel or list(q["options"].keys())[0]
+                if (time.time() - st.session_state.start_time) >= 90 and not st.session_state.submitted:
+                    st.session_state.selected_answer = list(q["options"].keys())[0]
+                    st.session_state.submitted = True
+                    st.rerun()
                     st.session_state.submitted = True
                     st.rerun()
 
