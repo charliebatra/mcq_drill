@@ -2290,7 +2290,7 @@ elif st.session_state.page == "flashcards":
                     unsafe_allow_html=True
                 )
                 st.markdown('<div style="height:16px;"></div>', unsafe_allow_html=True)
-                st.markdown('<p style="font-family:IBM Plex Mono,monospace;font-size:11px;color:#6b7a99;text-align:center;margin-bottom:10px;">How well did you know this?</p>', unsafe_allow_html=True)
+                st.markdown('<p style="font-family:IBM Plex Mono,monospace;font-size:11px;color:#6b7a99;text-align:center;margin-bottom:14px;">How well did you know this?</p>', unsafe_allow_html=True)
 
                 ef   = card.get("ease_factor", 2.5)
                 intv = card.get("interval", 1)
@@ -2300,20 +2300,52 @@ elif st.session_state.page == "flashcards":
                             ("Good",  "good",  2, "#fbbf24"),
                             ("Easy",  "easy",  3, "#4ade80")]
 
+                # Style each grade button by its key using Streamlit's element id
+                # Inject CSS that targets buttons inside each column slot
+                st.markdown(f"""<style>
+                /* Grade button shared */
+                [data-testid="stHorizontalBlock"] .stButton > button {{
+                    padding: 14px 8px !important;
+                    min-height: 68px !important;
+                    white-space: pre-line !important;
+                    line-height: 1.5 !important;
+                    font-size: 13px !important;
+                    text-align: center !important;
+                }}
+                /* Again — col 1 */
+                [data-testid="stHorizontalBlock"] > div:nth-child(1) .stButton > button {{
+                    border-color: #f87171 !important; color: #f87171 !important;
+                }}
+                [data-testid="stHorizontalBlock"] > div:nth-child(1) .stButton > button:hover {{
+                    background: #f8717122 !important;
+                }}
+                /* Hard — col 2 */
+                [data-testid="stHorizontalBlock"] > div:nth-child(2) .stButton > button {{
+                    border-color: #fb923c !important; color: #fb923c !important;
+                }}
+                [data-testid="stHorizontalBlock"] > div:nth-child(2) .stButton > button:hover {{
+                    background: #fb923c22 !important;
+                }}
+                /* Good — col 3 */
+                [data-testid="stHorizontalBlock"] > div:nth-child(3) .stButton > button {{
+                    border-color: #fbbf24 !important; color: #fbbf24 !important;
+                }}
+                [data-testid="stHorizontalBlock"] > div:nth-child(3) .stButton > button:hover {{
+                    background: #fbbf2422 !important;
+                }}
+                /* Easy — col 4 */
+                [data-testid="stHorizontalBlock"] > div:nth-child(4) .stButton > button {{
+                    border-color: #4ade80 !important; color: #4ade80 !important;
+                }}
+                [data-testid="stHorizontalBlock"] > div:nth-child(4) .stButton > button:hover {{
+                    background: #4ade8022 !important;
+                }}
+                </style>""", unsafe_allow_html=True)
+
                 g_cols = st.columns(4)
                 for col, (label, key, grade, col_c) in zip(g_cols, grades):
                     with col:
-                        st.markdown(
-                            f'<div style="background:#161b27;border:1px solid #252e42;border-radius:10px;'
-                            f'padding:12px 8px;text-align:center;margin-bottom:6px;">'
-                            f'<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:{col_c};'
-                            f'margin:0 0 4px;">{previews[grade]}</p>'
-                            f'<p style="font-family:IBM Plex Sans,monospace;font-size:14px;font-weight:500;'
-                            f'color:#e8edf5;margin:0;">{label}</p>'
-                            f'</div>',
-                            unsafe_allow_html=True
-                        )
-                        if st.button(label, key=f"fc_grade_{grade}", use_container_width=True):
+                        if st.button(f"{previews[grade]}\n{label}", key=f"fc_grade_{grade}", use_container_width=True):
                             updated = sm2(card, grade)
                             card_idx = next((i for i, c in enumerate(deck["cards"]) if c["id"] == card["id"]), None)
                             if card_idx is not None:
