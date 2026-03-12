@@ -284,43 +284,65 @@ hr { border-color: var(--border) !important; margin: 28px 0 !important; }
 </style>
 """, unsafe_allow_html=True)
 
-# ── Force sidebar open via JS ─────────────────────────────────────────────────
-st.markdown("""
+# ── Sidebar toggle state ─────────────────────────────────────────────────────
+if "sidebar_visible" not in st.session_state:
+    st.session_state.sidebar_visible = True
+
+# ── Sidebar JS controller ─────────────────────────────────────────────────────
+sidebar_open = st.session_state.sidebar_visible
+st.markdown(f"""
 <script>
-(function forceSidebar() {
-    function run() {
-        // Remove collapse button
-        var collapseBtn = document.querySelector('[data-testid="stSidebarCollapseButton"]');
-        if (collapseBtn) collapseBtn.style.display = 'none';
+(function controlSidebar() {{
+    var OPEN = {str(sidebar_open).lower()};
 
-        // Remove the collapsed-state control arrow
-        var collapsed = document.querySelector('[data-testid="collapsedControl"]');
-        if (collapsed) collapsed.style.display = 'none';
-
-        // If sidebar has been collapsed (has translate style), force it back
+    function apply() {{
         var sidebar = document.querySelector('[data-testid="stSidebar"]');
-        if (sidebar) {
-            sidebar.style.transform = 'none';
-            sidebar.style.width = '260px';
-            sidebar.style.minWidth = '260px';
-            sidebar.style.visibility = 'visible';
-        }
+        var main    = document.querySelector('[data-testid="stAppViewContainer"] > .main');
 
-        // Hide any open/close chevron buttons near sidebar
-        document.querySelectorAll('button[kind="header"]').forEach(function(b) {
-            b.style.display = 'none';
-        });
-    }
-    // Run immediately and after short delay for dynamic renders
-    run();
-    setTimeout(run, 300);
-    setTimeout(run, 800);
-    // Also run on any DOM mutations
-    var observer = new MutationObserver(run);
-    observer.observe(document.body, { childList: true, subtree: true, attributes: true });
-})();
+        // Always hide Streamlit's own collapse controls
+        ['[data-testid="stSidebarCollapseButton"]',
+         '[data-testid="collapsedControl"]',
+         'button[kind="header"]'].forEach(function(sel) {{
+            document.querySelectorAll(sel).forEach(function(el) {{
+                el.style.display = 'none';
+            }});
+        }});
+
+        if (!sidebar) return;
+
+        if (OPEN) {{
+            sidebar.style.transform  = 'none';
+            sidebar.style.width      = '260px';
+            sidebar.style.minWidth   = '260px';
+            sidebar.style.visibility = 'visible';
+            sidebar.style.position   = '';
+        }} else {{
+            sidebar.style.transform  = 'translateX(-260px)';
+            sidebar.style.width      = '0px';
+            sidebar.style.minWidth   = '0px';
+            sidebar.style.overflow   = 'hidden';
+        }}
+    }}
+
+    apply();
+    setTimeout(apply, 200);
+    setTimeout(apply, 600);
+    var obs = new MutationObserver(apply);
+    obs.observe(document.body, {{childList:true, subtree:true, attributes:true}});
+}})();
 </script>
 """, unsafe_allow_html=True)
+
+# ── Toggle button (top of main content) ───────────────────────────────────────
+toggle_label = "☰" if not st.session_state.sidebar_visible else "✕  Menu"
+st.markdown(
+    '<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">',
+    unsafe_allow_html=True
+)
+if st.button(toggle_label, key="sidebar_toggle"):
+    st.session_state.sidebar_visible = not st.session_state.sidebar_visible
+    st.rerun()
+st.markdown('</div>', unsafe_allow_html=True)
 
 # ── Topic colours ─────────────────────────────────────────────────────────────
 TOPICS = {
