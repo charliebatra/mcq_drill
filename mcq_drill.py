@@ -65,7 +65,7 @@ section[data-testid="stSidebar"],
     background: var(--surface) !important;
     border-right: 1px solid var(--border) !important;
     min-width: 240px !important;
-    transition: transform 0.25s ease, width 0.25s ease !important;
+    display: flex !important;
 }
 [data-testid="stSidebar"] *,
 [data-testid="stSidebarContent"] * { color: var(--text) !important; }
@@ -89,23 +89,7 @@ section[data-testid="stSidebar"],
     background: var(--surface2) !important;
     color: var(--text) !important;
 }
-/* ── Floating menu toggle button ── */
-.menu-toggle-btn {
-    position: fixed !important;
-    top: 14px !important;
-    left: 14px !important;
-    z-index: 9999 !important;
-    background: var(--surface2) !important;
-    border: 1px solid var(--border2) !important;
-    border-radius: 8px !important;
-    width: 40px !important;
-    height: 40px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    cursor: pointer !important;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.3) !important;
-}
+
 
 /* ── Buttons ── */
 .stButton > button {
@@ -629,8 +613,6 @@ if "chat_messages" not in st.session_state:
     st.session_state.chat_messages = []  # per-question chat history
 if "chat_q_id" not in st.session_state:
     st.session_state.chat_q_id = None  # which question the chat is about
-if "sidebar_open" not in st.session_state:
-    st.session_state.sidebar_open = True
 if "fc_editor_open" not in st.session_state:
     st.session_state.fc_editor_open = False  # whether flashcard editor is showing
 if "fc_editor_q_id" not in st.session_state:
@@ -765,44 +747,13 @@ def clear_saved_session():
 
 
 # ── Sidebar ───────────────────────────────────────────────────────────────────
-# ── Sidebar toggle (floating button in main area) ────────────────────────────
-# Use a small fixed-position button via JS injection
-toggle_icon = "✕" if st.session_state.sidebar_open else "☰"
-toggle_label = "Close menu" if st.session_state.sidebar_open else "Open menu"
-
-st.markdown(f"""
-<style>
-section[data-testid="stSidebar"] {{
-    {'display: flex' if st.session_state.sidebar_open else 'display: none'} !important;
-}}
-/* push toggle button right when sidebar is open */
-#menu-toggle-container {{
-    position: fixed;
-    top: 12px;
-    left: {'258px' if st.session_state.sidebar_open else '12px'};
-    z-index: 9999;
-    transition: left 0.25s ease;
-}}
-</style>
-<div id="menu-toggle-container"></div>
-""", unsafe_allow_html=True)
-
 with st.sidebar:
-    # Close button at top of sidebar
-    close_col, logo_col = st.columns([1, 4])
-    with close_col:
-        if st.button("✕", key="sb_close", help="Close menu"):
-            st.session_state.sidebar_open = False
-            st.rerun()
-    with logo_col:
-        st.markdown("""
-        <div style="padding:16px 0 16px;">
-            <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 4px;">Primary FRCA</p>
-            <h2 style="font-family:Fraunces,serif;color:#e8edf5;font-size:20px;font-weight:300;margin:0;letter-spacing:-0.02em;">MCQ Drill</h2>
-        </div>
-        """, unsafe_allow_html=True)
-
-    st.markdown('<div style="border-bottom:1px solid #252e42;margin-bottom:8px;"></div>', unsafe_allow_html=True)
+    st.markdown("""
+    <div style="padding:24px 16px 20px;border-bottom:1px solid #252e42;margin-bottom:8px;">
+        <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 6px;">Primary FRCA</p>
+        <h2 style="font-family:Fraunces,serif;color:#e8edf5;font-size:24px;font-weight:300;margin:0;letter-spacing:-0.02em;">MCQ Drill</h2>
+    </div>
+    """, unsafe_allow_html=True)
 
     if st.button("Home", use_container_width=True):
         nav("home")
@@ -835,20 +786,6 @@ with st.sidebar:
         </div>
         """, unsafe_allow_html=True)
 
-
-# ─────────────────────────────────────────────────────────────────────────────
-# FLOATING MENU BUTTON (all pages)
-# ─────────────────────────────────────────────────────────────────────────────
-if not st.session_state.sidebar_open:
-    st.markdown("""
-    <style>
-    section[data-testid="stSidebar"] { display: none !important; }
-    </style>
-    """, unsafe_allow_html=True)
-    if st.button("☰  Menu", key="sb_open_float"):
-        st.session_state.sidebar_open = True
-        st.rerun()
-    st.markdown('<div style="margin-bottom:8px;"></div>', unsafe_allow_html=True)
 
 # ─────────────────────────────────────────────────────────────────────────────
 # PAGE: HOME
