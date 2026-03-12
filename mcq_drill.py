@@ -56,17 +56,28 @@ html, body, [class*="css"] {
 }
 
 /* ── Sidebar ── */
-section[data-testid="stSidebar"],
-[data-testid="stSidebar"] {
+[data-testid="stSidebar"],
+[data-testid="stSidebar"] > div,
+section[data-testid="stSidebar"] {
     background: var(--surface) !important;
     border-right: 1px solid var(--border) !important;
-    min-width: 240px !important;
-    display: flex !important;
+    width: 260px !important;
+    min-width: 260px !important;
+    max-width: 260px !important;
+    transform: none !important;
+    visibility: visible !important;
+    opacity: 1 !important;
 }
+/* Hide collapse/expand controls */
+[data-testid="stSidebarCollapseButton"],
+[data-testid="collapsedControl"],
+button[aria-label="Close sidebar"],
+button[aria-label="Open sidebar"],
+.st-emotion-cache-pb6fr7,
+.st-emotion-cache-czk5ss { display: none !important; }
+
 [data-testid="stSidebar"] *,
 [data-testid="stSidebarContent"] * { color: var(--text) !important; }
-[data-testid="stSidebarCollapseButton"] { display: none !important; }
-[data-testid="collapsedControl"] { display: none !important; }
 [data-testid="stSidebar"] .stButton > button,
 [data-testid="stSidebarContent"] .stButton > button {
     background: transparent !important;
@@ -271,6 +282,44 @@ button[kind="secondary"] {
 hr { border-color: var(--border) !important; margin: 28px 0 !important; }
 #MainMenu, footer, header { visibility: hidden; }
 </style>
+""", unsafe_allow_html=True)
+
+# ── Force sidebar open via JS ─────────────────────────────────────────────────
+st.markdown("""
+<script>
+(function forceSidebar() {
+    function run() {
+        // Remove collapse button
+        var collapseBtn = document.querySelector('[data-testid="stSidebarCollapseButton"]');
+        if (collapseBtn) collapseBtn.style.display = 'none';
+
+        // Remove the collapsed-state control arrow
+        var collapsed = document.querySelector('[data-testid="collapsedControl"]');
+        if (collapsed) collapsed.style.display = 'none';
+
+        // If sidebar has been collapsed (has translate style), force it back
+        var sidebar = document.querySelector('[data-testid="stSidebar"]');
+        if (sidebar) {
+            sidebar.style.transform = 'none';
+            sidebar.style.width = '260px';
+            sidebar.style.minWidth = '260px';
+            sidebar.style.visibility = 'visible';
+        }
+
+        // Hide any open/close chevron buttons near sidebar
+        document.querySelectorAll('button[kind="header"]').forEach(function(b) {
+            b.style.display = 'none';
+        });
+    }
+    // Run immediately and after short delay for dynamic renders
+    run();
+    setTimeout(run, 300);
+    setTimeout(run, 800);
+    // Also run on any DOM mutations
+    var observer = new MutationObserver(run);
+    observer.observe(document.body, { childList: true, subtree: true, attributes: true });
+})();
+</script>
 """, unsafe_allow_html=True)
 
 # ── Topic colours ─────────────────────────────────────────────────────────────
