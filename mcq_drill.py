@@ -1835,7 +1835,7 @@ elif st.session_state.page == "textbook":
 # ─────────────────────────────────────────────────────────────────────────────
 elif st.session_state.page == "flashcards":
 
-    # Load data lazily
+    # ── Load data ─────────────────────────────────────────────────────────────
     if st.session_state.fc_data is None:
         st.session_state.fc_data = load_flashcard_data()
     fc_data = st.session_state.fc_data
@@ -1844,22 +1844,104 @@ elif st.session_state.page == "flashcards":
         decks = [{"id": "default", "name": "FRCA Revision", "colour": "#4f9cf9", "cards": []}]
         fc_data["decks"] = decks
 
-    st.markdown("""
-    <div style="padding-bottom:28px;border-bottom:1px solid #252e42;margin-bottom:28px;">
-        <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 8px;">Spaced Repetition</p>
-        <h2 style="font-family:Fraunces,serif;font-size:36px;font-weight:300;letter-spacing:-0.03em;margin:0;color:#e8edf5;">Flashcards</h2>
-    </div>
-    """, unsafe_allow_html=True)
+    # ── Streak calculation ────────────────────────────────────────────────────
+    streak_data = fc_data.get("streak", {"last_study_date": None, "count": 0})
+    today_str = datetime.now().strftime("%Y-%m-%d")
+    yesterday_str = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
+    last_date = streak_data.get("last_study_date")
+    streak_count = streak_data.get("count", 0)
+    if last_date == today_str:
+        pass  # already studied today
+    elif last_date == yesterday_str:
+        pass  # streak intact, not yet studied today
+    elif last_date is None:
+        streak_count = 0
+    else:
+        streak_count = 0  # streak broken
 
     fc_view = st.session_state.get("fc_view", "decks")
 
+    # ── DECK LIST VIEW ────────────────────────────────────────────────────────
     if fc_view == "decks":
-        # ── Deck list ────────────────────────────────────────────────────────
-        # New deck expander
+
+        # Header
+        st.markdown("""
+        <div style="padding-bottom:24px;border-bottom:1px solid #252e42;margin-bottom:28px;">
+            <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;
+                      letter-spacing:0.1em;text-transform:uppercase;margin:0 0 8px;">Spaced Repetition</p>
+            <h2 style="font-family:Fraunces,serif;font-size:36px;font-weight:300;
+                       letter-spacing:-0.03em;margin:0;color:#e8edf5;">Flashcards</h2>
+        </div>
+        """, unsafe_allow_html=True)
+
+        # ── Streak + Study All row ────────────────────────────────────────────
+        all_due = [c for deck in decks for c in deck["cards"] if fc_is_due(c)]
+        all_due_count = len(all_due)
+        total_cards = sum(len(d["cards"]) for d in decks)
+
+        streak_icon = "🔥" if streak_count >= 1 else "○"
+        streak_label = f"{streak_count} day streak" if streak_count > 1 else ("1 day streak" if streak_count == 1 else "No streak yet")
+
+        col_streak, col_studyall = st.columns([1, 2])
+        with col_streak:
+            st.markdown(f"""
+            <div style="background:#161b27;border:1px solid #252e42;border-radius:10px;
+                        padding:18px 20px;text-align:center;">
+                <p style="font-size:28px;margin:0 0 4px;">{streak_icon}</p>
+                <p style="font-family:Fraunces,serif;font-size:24px;font-weight:300;
+                          color:#e8edf5;margin:0 0 2px;">{streak_count}</p>
+                <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;
+                          text-transform:uppercase;letter-spacing:0.06em;margin:0;">day streak</p>
+            </div>
+            """, unsafe_allow_html=True)
+        with col_studyall:
+            if all_due_count > 0:
+                st.markdown(f"""
+                <div style="background:#0a1f14;border:1.5px solid #14532d;border-radius:10px;
+                            padding:18px 20px;">
+                    <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#4ade80;
+                              text-transform:uppercase;letter-spacing:0.06em;margin:0 0 4px;">Reviews waiting</p>
+                    <p style="font-family:Fraunces,serif;font-size:32px;font-weight:300;
+                              color:#4ade80;margin:0 0 12px;line-height:1;">{all_due_count}
+                        <span style="font-size:14px;color:#6b7a99;font-family:IBM Plex Mono,monospace;">
+                            / {total_cards} cards
+                        </span>
+                    </p>
+                </div>
+                """, unsafe_allow_html=True)
+                if st.button(f"Study All Due ({all_due_count}) →", use_container_width=True, key="fc_study_all"):
+                    # Build cross-deck queue: store (deck_id, card_id) pairs
+                    import random as _random
+                    cross_queue = []
+                    for dk in decks:
+                        for c in dk["cards"]:
+                            if fc_is_due(c):
+                                cross_queue.append({"deck_id": dk["id"], "card_id": c["id"]})
+                    _random.shuffle(cross_queue)
+                    st.session_state.fc_study_queue = cross_queue
+                    st.session_state.fc_study_idx = 0
+                    st.session_state.fc_flipped = False
+                    st.session_state.fc_session_stats = {"again": 0, "hard": 0, "good": 0, "easy": 0}
+                    st.session_state.fc_active_deck_id = None  # cross-deck mode
+                    st.session_state.fc_view = "study"
+                    st.rerun()
+            else:
+                st.markdown("""
+                <div style="background:#161b27;border:1px solid #252e42;border-radius:10px;
+                            padding:18px 20px;">
+                    <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#4ade80;
+                              text-transform:uppercase;letter-spacing:0.06em;margin:0 0 4px;">All caught up</p>
+                    <p style="font-size:15px;color:#e8edf5;margin:0;">✓ No reviews due</p>
+                </div>
+                """, unsafe_allow_html=True)
+
+        st.markdown('<div style="height:12px;"></div>', unsafe_allow_html=True)
+
+        # ── New Deck ──────────────────────────────────────────────────────────
         with st.expander("+ New Deck"):
-            nd_name = st.text_input("Deck name", placeholder="e.g. Pharmacology — Drug Mechanisms", key="nd_name")
-            nd_colours = {"Blue": "#4f9cf9", "Green": "#4ade80", "Amber": "#fbbf24",
-                          "Red": "#f87171", "Purple": "#a78bfa", "Teal": "#2dd4bf"}
+            nd_name   = st.text_input("Deck name", placeholder="e.g. Drug Mechanisms", key="nd_name")
+            nd_colours = {"Teal": "#2dd4bf", "Purple": "#a78bfa", "Blue": "#38bdf8",
+                          "Amber": "#fb923c", "Green": "#4ade80", "Red": "#f87171"}
             nd_colour = st.selectbox("Colour", list(nd_colours.keys()), key="nd_colour")
             if st.button("Create Deck", key="nd_create"):
                 if nd_name.strip():
@@ -1871,33 +1953,95 @@ elif st.session_state.page == "flashcards":
                     st.success(f"Deck '{nd_name}' created!")
                     st.rerun()
 
-        st.markdown("")
+        st.markdown('<div style="height:8px;"></div>', unsafe_allow_html=True)
 
+        # ── Deck cards ────────────────────────────────────────────────────────
         for deck in decks:
             total  = len(deck["cards"])
             due    = sum(1 for c in deck["cards"] if fc_is_due(c))
             colour = deck.get("colour", "#4f9cf9")
+            learned = sum(1 for c in deck["cards"] if c.get("interval", 1) > 1)
+            mastery_pct = int(learned / total * 100) if total > 0 else 0
 
-            st.markdown(f"""
-            <div style="background:#161b27;border:1px solid #252e42;border-radius:8px;
-                        padding:18px 22px;margin-bottom:8px;border-left:3px solid {colour};">
-                <div style="display:flex;justify-content:space-between;align-items:center;">
-                    <div>
-                        <p style="font-size:15px;font-weight:500;color:#e8edf5;margin:0 0 4px;">{deck["name"]}</p>
-                        <p style="font-family:IBM Plex Mono,monospace;font-size:11px;color:#6b7a99;margin:0;">
-                            {total} cards &middot; <span style="color:{colour};">{due} due</span>
-                        </p>
-                    </div>
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
+            # Next review time when nothing due
+            if due == 0 and total > 0:
+                future_cards = [c for c in deck["cards"] if c.get("next_review")]
+                if future_cards:
+                    next_dt = min(datetime.fromisoformat(c["next_review"]) for c in future_cards)
+                    delta = next_dt - datetime.now()
+                    hrs = int(delta.total_seconds() / 3600)
+                    if hrs < 1:
+                        next_str = "< 1 hour"
+                    elif hrs < 24:
+                        next_str = f"{hrs}h"
+                    else:
+                        next_str = f"{delta.days}d"
+                    due_display = f"Next in {next_str}"
+                else:
+                    due_display = "No reviews scheduled"
+            else:
+                due_display = None
 
-            dc1, dc2, dc3, dc4 = st.columns([2, 2, 2, 1])
-            with dc1:
-                if st.button("Study", key=f"fc_study_{deck['id']}", use_container_width=True):
-                    due_cards = [c for c in deck["cards"] if fc_is_due(c)]
-                    if due_cards:
-                        st.session_state.fc_study_queue = [c["id"] for c in due_cards]
+            # Progress ring SVG
+            r = 18
+            circ = 2 * 3.14159 * r
+            filled = circ * mastery_pct / 100
+            ring_svg = (
+                f'<svg width="44" height="44" viewBox="0 0 44 44">'
+                f'<circle cx="22" cy="22" r="{r}" fill="none" stroke="#252e42" stroke-width="3"/>'
+                f'<circle cx="22" cy="22" r="{r}" fill="none" stroke="{colour}" stroke-width="3"'
+                f' stroke-dasharray="{filled:.1f} {circ:.1f}" stroke-linecap="round"'
+                f' transform="rotate(-90 22 22)"/>'
+                f'<text x="22" y="27" text-anchor="middle" font-family="IBM Plex Mono" font-size="9"'
+                f' fill="{colour}">{mastery_pct}%</text>'
+                f'</svg>'
+            )
+
+            # Deck card HTML
+            if due > 0:
+                due_html = (
+                    f'<p style="font-family:Fraunces,serif;font-size:36px;font-weight:300;'
+                    f'color:{colour};margin:0 0 2px;line-height:1;">{due}</p>'
+                    f'<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;'
+                    f'text-transform:uppercase;letter-spacing:0.06em;margin:0;">due</p>'
+                )
+            else:
+                due_html = (
+                    f'<p style="font-size:22px;margin:0 0 2px;">✓</p>'
+                    f'<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#4ade80;margin:0;">'
+                    + (due_display or "all done") + '</p>'
+                )
+
+            st.markdown(
+                f'<div style="background:#161b27;border:1px solid {"#" + colour.lstrip("#") if due > 0 else "252e42"};'
+                f'border-radius:12px;padding:20px 24px;margin-bottom:6px;border-left:3px solid {colour};">'
+                f'<div style="display:flex;align-items:center;justify-content:space-between;">'
+                f'<div style="flex:1;">'
+                f'<p style="font-size:16px;font-weight:500;color:#e8edf5;margin:0 0 3px;">{deck["name"]}</p>'
+                f'<p style="font-family:IBM Plex Mono,monospace;font-size:11px;color:#6b7a99;margin:0;">'
+                f'{total} cards</p>'
+                f'</div>'
+                f'<div style="display:flex;align-items:center;gap:20px;">'
+                f'{ring_svg}'
+                f'<div style="text-align:center;min-width:52px;">{due_html}</div>'
+                f'</div>'
+                f'</div>'
+                f'</div>',
+                unsafe_allow_html=True
+            )
+
+            # Action row — Study CTA dominant, rest in a slim row
+            if due > 0:
+                btn_study, btn_browse, btn_add, btn_del = st.columns([3, 1, 1, 1])
+            else:
+                btn_study, btn_browse, btn_add, btn_del = st.columns([3, 1, 1, 1])
+
+            with btn_study:
+                study_label = f"Study {due} due →" if due > 0 else "Browse cards"
+                if st.button(study_label, key=f"fc_study_{deck['id']}", use_container_width=True):
+                    if due > 0:
+                        due_cards = [c for c in deck["cards"] if fc_is_due(c)]
+                        st.session_state.fc_study_queue = [{"deck_id": deck["id"], "card_id": c["id"]} for c in due_cards]
                         st.session_state.fc_study_idx = 0
                         st.session_state.fc_flipped = False
                         st.session_state.fc_session_stats = {"again": 0, "hard": 0, "good": 0, "easy": 0}
@@ -1905,41 +2049,50 @@ elif st.session_state.page == "flashcards":
                         st.session_state.fc_view = "study"
                         st.rerun()
                     else:
-                        st.toast("No cards due in this deck!")
-            with dc2:
+                        st.session_state.fc_active_deck_id = deck["id"]
+                        st.session_state.fc_view = "browse"
+                        st.rerun()
+            with btn_browse:
                 if st.button("Browse", key=f"fc_browse_{deck['id']}", use_container_width=True):
                     st.session_state.fc_active_deck_id = deck["id"]
                     st.session_state.fc_view = "browse"
                     st.rerun()
-            with dc3:
-                if st.button("Add Card", key=f"fc_add_{deck['id']}", use_container_width=True):
+            with btn_add:
+                if st.button("+ Card", key=f"fc_add_{deck['id']}", use_container_width=True):
                     st.session_state.fc_active_deck_id = deck["id"]
                     st.session_state.fc_view = "add"
                     st.rerun()
-            with dc4:
+            with btn_del:
                 if st.button("🗑", key=f"fc_del_{deck['id']}", use_container_width=True):
                     fc_data["decks"] = [d for d in fc_data["decks"] if d["id"] != deck["id"]]
                     save_flashcard_data(fc_data)
                     st.session_state.fc_data = fc_data
                     st.rerun()
 
+            st.markdown('<div style="height:4px;"></div>', unsafe_allow_html=True)
+
+    # ── ADD CARD VIEW ─────────────────────────────────────────────────────────
     elif fc_view == "add":
-        # ── Add card ─────────────────────────────────────────────────────────
         deck = next((d for d in decks if d["id"] == st.session_state.get("fc_active_deck_id")), decks[0])
-        if st.button("← Back to Decks", key="fc_back_add"):
+        colour = deck.get("colour", "#4f9cf9")
+        if st.button("← Decks", key="fc_back_add"):
             st.session_state.fc_view = "decks"
             st.rerun()
-        st.markdown(f"""
-        <h3 style="font-family:Fraunces,serif;font-size:22px;font-weight:300;
-                   color:#e8edf5;margin:16px 0 24px;">Add Card — {deck["name"]}</h3>
-        """, unsafe_allow_html=True)
+        st.markdown(
+            f'<div style="margin:16px 0 24px;">'
+            f'<div style="display:flex;align-items:center;gap:10px;">'
+            f'<div style="width:3px;height:20px;background:{colour};border-radius:2px;"></div>'
+            f'<p style="font-family:Fraunces,serif;font-size:22px;font-weight:300;color:#e8edf5;margin:0;">Add Card — {deck["name"]}</p>'
+            f'</div></div>',
+            unsafe_allow_html=True
+        )
         fc1, fc2 = st.columns(2)
         with fc1:
             st.markdown('<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Front</p>', unsafe_allow_html=True)
-            new_front = st.text_area("Front", height=140, placeholder="Question or concept...", key="fc_new_front", label_visibility="collapsed")
+            new_front = st.text_area("Front", height=160, placeholder="Question or concept...", key="fc_new_front", label_visibility="collapsed")
         with fc2:
             st.markdown('<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Back</p>', unsafe_allow_html=True)
-            new_back  = st.text_area("Back",  height=140, placeholder="Answer or explanation...", key="fc_new_back",  label_visibility="collapsed")
+            new_back  = st.text_area("Back",  height=160, placeholder="Answer or explanation...", key="fc_new_back",  label_visibility="collapsed")
         st.markdown("")
         if st.button("Save Card", use_container_width=True, key="fc_save_card",
                      disabled=not (new_front.strip() and new_back.strip())):
@@ -1952,135 +2105,215 @@ elif st.session_state.page == "flashcards":
             st.toast("Card saved!")
             st.rerun()
 
+    # ── BROWSE VIEW ───────────────────────────────────────────────────────────
     elif fc_view == "browse":
-        # ── Browse cards ──────────────────────────────────────────────────────
         deck = next((d for d in decks if d["id"] == st.session_state.get("fc_active_deck_id")), decks[0])
-        if st.button("← Back", key="fc_back_browse"):
-            st.session_state.fc_view = "decks"
-            st.rerun()
-        st.markdown(f"""
-        <h3 style="font-family:Fraunces,serif;font-size:22px;font-weight:300;
-                   color:#e8edf5;margin:16px 0 8px;">{deck["name"]}</h3>
-        <p style="font-family:IBM Plex Mono,monospace;font-size:11px;color:#6b7a99;margin:0 0 24px;">
-            {len(deck["cards"])} cards &middot; {sum(1 for c in deck["cards"] if fc_is_due(c))} due
-        </p>
-        """, unsafe_allow_html=True)
+        colour = deck.get("colour", "#4f9cf9")
+        b_col1, b_col2 = st.columns([1, 4])
+        with b_col1:
+            if st.button("← Decks", key="fc_back_browse"):
+                st.session_state.fc_view = "decks"
+                st.rerun()
+        with b_col2:
+            st.markdown(
+                f'<div style="display:flex;align-items:center;gap:10px;padding:4px 0;">'
+                f'<div style="width:3px;height:18px;background:{colour};border-radius:2px;"></div>'
+                f'<p style="font-family:Fraunces,serif;font-size:20px;font-weight:300;color:#e8edf5;margin:0;">{deck["name"]}</p>'
+                f'<span style="font-family:IBM Plex Mono,monospace;font-size:11px;color:#6b7a99;">'
+                f'{len(deck["cards"])} cards &middot; {sum(1 for c in deck["cards"] if fc_is_due(c))} due</span>'
+                f'</div>',
+                unsafe_allow_html=True
+            )
+        st.markdown('<div style="height:12px;"></div>', unsafe_allow_html=True)
 
         if not deck["cards"]:
-            st.markdown('<p style="color:#6b7a99;text-align:center;padding:40px 0;">No cards yet.</p>', unsafe_allow_html=True)
+            st.markdown('<p style="color:#6b7a99;text-align:center;padding:60px 0;">No cards yet — add your first one.</p>', unsafe_allow_html=True)
+            if st.button("+ Add Card", use_container_width=True, key="browse_add_cta"):
+                st.session_state.fc_view = "add"
+                st.rerun()
         else:
             for card in deck["cards"]:
-                due_label = "Due" if fc_is_due(card) else fc_days_until(card)
-                colour = "#4ade80" if fc_is_due(card) else "#6b7a99"
-                with st.expander(f"{card['front'][:70]}{'…' if len(card['front']) > 70 else ''}"):
+                is_due = fc_is_due(card)
+                due_label = "Due now" if is_due else fc_days_until(card)
+                badge_c = "#4ade80" if is_due else "#6b7a99"
+                with st.expander(card["front"][:80] + ("…" if len(card["front"]) > 80 else "")):
                     bc1, bc2 = st.columns(2)
                     with bc1:
-                        st.markdown(f'<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Front</p>', unsafe_allow_html=True)
-                        st.markdown(f'<div style="background:#1e2535;border:1px solid #252e42;border-radius:6px;padding:14px;font-size:14px;color:#e8edf5;line-height:1.6;white-space:pre-wrap;">{card["front"]}</div>', unsafe_allow_html=True)
+                        st.markdown('<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Front</p>', unsafe_allow_html=True)
+                        st.markdown(f'<div style="background:#1e2535;border:1px solid #252e42;border-radius:8px;padding:14px;font-size:14px;color:#e8edf5;line-height:1.6;white-space:pre-wrap;">{card["front"]}</div>', unsafe_allow_html=True)
                     with bc2:
-                        st.markdown(f'<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Back</p>', unsafe_allow_html=True)
-                        st.markdown(f'<div style="background:#1e2535;border:1px solid #252e42;border-radius:6px;padding:14px;font-size:14px;color:#e8edf5;line-height:1.6;white-space:pre-wrap;">{card["back"]}</div>', unsafe_allow_html=True)
-                    st.markdown(f'<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:{colour};margin-top:8px;">Next review: {due_label} &middot; Interval: {card.get("interval",1)}d &middot; EF: {card.get("ease_factor",2.5):.2f}</p>', unsafe_allow_html=True)
-                    if st.button("Delete", key=f"fc_del_card_{card['id']}"):
+                        st.markdown('<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Back</p>', unsafe_allow_html=True)
+                        st.markdown(f'<div style="background:#1e2535;border:1px solid #252e42;border-radius:8px;padding:14px;font-size:14px;color:#e8edf5;line-height:1.6;white-space:pre-wrap;">{card["back"]}</div>', unsafe_allow_html=True)
+                    st.markdown(
+                        f'<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:{badge_c};margin-top:10px;">'
+                        f'{due_label} &middot; interval {card.get("interval",1)}d &middot; EF {card.get("ease_factor",2.5):.2f}</p>',
+                        unsafe_allow_html=True
+                    )
+                    if st.button("Delete card", key=f"fc_del_card_{card['id']}"):
                         deck["cards"] = [c for c in deck["cards"] if c["id"] != card["id"]]
                         save_flashcard_data(fc_data)
                         st.session_state.fc_data = fc_data
                         st.rerun()
 
+    # ── STUDY VIEW ────────────────────────────────────────────────────────────
     elif fc_view == "study":
-        # ── Study session ─────────────────────────────────────────────────────
-        deck = next((d for d in decks if d["id"] == st.session_state.get("fc_active_deck_id")), decks[0])
-        queue_ids = st.session_state.fc_study_queue
-        idx       = st.session_state.fc_study_idx
-        ss        = st.session_state.fc_session_stats
+        queue   = st.session_state.fc_study_queue   # list of {deck_id, card_id}
+        idx     = st.session_state.fc_study_idx
+        ss      = st.session_state.fc_session_stats
 
-        if not queue_ids or idx >= len(queue_ids):
-            # Session complete
+        # Support old format (list of strings) gracefully
+        if queue and isinstance(queue[0], str):
+            active_deck_id = st.session_state.get("fc_active_deck_id")
+            queue = [{"deck_id": active_deck_id, "card_id": cid} for cid in queue]
+            st.session_state.fc_study_queue = queue
+
+        # ── Session complete ──────────────────────────────────────────────────
+        if not queue or idx >= len(queue):
             total_reviewed = idx
+
+            # Update streak
+            streak_data2 = fc_data.get("streak", {"last_study_date": None, "count": 0})
+            today_s = datetime.now().strftime("%Y-%m-%d")
+            yest_s  = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
+            last_s  = streak_data2.get("last_study_date")
+            cnt     = streak_data2.get("count", 0)
+            if last_s == today_s:
+                pass
+            elif last_s == yest_s:
+                cnt += 1
+            elif last_s is None:
+                cnt = 1
+            else:
+                cnt = 1
+            streak_data2 = {"last_study_date": today_s, "count": cnt}
+            fc_data["streak"] = streak_data2
+            save_flashcard_data(fc_data)
+            st.session_state.fc_data = fc_data
+
+            total_correct = ss["good"] + ss["easy"]
+            pct = int(total_correct / total_reviewed * 100) if total_reviewed else 0
+
             st.markdown(f"""
-            <div style="text-align:center;padding:48px 0 32px;border-bottom:1px solid #252e42;margin-bottom:32px;">
-                <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 16px;">Session complete</p>
-                <h2 style="font-family:Fraunces,serif;font-size:60px;font-weight:300;letter-spacing:-0.04em;margin:0 0 20px;color:#e8edf5;">{total_reviewed}</h2>
-                <p style="font-size:14px;color:#6b7a99;margin:0;">cards reviewed</p>
+            <div style="text-align:center;padding:48px 0 36px;">
+                <p style="font-size:40px;margin:0 0 8px;">{"🔥" if cnt >= 2 else "✓"}</p>
+                <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;
+                          letter-spacing:0.1em;text-transform:uppercase;margin:0 0 12px;">Session complete</p>
+                <h2 style="font-family:Fraunces,serif;font-size:64px;font-weight:300;
+                           letter-spacing:-0.04em;margin:0 0 4px;color:#4ade80;line-height:1;">{total_reviewed}</h2>
+                <p style="font-size:14px;color:#6b7a99;margin:0 0 6px;">cards reviewed</p>
+                <p style="font-family:IBM Plex Mono,monospace;font-size:12px;color:#e8edf5;">
+                    {cnt} day streak 🔥</p>
             </div>
             """, unsafe_allow_html=True)
+
             sc1, sc2, sc3, sc4 = st.columns(4)
-            for col, (label, key, colour) in zip(
+            for col, (label, key, col_c) in zip(
                 [sc1, sc2, sc3, sc4],
                 [("Again", "again", "#f87171"), ("Hard", "hard", "#fb923c"),
-                 ("Good", "good", "#fbbf24"), ("Easy", "easy", "#4ade80")]
+                 ("Good",  "good",  "#fbbf24"), ("Easy", "easy",  "#4ade80")]
             ):
                 with col:
                     st.markdown(f"""
-                    <div style="background:#161b27;border:1px solid #252e42;border-radius:8px;padding:16px;text-align:center;">
-                        <p style="font-family:Fraunces,serif;font-size:28px;font-weight:300;color:{colour};margin:0 0 4px;">{ss[key]}</p>
-                        <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:0.06em;margin:0;">{label}</p>
+                    <div style="background:#161b27;border:1px solid #252e42;border-radius:10px;
+                                padding:16px;text-align:center;">
+                        <p style="font-family:Fraunces,serif;font-size:32px;font-weight:300;
+                                  color:{col_c};margin:0 0 4px;">{ss[key]}</p>
+                        <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;
+                                  text-transform:uppercase;letter-spacing:0.06em;margin:0;">{label}</p>
                     </div>
                     """, unsafe_allow_html=True)
-            st.markdown("")
-            if st.button("Back to Decks", use_container_width=True, key="fc_back_done"):
+
+            st.markdown('<div style="height:20px;"></div>', unsafe_allow_html=True)
+            if st.button("Back to Decks →", use_container_width=True, key="fc_back_done"):
                 st.session_state.fc_view = "decks"
                 st.session_state.fc_study_queue = []
                 st.session_state.fc_study_idx = 0
                 st.session_state.fc_session_stats = {"again": 0, "hard": 0, "good": 0, "easy": 0}
                 st.rerun()
+
         else:
-            card_id = queue_ids[idx]
-            card = next((c for c in deck["cards"] if c["id"] == card_id), None)
+            # ── Active card ───────────────────────────────────────────────────
+            item     = queue[idx]
+            deck_id  = item["deck_id"]
+            card_id  = item["card_id"]
+            deck     = next((d for d in decks if d["id"] == deck_id), decks[0])
+            card     = next((c for c in deck["cards"] if c["id"] == card_id), None)
+
             if not card:
                 st.session_state.fc_study_idx += 1
                 st.rerun()
 
-            # Progress
-            st.progress(idx / len(queue_ids))
-            st.markdown(f'<p style="font-family:IBM Plex Mono,monospace;font-size:11px;color:#6b7a99;margin-bottom:20px;">{idx + 1} of {len(queue_ids)}</p>', unsafe_allow_html=True)
+            colour = TOPICS.get(card.get("topic", ""), {}).get("colour", deck.get("colour", "#4f9cf9"))
 
-            colour = TOPICS.get(card.get("topic", ""), {}).get("colour", "#4f9cf9")
+            # Progress bar + counter
+            prog_pct = int(idx / len(queue) * 100)
+            st.markdown(
+                f'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">'
+                f'<span style="font-family:IBM Plex Mono,monospace;font-size:11px;color:#6b7a99;">'
+                f'{idx + 1} / {len(queue)}</span>'
+                f'<span style="font-family:IBM Plex Mono,monospace;font-size:11px;color:{colour};">'
+                f'{deck["name"]}</span>'
+                f'</div>'
+                f'<div style="background:#252e42;border-radius:2px;height:3px;margin-bottom:28px;">'
+                f'<div style="width:{prog_pct}%;height:3px;background:{colour};border-radius:2px;"></div>'
+                f'</div>',
+                unsafe_allow_html=True
+            )
 
             if not st.session_state.fc_flipped:
-                # Front
-                st.markdown(f"""
-                <div style="background:#161b27;border:1px solid #252e42;border-radius:10px;
-                            padding:44px 40px;text-align:center;min-height:220px;
-                            display:flex;flex-direction:column;align-items:center;justify-content:center;
-                            border-top:3px solid {colour};">
-                    <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;
-                              text-transform:uppercase;letter-spacing:0.08em;margin:0 0 20px;">Question</p>
-                    <p style="font-family:Fraunces,serif;font-size:22px;font-weight:300;
-                              line-height:1.6;color:#e8edf5;margin:0;white-space:pre-wrap;">{card["front"]}</p>
-                </div>
-                """, unsafe_allow_html=True)
-                st.markdown("")
+                # ── Front ─────────────────────────────────────────────────────
+                st.markdown(
+                    f'<div style="background:#161b27;border:1px solid #252e42;border-radius:12px;'
+                    f'padding:48px 40px;text-align:center;min-height:240px;border-top:3px solid {colour};">'
+                    f'<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;'
+                    f'text-transform:uppercase;letter-spacing:0.08em;margin:0 0 24px;">Question</p>'
+                    f'<p style="font-family:Fraunces,serif;font-size:22px;font-weight:300;'
+                    f'line-height:1.6;color:#e8edf5;margin:0;white-space:pre-wrap;">{card["front"]}</p>'
+                    f'</div>',
+                    unsafe_allow_html=True
+                )
+                st.markdown('<div style="height:16px;"></div>', unsafe_allow_html=True)
                 if st.button("Reveal Answer →", use_container_width=True, key="fc_reveal"):
                     st.session_state.fc_flipped = True
                     st.rerun()
+
             else:
-                # Back
-                st.markdown(f"""
-                <div style="background:#1e2535;border:1px solid {colour};border-radius:10px;
-                            padding:44px 40px;text-align:center;min-height:220px;
-                            box-shadow:0 0 32px rgba(79,156,249,0.08);">
-                    <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;
-                              text-transform:uppercase;letter-spacing:0.08em;margin:0 0 20px;">Answer</p>
-                    <p style="font-family:IBM Plex Sans,sans-serif;font-size:16px;font-weight:300;
-                              line-height:1.8;color:#e8edf5;margin:0;white-space:pre-wrap;text-align:left;">{card["back"]}</p>
-                </div>
-                """, unsafe_allow_html=True)
+                # ── Back ──────────────────────────────────────────────────────
+                st.markdown(
+                    f'<div style="background:#161b27;border:1.5px solid {colour};border-radius:12px;'
+                    f'padding:48px 40px;min-height:240px;">'
+                    f'<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;'
+                    f'text-transform:uppercase;letter-spacing:0.08em;margin:0 0 20px;">Answer</p>'
+                    f'<p style="font-family:IBM Plex Sans,sans-serif;font-size:16px;'
+                    f'line-height:1.8;color:#e8edf5;margin:0;white-space:pre-wrap;">{card["back"]}</p>'
+                    f'</div>',
+                    unsafe_allow_html=True
+                )
+                st.markdown('<div style="height:16px;"></div>', unsafe_allow_html=True)
+                st.markdown('<p style="font-family:IBM Plex Mono,monospace;font-size:11px;color:#6b7a99;text-align:center;margin-bottom:10px;">How well did you know this?</p>', unsafe_allow_html=True)
 
-                st.markdown('<p style="font-family:IBM Plex Mono,monospace;font-size:11px;color:#6b7a99;text-align:center;margin:20px 0 8px;">How well did you recall this?</p>', unsafe_allow_html=True)
-
-                ef = card.get("ease_factor", 2.5)
+                ef   = card.get("ease_factor", 2.5)
                 intv = card.get("interval", 1)
-                previews = ["<1d", "~1d", f"~{max(1,round(intv*ef))}d", f"~{max(1,round(intv*ef*1.3))}d"]
-                grades = [("Again", "again", 0, "#f87171"), ("Hard", "hard", 1, "#fb923c"),
-                          ("Good", "good",  2, "#fbbf24"), ("Easy", "easy", 3, "#4ade80")]
+                previews = ["< 1d", "tomorrow", f"{max(1,round(intv*ef))}d", f"{max(1,round(intv*ef*1.3))}d"]
+                grades   = [("Again", "again", 0, "#f87171"),
+                            ("Hard",  "hard",  1, "#fb923c"),
+                            ("Good",  "good",  2, "#fbbf24"),
+                            ("Easy",  "easy",  3, "#4ade80")]
 
                 g_cols = st.columns(4)
-                for col, (label, key, grade, colour_g) in zip(g_cols, grades):
+                for col, (label, key, grade, col_c) in zip(g_cols, grades):
                     with col:
-                        st.markdown(f'<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;text-align:center;margin-bottom:4px;">{previews[grade]}</p>', unsafe_allow_html=True)
+                        st.markdown(
+                            f'<div style="background:#161b27;border:1px solid #252e42;border-radius:10px;'
+                            f'padding:12px 8px;text-align:center;margin-bottom:6px;">'
+                            f'<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:{col_c};'
+                            f'margin:0 0 4px;">{previews[grade]}</p>'
+                            f'<p style="font-family:IBM Plex Sans,monospace;font-size:14px;font-weight:500;'
+                            f'color:#e8edf5;margin:0;">{label}</p>'
+                            f'</div>',
+                            unsafe_allow_html=True
+                        )
                         if st.button(label, key=f"fc_grade_{grade}", use_container_width=True):
-                            # Apply SM-2
                             updated = sm2(card, grade)
                             card_idx = next((i for i, c in enumerate(deck["cards"]) if c["id"] == card["id"]), None)
                             if card_idx is not None:
