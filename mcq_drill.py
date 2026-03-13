@@ -365,6 +365,35 @@ TOPICS = {
     "Clinical Anaesthesia":         {"colour": "#fb923c", "emoji": ""},
 }
 
+# ── Canonical flashcard deck structure ───────────────────────────────────────
+CANONICAL_DECKS = [
+    {"id": "phy_resp",    "name": "Respiratory Physiology",           "colour": "#2dd4bf", "cards": []},
+    {"id": "phy_cvs",     "name": "Cardiovascular Physiology",        "colour": "#2dd4bf", "cards": []},
+    {"id": "phy_neuro",   "name": "Neurophysiology & Pain",           "colour": "#2dd4bf", "cards": []},
+    {"id": "phy_renal",   "name": "Renal & Acid-Base",                "colour": "#2dd4bf", "cards": []},
+    {"id": "phy_gi",      "name": "Hepatic, GI & Metabolic",          "colour": "#2dd4bf", "cards": []},
+    {"id": "phy_haem",    "name": "Haematology & Immunology",         "colour": "#2dd4bf", "cards": []},
+    {"id": "phy_endo",    "name": "Endocrine & Obstetric Physiology",  "colour": "#2dd4bf", "cards": []},
+    {"id": "ph_inh",      "name": "Inhalational Agents",              "colour": "#a78bfa", "cards": []},
+    {"id": "ph_iv",       "name": "IV Induction Agents & Sedatives",  "colour": "#a78bfa", "cards": []},
+    {"id": "ph_opioid",   "name": "Opioids & Analgesics",             "colour": "#a78bfa", "cards": []},
+    {"id": "ph_nmb",      "name": "NMBs & Reversal",                  "colour": "#a78bfa", "cards": []},
+    {"id": "ph_la",       "name": "Local Anaesthetics",               "colour": "#a78bfa", "cards": []},
+    {"id": "ph_cvd",      "name": "Cardiovascular Drugs",             "colour": "#a78bfa", "cards": []},
+    {"id": "ph_other",    "name": "Antiemetics, Antacids & Other",    "colour": "#a78bfa", "cards": []},
+    {"id": "phx_elec",    "name": "Electricity, Safety & Equipment",  "colour": "#38bdf8", "cards": []},
+    {"id": "phx_gas",     "name": "Gas Laws & Vaporisers",            "colour": "#38bdf8", "cards": []},
+    {"id": "phx_mon",     "name": "Monitoring (CO, Neuro, Temp)",     "colour": "#38bdf8", "cards": []},
+    {"id": "phx_resp",    "name": "Respiratory Mechanics & Spirometry","colour": "#38bdf8", "cards": []},
+    {"id": "phx_stats",   "name": "Statistics & Clinical Trials",     "colour": "#38bdf8", "cards": []},
+    {"id": "ca_airway",   "name": "Airway Anatomy & Management",      "colour": "#fb923c", "cards": []},
+    {"id": "ca_regional", "name": "Regional Anatomy & Blocks",        "colour": "#fb923c", "cards": []},
+    {"id": "ca_preop",    "name": "Preoperative Assessment",          "colour": "#fb923c", "cards": []},
+    {"id": "ca_emerg",    "name": "Perioperative Emergencies",        "colour": "#fb923c", "cards": []},
+    {"id": "ca_obs",      "name": "Obstetric Anaesthesia",            "colour": "#fb923c", "cards": []},
+    {"id": "ca_paeds",    "name": "Paediatric Anaesthesia",           "colour": "#fb923c", "cards": []},
+]
+
 # ── Fixed question bank ───────────────────────────────────────────────────────
 FIXED_BANK = [
     # ── Physiology ──────────────────────────────────────────────────────────
@@ -835,10 +864,16 @@ def load_flashcard_data() -> dict:
         r = sb.table("frca_flashcards").select("data").eq("id", 1).execute()
         if r.data and r.data[0]["data"]:
             d = r.data[0]["data"]
-            return d if isinstance(d, dict) else json.loads(d)
+            data = d if isinstance(d, dict) else json.loads(d)
+            # Merge in any new canonical decks not yet in stored data
+            existing_ids = {deck["id"] for deck in data.get("decks", [])}
+            for canonical in CANONICAL_DECKS:
+                if canonical["id"] not in existing_ids:
+                    data.setdefault("decks", []).append(dict(canonical))
+            return data
     except Exception:
         pass
-    return {"decks": [{"id": "default", "name": "FRCA Revision", "colour": "#4f9cf9", "cards": []}]}
+    return {"decks": [dict(d) for d in CANONICAL_DECKS]}
 
 def save_flashcard_data(fc_data: dict):
     try:
@@ -1871,7 +1906,37 @@ elif st.session_state.page == "flashcards":
     fc_data = st.session_state.fc_data
     decks = fc_data.get("decks", [])
     if not decks:
-        decks = [{"id": "default", "name": "FRCA Revision", "colour": "#4f9cf9", "cards": []}]
+        decks = [
+        # ── Physiology ──────────────────────────────────────────────────────
+        {"id": "phy_resp",   "name": "Respiratory Physiology",         "colour": "#2dd4bf", "cards": []},
+        {"id": "phy_cvs",    "name": "Cardiovascular Physiology",      "colour": "#2dd4bf", "cards": []},
+        {"id": "phy_neuro",  "name": "Neurophysiology & Pain",         "colour": "#2dd4bf", "cards": []},
+        {"id": "phy_renal",  "name": "Renal & Acid-Base",              "colour": "#2dd4bf", "cards": []},
+        {"id": "phy_gi",     "name": "Hepatic, GI & Metabolic",        "colour": "#2dd4bf", "cards": []},
+        {"id": "phy_haem",   "name": "Haematology & Immunology",       "colour": "#2dd4bf", "cards": []},
+        {"id": "phy_endo",   "name": "Endocrine & Obstetric Physiology","colour": "#2dd4bf", "cards": []},
+        # ── Pharmacology ────────────────────────────────────────────────────
+        {"id": "ph_inh",     "name": "Inhalational Agents",            "colour": "#a78bfa", "cards": []},
+        {"id": "ph_iv",      "name": "IV Induction Agents & Sedatives","colour": "#a78bfa", "cards": []},
+        {"id": "ph_opioid",  "name": "Opioids & Analgesics",           "colour": "#a78bfa", "cards": []},
+        {"id": "ph_nmb",     "name": "NMBs & Reversal",                "colour": "#a78bfa", "cards": []},
+        {"id": "ph_la",      "name": "Local Anaesthetics",             "colour": "#a78bfa", "cards": []},
+        {"id": "ph_cvd",     "name": "Cardiovascular Drugs",           "colour": "#a78bfa", "cards": []},
+        {"id": "ph_other",   "name": "Antiemetics, Antacids & Other",  "colour": "#a78bfa", "cards": []},
+        # ── Physics & Clinical Measurement ──────────────────────────────────
+        {"id": "phx_elec",   "name": "Electricity, Safety & Equipment","colour": "#38bdf8", "cards": []},
+        {"id": "phx_gas",    "name": "Gas Laws & Vaporisers",          "colour": "#38bdf8", "cards": []},
+        {"id": "phx_mon",    "name": "Monitoring (CO, Neuro, Temp)",   "colour": "#38bdf8", "cards": []},
+        {"id": "phx_resp",   "name": "Respiratory Mechanics & Spirometry","colour": "#38bdf8","cards": []},
+        {"id": "phx_stats",  "name": "Statistics & Clinical Trials",   "colour": "#38bdf8", "cards": []},
+        # ── Clinical Anaesthesia ─────────────────────────────────────────────
+        {"id": "ca_airway",  "name": "Airway Anatomy & Management",    "colour": "#fb923c", "cards": []},
+        {"id": "ca_regional","name": "Regional Anatomy & Blocks",      "colour": "#fb923c", "cards": []},
+        {"id": "ca_preop",   "name": "Preoperative Assessment",        "colour": "#fb923c", "cards": []},
+        {"id": "ca_emerg",   "name": "Perioperative Emergencies",      "colour": "#fb923c", "cards": []},
+        {"id": "ca_obs",     "name": "Obstetric Anaesthesia",          "colour": "#fb923c", "cards": []},
+        {"id": "ca_paeds",   "name": "Paediatric Anaesthesia",         "colour": "#fb923c", "cards": []},
+    ]
         fc_data["decks"] = decks
 
     # ── Streak calculation ────────────────────────────────────────────────────
