@@ -365,6 +365,43 @@ TOPICS = {
     "Clinical Anaesthesia":         {"colour": "#fb923c", "emoji": ""},
 }
 
+# ── Topic → suggested flashcard decks mapping ────────────────────────────────
+TOPIC_DECK_SUGGESTIONS = {
+    "Physiology": [
+        ("phy_resp",  "Respiratory Physiology"),
+        ("phy_cvs",   "Cardiovascular Physiology"),
+        ("phy_neuro", "Neurophysiology & Pain"),
+        ("phy_renal", "Renal & Acid-Base"),
+        ("phy_gi",    "Hepatic, GI & Metabolic"),
+        ("phy_haem",  "Haematology & Immunology"),
+        ("phy_endo",  "Endocrine & Obstetric Physiology"),
+    ],
+    "Pharmacology": [
+        ("ph_inh",    "Inhalational Agents"),
+        ("ph_iv",     "IV Induction Agents & Sedatives"),
+        ("ph_opioid", "Opioids & Analgesics"),
+        ("ph_nmb",    "NMBs & Reversal"),
+        ("ph_la",     "Local Anaesthetics"),
+        ("ph_cvd",    "Cardiovascular Drugs"),
+        ("ph_other",  "Antiemetics, Antacids & Other"),
+    ],
+    "Physics & Clinical Measurement": [
+        ("phx_elec",  "Electricity, Safety & Equipment"),
+        ("phx_gas",   "Gas Laws & Vaporisers"),
+        ("phx_mon",   "Monitoring (CO, Neuro, Temp)"),
+        ("phx_resp",  "Respiratory Mechanics & Spirometry"),
+        ("phx_stats", "Statistics & Clinical Trials"),
+    ],
+    "Clinical Anaesthesia": [
+        ("ca_airway",   "Airway Anatomy & Management"),
+        ("ca_regional", "Regional Anatomy & Blocks"),
+        ("ca_preop",    "Preoperative Assessment"),
+        ("ca_emerg",    "Perioperative Emergencies"),
+        ("ca_obs",      "Obstetric Anaesthesia"),
+        ("ca_paeds",    "Paediatric Anaesthesia"),
+    ],
+}
+
 # ── Canonical flashcard deck structure ───────────────────────────────────────
 CANONICAL_DECKS = [
     {"id": "phy_resp",    "name": "Respiratory Physiology",           "colour": "#2dd4bf", "cards": []},
@@ -1460,20 +1497,50 @@ Answer the student's follow-up question concisely and clearly. Focus on exam-rel
 
                 default_back = q["answer"] + ". " + q["options"][q["answer"]] + "\n\n" + q["explanation"]
 
-                st.markdown("""
-                <div style="background:#161b27;border:1px solid #252e42;border-radius:8px;
-                            padding:20px 24px;margin:12px 0;">
-                    <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#4f9cf9;
-                              text-transform:uppercase;letter-spacing:0.08em;margin:0 0 14px;">
-                        New Flashcard
-                    </p>
-                """, unsafe_allow_html=True)
+                # Work out suggested decks for this topic
+                q_topic = q.get("topic", "")
+                q_colour = TOPICS.get(q_topic, {}).get("colour", "#4f9cf9")
+                suggestions = TOPIC_DECK_SUGGESTIONS.get(q_topic, [])
+                suggested_names = [name for _, name in suggestions]
 
-                # Deck selector
+                # Build suggested deck chips HTML
+                chips_html = "".join(
+                    f'<span style="display:inline-block;background:{q_colour}18;border:1px solid {q_colour}55;' +
+                    f'border-radius:4px;padding:3px 10px;font-family:IBM Plex Mono,monospace;' +
+                    f'font-size:10px;color:{q_colour};margin:0 4px 4px 0;letter-spacing:0.04em;">{name}</span>'
+                    for _, name in suggestions
+                )
+
+                st.markdown(
+                    f'<div style="background:#161b27;border:1px solid #252e42;border-left:3px solid {q_colour};' +
+                    f'border-radius:8px;padding:16px 20px;margin:12px 0 4px;">' +
+                    f'<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">' +
+                    f'<div style="width:3px;height:14px;background:{q_colour};border-radius:2px;"></div>' +
+                    f'<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:{q_colour};' +
+                    f'text-transform:uppercase;letter-spacing:0.08em;margin:0;">Suggested decks — {q_topic}</p>' +
+                    f'</div>' +
+                    f'<div style="flex-wrap:wrap;display:flex;">{chips_html}</div>' +
+                    f'</div>',
+                    unsafe_allow_html=True
+                )
+
+                st.markdown(
+                    '<div style="background:#161b27;border:1px solid #252e42;border-radius:8px;padding:20px 24px;margin:4px 0;">',
+                    unsafe_allow_html=True
+                )
+
+                # Deck selector — pre-select first suggested deck if available
                 if decks:
                     deck_names = [d["name"] for d in decks]
+                    # Find index of first suggested deck
+                    default_idx = 0
+                    for sname in suggested_names:
+                        if sname in deck_names:
+                            default_idx = deck_names.index(sname)
+                            break
                     chosen_deck_name = st.selectbox(
                         "Deck", deck_names,
+                        index=default_idx,
                         key=f"fc_deck_sel_{q_id}",
                         label_visibility="collapsed"
                     )
@@ -1496,6 +1563,7 @@ Answer the student's follow-up question concisely and clearly. Focus on exam-rel
                     key=f"fc_back_{q_id}", label_visibility="collapsed"
                 )
 
+                st.markdown("</div>", unsafe_allow_html=True)
                 st.markdown("</div>", unsafe_allow_html=True)
 
                 save_col, cancel_col = st.columns(2)
