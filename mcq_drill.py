@@ -94,6 +94,21 @@ button[aria-label="Open sidebar"],
     background: var(--surface2) !important;
     color: var(--text) !important;
 }
+/* Close button — first button in sidebar */
+[data-testid="stSidebar"] [data-testid="stHorizontalBlock"] .stButton > button {
+    border: 1px solid #252e42 !important;
+    color: #6b7a99 !important;
+    font-size: 16px !important;
+    padding: 6px !important;
+    text-align: center !important;
+    justify-content: center !important;
+    min-height: 36px !important;
+}
+[data-testid="stSidebar"] [data-testid="stHorizontalBlock"] .stButton > button:hover {
+    border-color: #f87171 !important;
+    color: #f87171 !important;
+    background: transparent !important;
+}
 
 /* ── Buttons — default ── */
 .stButton > button {
@@ -870,12 +885,21 @@ def clear_saved_session():
 
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 with st.sidebar:
-    st.markdown("""
-    <div style="padding:24px 16px 20px;border-bottom:1px solid #252e42;margin-bottom:8px;">
-        <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 6px;">Primary FRCA</p>
-        <h2 style="font-family:Fraunces,serif;color:#e8edf5;font-size:24px;font-weight:300;margin:0;letter-spacing:-0.02em;">MCQ Drill</h2>
-    </div>
-    """, unsafe_allow_html=True)
+    # Close button at very top of sidebar — always visible on mobile
+    close_col, title_col = st.columns([1, 3])
+    with close_col:
+        if st.button("✕", key="sidebar_close", use_container_width=True):
+            st.session_state.sidebar_visible = False
+            st.rerun()
+    with title_col:
+        st.markdown("""
+        <div style="padding:6px 0 0;">
+            <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 2px;">Primary FRCA</p>
+            <p style="font-family:Fraunces,serif;color:#e8edf5;font-size:18px;font-weight:300;margin:0;">MCQ Drill</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+    st.markdown('<div style="border-bottom:1px solid #252e42;margin:12px 0 8px;"></div>', unsafe_allow_html=True)
 
     if st.button("Home", use_container_width=True):
         nav("home")
