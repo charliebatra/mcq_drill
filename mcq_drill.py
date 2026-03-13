@@ -282,7 +282,7 @@ hr { border-color: var(--border) !important; margin: 28px 0 !important; }
 
 # ── Sidebar toggle state ─────────────────────────────────────────────────────
 if "sidebar_visible" not in st.session_state:
-    st.session_state.sidebar_visible = True
+    st.session_state.sidebar_visible = False
 
 # ── Sidebar JS controller ─────────────────────────────────────────────────────
 sidebar_open = st.session_state.sidebar_visible
@@ -326,15 +326,21 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ── Toggle button (top of main content) ───────────────────────────────────────
-toggle_label = "☰" if not st.session_state.sidebar_visible else "✕  Menu"
-st.markdown(
-    '<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">',
-    unsafe_allow_html=True
-)
+toggle_label = "☰  Menu" if not st.session_state.sidebar_visible else "✕  Close"
+st.markdown("""<style>
+button[data-testid="baseButton-secondary"][kind="secondary"]:first-of-type {
+    background: transparent !important;
+    border: 1px solid #252e42 !important;
+    color: #6b7a99 !important;
+    font-size: 13px !important;
+    padding: 8px 16px !important;
+    min-height: 38px !important;
+    margin-bottom: 4px !important;
+}
+</style>""", unsafe_allow_html=True)
 if st.button(toggle_label, key="sidebar_toggle"):
     st.session_state.sidebar_visible = not st.session_state.sidebar_visible
     st.rerun()
-st.markdown('</div>', unsafe_allow_html=True)
 
 # ── Topic colours ─────────────────────────────────────────────────────────────
 TOPICS = {
