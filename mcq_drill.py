@@ -407,6 +407,115 @@ TOPIC_DECK_SUGGESTIONS = {
     ],
 }
 
+# ── Question → subtopic/deck mapping ────────────────────────────────────────
+# Each entry: question_id → (deck_id, subtopic display name)
+Q_SUBTOPICS = {
+    # ── Physiology ──────────────────────────────────────────────────────────
+    "phy001": ("phy_resp",   "Respiratory Physiology"),
+    "phy002": ("phy_resp",   "Respiratory Physiology"),
+    "phy003": ("phy_cvs",    "Cardiovascular Physiology"),
+    "phy004": ("phy_renal",  "Renal & Acid-Base"),
+    "phy005": ("phy_cvs",    "Cardiovascular Physiology"),
+    "phy006": ("phy_cvs",    "Cardiovascular Physiology"),
+    "phy007": ("phy_cvs",    "Cardiovascular Physiology"),
+    "phy008": ("phy_cvs",    "Cardiovascular Physiology"),
+    "phy009": ("phy_renal",  "Renal & Acid-Base"),
+    "phy010": ("phy_resp",   "Respiratory Physiology"),
+    "phy011": ("phy_resp",   "Respiratory Physiology"),
+    "phy012": ("phy_neuro",  "Neurophysiology & Pain"),
+    "phy013": ("phy_renal",  "Renal & Acid-Base"),
+    "phy014": ("phy_endo",   "Endocrine & Obstetric Physiology"),
+    "phy015": ("phy_renal",  "Renal & Acid-Base"),
+    "phy016": ("phy_resp",   "Respiratory Physiology"),
+    "phy017": ("phy_cvs",    "Cardiovascular Physiology"),
+    "phy018": ("phy_haem",   "Haematology & Immunology"),
+    "phy019": ("phy_resp",   "Respiratory Physiology"),
+    "phy020": ("phy_resp",   "Respiratory Physiology"),
+    "phy021": ("phy_renal",  "Renal & Acid-Base"),
+    "phy022": ("phy_cvs",    "Cardiovascular Physiology"),
+    "phy023": ("phy_cvs",    "Cardiovascular Physiology"),
+    "phy024": ("phy_resp",   "Respiratory Physiology"),
+    "phy025": ("phy_neuro",  "Neurophysiology & Pain"),
+    # ── Pharmacology ────────────────────────────────────────────────────────
+    "phar001": ("ph_iv",      "IV Induction Agents & Sedatives"),
+    "phar002": ("ph_nmb",     "NMBs & Reversal"),
+    "phar003": ("ph_opioid",  "Opioids & Analgesics"),
+    "phar004": ("ph_iv",      "IV Induction Agents & Sedatives"),
+    "phar005": ("ph_inh",     "Inhalational Agents"),
+    "phar006": ("ph_iv",      "IV Induction Agents & Sedatives"),
+    "phar007": ("ph_opioid",  "Opioids & Analgesics"),
+    "phar008": ("ph_nmb",     "NMBs & Reversal"),
+    "phar009": ("ph_iv",      "IV Induction Agents & Sedatives"),
+    "phar010": ("ph_iv",      "IV Induction Agents & Sedatives"),
+    "phar011": ("ph_nmb",     "NMBs & Reversal"),
+    "phar012": ("ph_inh",     "Inhalational Agents"),
+    "phar013": ("ph_inh",     "Inhalational Agents"),
+    "phar014": ("ph_opioid",  "Opioids & Analgesics"),
+    "phar015": ("ph_la",      "Local Anaesthetics"),
+    "phar016": ("ph_nmb",     "NMBs & Reversal"),
+    "phar017": ("ph_opioid",  "Opioids & Analgesics"),
+    "phar018": ("ph_iv",      "IV Induction Agents & Sedatives"),
+    "phar019": ("ph_opioid",  "Opioids & Analgesics"),
+    "phar020": ("ph_inh",     "Inhalational Agents"),
+    "phar021": ("ph_other",   "Antiemetics, Antacids & Other"),
+    "phar022": ("ph_other",   "Antiemetics, Antacids & Other"),
+    "phar023": ("ph_inh",     "Inhalational Agents"),
+    "phar024": ("ph_cvd",     "Cardiovascular Drugs"),
+    "phar025": ("ph_other",   "Antiemetics, Antacids & Other"),
+    # ── Physics & Clinical Measurement ──────────────────────────────────────
+    "phys001": ("phx_mon",   "Monitoring (CO, Neuro, Temp)"),
+    "phys002": ("phx_mon",   "Monitoring (CO, Neuro, Temp)"),
+    "phys003": ("phx_gas",   "Gas Laws & Vaporisers"),
+    "phys004": ("phx_mon",   "Monitoring (CO, Neuro, Temp)"),
+    "phys005": ("phx_gas",   "Gas Laws & Vaporisers"),
+    "phys006": ("phx_mon",   "Monitoring (CO, Neuro, Temp)"),
+    "phys007": ("phx_mon",   "Monitoring (CO, Neuro, Temp)"),
+    "phys008": ("phx_elec",  "Electricity, Safety & Equipment"),
+    "phys009": ("phx_gas",   "Gas Laws & Vaporisers"),
+    "phys010": ("phx_mon",   "Monitoring (CO, Neuro, Temp)"),
+    "phys011": ("phx_mon",   "Monitoring (CO, Neuro, Temp)"),
+    "phys012": ("phx_mon",   "Monitoring (CO, Neuro, Temp)"),
+    "phys013": ("phx_gas",   "Gas Laws & Vaporisers"),
+    "phys014": ("phx_gas",   "Gas Laws & Vaporisers"),
+    "phys015": ("phx_mon",   "Monitoring (CO, Neuro, Temp)"),
+    "phys016": ("phx_mon",   "Monitoring (CO, Neuro, Temp)"),
+    "phys017": ("phx_elec",  "Electricity, Safety & Equipment"),
+    "phys018": ("phx_gas",   "Gas Laws & Vaporisers"),
+    "phys019": ("phx_elec",  "Electricity, Safety & Equipment"),
+    "phys020": ("phx_resp",  "Respiratory Mechanics & Spirometry"),
+    "phys021": ("phx_stats", "Statistics & Clinical Trials"),
+    "phys022": ("phx_elec",  "Electricity, Safety & Equipment"),
+    "phys023": ("phx_stats", "Statistics & Clinical Trials"),
+    "phys024": ("phx_mon",   "Monitoring (CO, Neuro, Temp)"),
+    "phys025": ("phx_resp",  "Respiratory Mechanics & Spirometry"),
+    # ── Clinical Anaesthesia ─────────────────────────────────────────────────
+    "clin001": ("ca_preop",    "Preoperative Assessment"),
+    "clin002": ("ca_airway",   "Airway Anatomy & Management"),
+    "clin003": ("ca_regional", "Regional Anatomy & Blocks"),
+    "clin004": ("ca_obs",      "Obstetric Anaesthesia"),
+    "clin005": ("ca_emerg",    "Perioperative Emergencies"),
+    "clin006": ("ca_preop",    "Preoperative Assessment"),
+    "clin007": ("ca_airway",   "Airway Anatomy & Management"),
+    "clin008": ("ca_emerg",    "Perioperative Emergencies"),
+    "clin009": ("ca_regional", "Regional Anatomy & Blocks"),
+    "clin010": ("ca_airway",   "Airway Anatomy & Management"),
+    "clin011": ("ca_emerg",    "Perioperative Emergencies"),
+    "clin012": ("ca_emerg",    "Perioperative Emergencies"),
+    "clin013": ("ca_regional", "Regional Anatomy & Blocks"),
+    "clin014": ("ca_emerg",    "Perioperative Emergencies"),
+    "clin015": ("ca_preop",    "Preoperative Assessment"),
+    "clin016": ("ca_emerg",    "Perioperative Emergencies"),
+    "clin017": ("ca_regional", "Regional Anatomy & Blocks"),
+    "clin018": ("ca_airway",   "Airway Anatomy & Management"),
+    "clin019": ("ca_obs",      "Obstetric Anaesthesia"),
+    "clin020": ("ca_airway",   "Airway Anatomy & Management"),
+    "clin021": ("ca_preop",    "Preoperative Assessment"),
+    "clin022": ("ca_regional", "Regional Anatomy & Blocks"),
+    "clin023": ("ca_emerg",    "Perioperative Emergencies"),
+    "clin024": ("ca_regional", "Regional Anatomy & Blocks"),
+    "clin025": ("ca_obs",      "Obstetric Anaesthesia"),
+}
+
 # ── Canonical flashcard deck structure ───────────────────────────────────────
 CANONICAL_DECKS = [
     {"id": "phy_resp",    "name": "Respiratory Physiology",           "colour": "#2dd4bf", "cards": []},
@@ -2144,9 +2253,27 @@ if st.session_state.page == "home":
         full_bank = [q for q in FIXED_BANK if (not topic_filter or q["topic"] == topic_filter)]
         unseen = [q for q in full_bank if q["id"] not in answered_ids]
         seen   = [q for q in full_bank if q["id"] in answered_ids]
-        random.shuffle(unseen)
-        random.shuffle(seen)
-        bank = unseen + seen  # exhaust unseen before repeating seen
+
+        def interleave_topics(pool):
+            """Shuffle within each topic then interleave so consecutive Qs are always different topics."""
+            from collections import defaultdict
+            by_topic = defaultdict(list)
+            for q in pool:
+                by_topic[q["topic"]].append(q)
+            for t in by_topic:
+                random.shuffle(by_topic[t])
+            # Round-robin across topics
+            result = []
+            topic_queues = list(by_topic.values())
+            random.shuffle(topic_queues)  # randomise which topic goes first
+            while any(topic_queues):
+                topic_queues = [tq for tq in topic_queues if tq]
+                for tq in topic_queues:
+                    if tq:
+                        result.append(tq.pop(0))
+            return result
+
+        bank = interleave_topics(unseen) + interleave_topics(seen)
 
         use_fixed = mode_choice != "AI-generated only"
         use_ai    = mode_choice != "Fixed bank only"
@@ -2304,14 +2431,23 @@ elif st.session_state.page == "quiz":
                 f'</div>'
             )
 
+        _eos_sub = Q_SUBTOPICS.get(r.get('id', ''), (None, ''))
+        _eos_deck_id, _eos_sub_name = _eos_sub
+        _eos_badge = (
+            f'<span style="display:inline-block;background:{q_colour}15;border:1px solid {q_colour}44;'
+            f'border-radius:4px;padding:1px 8px;font-family:IBM Plex Mono,monospace;font-size:10px;'
+            f'color:{q_colour};margin-left:8px;">{_eos_sub_name}</span>'
+        ) if _eos_sub_name else ''
+
         st.markdown(
             f'<div style="border:1px solid #252e42;border-top:3px solid {q_colour};border-radius:8px;padding:24px;margin-bottom:12px;">' +
-            f'<div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">' +
+            f'<div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:16px;">' +
             f'<span style="display:inline-flex;align-items:center;justify-content:center;' +
             f'width:28px;height:28px;border-radius:50%;background:{icon_bg};' +
             f'color:{icon_col};font-size:14px;font-weight:700;">{icon}</span>' +
             f'<span style="font-family:IBM Plex Mono,monospace;font-size:10px;color:{q_colour};' +
             f'text-transform:uppercase;letter-spacing:0.08em;">Q{ri+1} of {n_results} · {r["topic"]}</span>' +
+            _eos_badge +
             f'</div>' +
             f'<p style="font-size:16px;color:#e8edf5;line-height:1.6;margin:0 0 18px;font-weight:500;">{r["question"]}</p>' +
             f'{options_html}' +
@@ -2325,7 +2461,7 @@ elif st.session_state.page == "quiz":
             unsafe_allow_html=True
         )
 
-        # Prev / Next navigation
+        # Prev / Next + Go to deck
         prev_col, counter_col, next_col = st.columns([1, 2, 1])
         with prev_col:
             if st.button("← Prev", use_container_width=True, disabled=(ri == 0)):
@@ -2340,6 +2476,12 @@ elif st.session_state.page == "quiz":
         with next_col:
             if st.button("Next →", use_container_width=True, disabled=(ri == n_results - 1)):
                 st.session_state.quiz_review_idx = ri + 1
+                st.rerun()
+        if _eos_deck_id and _eos_sub_name:
+            if st.button(f"→ Go to {_eos_sub_name}", use_container_width=True, key=f"eos_deck_{ri}"):
+                st.session_state.fc_view = 'browse'
+                st.session_state.fc_active_deck_id = _eos_deck_id
+                nav('flashcards')
                 st.rerun()
 
         st.markdown("")
@@ -2470,7 +2612,11 @@ elif st.session_state.page == "quiz":
                 f'border-radius:50%;background:{icon_bg};color:{icon_col};font-size:13px;font-weight:700;">{icon}</span>'
                 f'<span style="font-family:IBM Plex Mono,monospace;font-size:10px;color:{r_colour};'
                 f'text-transform:uppercase;letter-spacing:0.08em;">Q{ri+1} · {r["topic"]}</span>'
-                f'</div>'
+                + (f'<span style="display:inline-block;background:{r_colour}15;border:1px solid {r_colour}44;'
+                f'border-radius:4px;padding:1px 8px;font-family:IBM Plex Mono,monospace;font-size:10px;'
+                f'color:{r_colour};margin-left:8px;">{Q_SUBTOPICS.get(r.get("id",""), (None,""))[1]}</span>'
+                if Q_SUBTOPICS.get(r.get("id","")) else "")
+                + f'</div>'
                 f'<p style="font-size:16px;color:#e8edf5;line-height:1.6;margin:0 0 16px;font-weight:500;">{r["question"]}</p>'
                 f'{options_html}'
                 f'<div style="border-left:3px solid {r_colour};padding:12px 16px;margin-top:14px;'
@@ -2497,15 +2643,28 @@ elif st.session_state.page == "quiz":
                     st.rerun()
             st.markdown('<hr style="border-color:#252e42;margin:20px 0;">', unsafe_allow_html=True)
 
+        # Look up subtopic for this question
+        q_id_for_sub = q.get('id', '')
+        subtopic_info = Q_SUBTOPICS.get(q_id_for_sub)
+        subtopic_deck_id, subtopic_name = subtopic_info if subtopic_info else (None, None)
+        subtopic_badge = (
+            f'<span style="display:inline-block;background:{colour}15;border:1px solid {colour}44;'
+            f'border-radius:4px;padding:2px 10px;font-family:IBM Plex Mono,monospace;'
+            f'font-size:10px;color:{colour};letter-spacing:0.04em;margin-left:8px;">{subtopic_name}</span>'
+        ) if subtopic_name else ''
+
         st.markdown(
             '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">'
             '<div>'
             '<p style="font-family:IBM Plex Mono,monospace;font-size:11px;color:#6b7a99;'
             'margin:0 0 5px;text-transform:uppercase;letter-spacing:0.06em;">'
             'Question ' + str(done+1) + ' of ' + str(total_target) + '</p>'
+            '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;">'
             '<div style="display:flex;align-items:center;gap:8px;">'
             '<div style="width:3px;height:16px;background:' + colour + ';border-radius:2px;"></div>'
             '<span style="font-family:IBM Plex Mono,monospace;font-size:12px;color:' + colour + ';">' + q["topic"] + '</span>'
+            '</div>'
+            + subtopic_badge +
             '</div>'
             '</div>'
             + timer_block +
@@ -2671,8 +2830,19 @@ Answer the student's follow-up question concisely and clearly. Focus on exam-rel
                             st.session_state.chat_messages.append({"role": "assistant", "content": f"Error: {e}"})
                         st.rerun()
 
-            # ── Save as flashcard ───────────────────────────────────────────
+            # ── Save as flashcard + Go to deck ──────────────────────────────
             with chat_col2:
+                # Subtopic deck jump button (uses q_id_for_sub from header block above)
+                _sub_deck_id = Q_SUBTOPICS.get(q.get("id", ""), (None, None))[0]
+                _sub_name    = Q_SUBTOPICS.get(q.get("id", ""), (None, None))[1]
+                if _sub_deck_id and _sub_name:
+                    btn_label = f"→ {_sub_name.split('&')[0].strip()}"
+                    if st.button(btn_label, key=f"go_deck_{q_id}", use_container_width=True,
+                                 help=f"Go to {_sub_name} flashcard deck"):
+                        st.session_state.fc_view = "browse"
+                        st.session_state.fc_active_deck_id = _sub_deck_id
+                        nav("flashcards")
+                        st.rerun()
                 if st.button("+ Flashcard", key=f"fc_{q_id}", use_container_width=True):
                     if st.session_state.fc_data is None:
                         st.session_state.fc_data = load_flashcard_data()
