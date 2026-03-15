@@ -47,7 +47,12 @@ st.markdown("""
     --red-border: #7f1d1d;
 }
 
-html, body, [class*="css"] {
+html, body, [class*="css"],
+.stApp, .stApp > div,
+[data-testid="stAppViewContainer"],
+[data-testid="stAppViewContainer"] > section,
+[data-testid="stMain"], [data-testid="stMainBlockContainer"],
+.main, .main > div, .block-container {
     font-family: 'IBM Plex Sans', sans-serif !important;
     font-size: 16px !important;
     background: var(--bg) !important;
@@ -1860,6 +1865,10 @@ if "fc_editor_open" not in st.session_state:
     st.session_state.fc_editor_open = False  # whether flashcard editor is showing
 if "fc_editor_q_id" not in st.session_state:
     st.session_state.fc_editor_q_id = None
+if "quiz_review_idx" not in st.session_state:
+    st.session_state.quiz_review_idx = None  # None = not in review mode; int = reviewing result at that index
+if "mid_session_review" not in st.session_state:
+    st.session_state.mid_session_review = False
 
 stats = st.session_state.stats
 
@@ -2163,6 +2172,8 @@ if st.session_state.page == "home":
         st.session_state.current_q = None
         st.session_state.selected_answer = None
         st.session_state.submitted = False
+        st.session_state.quiz_review_idx = None
+        st.session_state.mid_session_review = False
         nav("quiz")
         st.rerun()
 
@@ -2247,22 +2258,89 @@ elif st.session_state.page == "quiz":
         save_stats(stats)
         clear_saved_session()
 
-        # Per-question review
-        st.markdown("#### Answer Review")
-        for i, r in enumerate(session["results"]):
-            icon = "✅" if r["correct"] else "❌"
-            with st.expander(f"{icon}  Q{i+1} · {r['topic']} · Your answer: {r['selected']} · Correct: {r['answer']}"):
-                st.markdown(f"**{r['question']}**")
-                for opt, text in r["options"].items():
-                    colour = "#34d399" if opt == r["answer"] else ("#f87171" if opt == r["selected"] and not r["correct"] else "#6b7280")
-                    prefix = "✓ " if opt == r["answer"] else ("✗ " if opt == r["selected"] and not r["correct"] else "  ")
-                    st.markdown(f'<p style="color:{colour};margin:4px 0;">{prefix}<strong>{opt}.</strong> {text}</p>', unsafe_allow_html=True)
-                st.markdown(f"""
-                <div style="background:#1a1e28;border-left:3px solid #06b6d4;padding:12px 16px;
-                            border-radius:0 8px 8px 0;margin-top:12px;font-size:14px;line-height:1.6;">
-                    {r['explanation']}
-                </div>
-                """, unsafe_allow_html=True)
+        # Per-question review — card navigator
+        results = session["results"]
+        n_results = len(results)
+        if st.session_state.quiz_review_idx is None:
+            st.session_state.quiz_review_idx = 0
+        ri = max(0, min(st.session_state.quiz_review_idx, n_results - 1))
+
+        # Mini progress dots
+        dots_html = ""
+        for di in range(n_results):
+            r_dot = results[di]
+            dot_col = "#4ade80" if r_dot["correct"] else "#f87171"
+            dot_size = "10px" if di == ri else "7px"
+            dots_html += f'<span style="display:inline-block;width:{dot_size};height:{dot_size};border-radius:50%;background:{dot_col};margin:0 3px;transition:all 0.15s;"></span>'
+
+        st.markdown(f'''
+        <div style="text-align:center;margin:0 0 20px;">
+            <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;letter-spacing:0.08em;text-transform:uppercase;margin:0 0 10px;">Answer Review</p>
+            <div>{dots_html}</div>
+        </div>
+        ''', unsafe_allow_html=True)
+
+        r = results[ri]
+        q_colour = TOPICS.get(r["topic"], {}).get("colour", "#4f9cf9")
+        icon = "✓" if r["correct"] else "✗"
+        icon_col = "#4ade80" if r["correct"] else "#f87171"
+        icon_bg  = "#0a1f14" if r["correct"] else "#1c0a0a"
+
+        # Result card
+        options_html = ""
+        for opt, text in r["options"].items():
+            if opt == r["answer"]:
+                bg, col, marker = "#0a1f14", "#4ade80", "✓"
+            elif opt == r["selected"] and not r["correct"]:
+                bg, col, marker = "#1c0a0a", "#f87171", "✗"
+            else:
+                bg, col, marker = "transparent", "#6b7a99", "·"
+            options_html += (
+                f'<div style="background:{bg};border:1px solid {col}33;border-radius:6px;' +
+                f'padding:10px 14px;margin:6px 0;display:flex;gap:10px;align-items:flex-start;">' +
+                f'<span style="color:{col};font-family:IBM Plex Mono,monospace;font-size:12px;' +
+                f'min-width:14px;margin-top:1px;">{marker}</span>' +
+                f'<span style="color:{col};font-size:14px;line-height:1.5;"><strong>{opt}.</strong> {text}</span>' +
+                f'</div>'
+            )
+
+        st.markdown(
+            f'<div style="border:1px solid #252e42;border-top:3px solid {q_colour};border-radius:8px;padding:24px;margin-bottom:12px;">' +
+            f'<div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">' +
+            f'<span style="display:inline-flex;align-items:center;justify-content:center;' +
+            f'width:28px;height:28px;border-radius:50%;background:{icon_bg};' +
+            f'color:{icon_col};font-size:14px;font-weight:700;">{icon}</span>' +
+            f'<span style="font-family:IBM Plex Mono,monospace;font-size:10px;color:{q_colour};' +
+            f'text-transform:uppercase;letter-spacing:0.08em;">Q{ri+1} of {n_results} · {r["topic"]}</span>' +
+            f'</div>' +
+            f'<p style="font-size:16px;color:#e8edf5;line-height:1.6;margin:0 0 18px;font-weight:500;">{r["question"]}</p>' +
+            f'{options_html}' +
+            f'<div style="border-left:3px solid {q_colour};padding:12px 16px;margin-top:16px;' +
+            f'background:#161b27;border-radius:0 6px 6px 0;font-size:14px;line-height:1.7;color:#c8d3e8;">' +
+            f'<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:{q_colour};' +
+            f'text-transform:uppercase;letter-spacing:0.08em;margin:0 0 8px;">Explanation</p>' +
+            f'{r["explanation"]}' +
+            f'</div>' +
+            f'</div>',
+            unsafe_allow_html=True
+        )
+
+        # Prev / Next navigation
+        prev_col, counter_col, next_col = st.columns([1, 2, 1])
+        with prev_col:
+            if st.button("← Prev", use_container_width=True, disabled=(ri == 0)):
+                st.session_state.quiz_review_idx = ri - 1
+                st.rerun()
+        with counter_col:
+            st.markdown(
+                f'<p style="text-align:center;font-family:IBM Plex Mono,monospace;font-size:12px;' +
+                f'color:#6b7a99;margin:10px 0;">{ri+1} / {n_results}</p>',
+                unsafe_allow_html=True
+            )
+        with next_col:
+            if st.button("Next →", use_container_width=True, disabled=(ri == n_results - 1)):
+                st.session_state.quiz_review_idx = ri + 1
+                st.rerun()
 
         st.markdown("")
         c1, c2 = st.columns(2)
@@ -2356,6 +2434,69 @@ elif st.session_state.page == "quiz":
         else:
             timer_block = ""
 
+        # Review-previous state — show review panel if active
+        reviewing = st.session_state.get("mid_session_review", False)
+
+        if reviewing and done > 0:
+            results = session["results"]
+            n_res = len(results)
+            if st.session_state.quiz_review_idx is None:
+                st.session_state.quiz_review_idx = n_res - 1
+            ri = max(0, min(st.session_state.quiz_review_idx, n_res - 1))
+            r = results[ri]
+            r_colour = TOPICS.get(r["topic"], {}).get("colour", "#4f9cf9")
+            icon = "✓" if r["correct"] else "✗"
+            icon_col = "#4ade80" if r["correct"] else "#f87171"
+            icon_bg  = "#0a1f14" if r["correct"] else "#1c0a0a"
+            options_html = ""
+            for opt, text in r["options"].items():
+                if opt == r["answer"]:
+                    bg2, col2, marker2 = "#0a1f14", "#4ade80", "✓"
+                elif opt == r["selected"] and not r["correct"]:
+                    bg2, col2, marker2 = "#1c0a0a", "#f87171", "✗"
+                else:
+                    bg2, col2, marker2 = "transparent", "#6b7a99", "·"
+                options_html += (
+                    f'<div style="background:{bg2};border:1px solid {col2}33;border-radius:6px;'
+                    f'padding:10px 14px;margin:6px 0;display:flex;gap:10px;align-items:flex-start;">'
+                    f'<span style="color:{col2};font-family:IBM Plex Mono,monospace;font-size:12px;min-width:14px;">{marker2}</span>'
+                    f'<span style="color:{col2};font-size:14px;line-height:1.5;"><strong>{opt}.</strong> {text}</span>'
+                    f'</div>'
+                )
+            st.markdown(
+                f'<div style="border:1px solid #252e42;border-top:3px solid {r_colour};border-radius:8px;padding:20px 24px;margin-bottom:16px;">'
+                f'<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">'
+                f'<span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;'
+                f'border-radius:50%;background:{icon_bg};color:{icon_col};font-size:13px;font-weight:700;">{icon}</span>'
+                f'<span style="font-family:IBM Plex Mono,monospace;font-size:10px;color:{r_colour};'
+                f'text-transform:uppercase;letter-spacing:0.08em;">Q{ri+1} · {r["topic"]}</span>'
+                f'</div>'
+                f'<p style="font-size:16px;color:#e8edf5;line-height:1.6;margin:0 0 16px;font-weight:500;">{r["question"]}</p>'
+                f'{options_html}'
+                f'<div style="border-left:3px solid {r_colour};padding:12px 16px;margin-top:14px;'
+                f'background:#161b27;border-radius:0 6px 6px 0;font-size:14px;line-height:1.7;color:#c8d3e8;">'
+                f'<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:{r_colour};'
+                f'text-transform:uppercase;letter-spacing:0.08em;margin:0 0 8px;">Explanation</p>'
+                f'{r["explanation"]}</div></div>',
+                unsafe_allow_html=True
+            )
+            prev_c, ctr_c, next_c, close_c = st.columns([1, 1, 1, 1])
+            with prev_c:
+                if st.button("← Prev", key="rev_prev", use_container_width=True, disabled=(ri == 0)):
+                    st.session_state.quiz_review_idx = ri - 1
+                    st.rerun()
+            with ctr_c:
+                st.markdown(f'<p style="text-align:center;font-family:IBM Plex Mono,monospace;font-size:12px;color:#6b7a99;margin:10px 0;">{ri+1} / {n_res}</p>', unsafe_allow_html=True)
+            with next_c:
+                if st.button("Next →", key="rev_next", use_container_width=True, disabled=(ri == n_res - 1)):
+                    st.session_state.quiz_review_idx = ri + 1
+                    st.rerun()
+            with close_c:
+                if st.button("✕ Resume", key="rev_close", use_container_width=True):
+                    st.session_state.mid_session_review = False
+                    st.rerun()
+            st.markdown('<hr style="border-color:#252e42;margin:20px 0;">', unsafe_allow_html=True)
+
         st.markdown(
             '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">'
             '<div>'
@@ -2386,6 +2527,15 @@ elif st.session_state.page == "quiz":
         )
 
         if not st.session_state.submitted:
+            # "Review previous" link if we have answered questions
+            if done > 0:
+                rev_label = "📖 Review previous" if not st.session_state.get("mid_session_review") else "▲ Hide review"
+                if st.button(rev_label, key="toggle_review"):
+                    st.session_state.mid_session_review = not st.session_state.get("mid_session_review", False)
+                    if st.session_state.mid_session_review:
+                        st.session_state.quiz_review_idx = len(session["results"]) - 1
+                    st.rerun()
+
             # Radio styled as cards via CSS
             selected = st.radio(
                 "Select your answer:",
