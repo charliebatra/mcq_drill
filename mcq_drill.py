@@ -4609,7 +4609,7 @@ elif st.session_state.page == "quiz":
             f'text-transform:uppercase;letter-spacing:0.08em;">Q{ri+1} of {n_results} · {r["topic"]}</span>' +
             _eos_badge +
             f'</div>' +
-            + (f'<div style="margin-bottom:14px;">{Q_IMAGES[r["id"]]}</div>' if r.get('id') in Q_IMAGES
+            (f'<div style="margin-bottom:14px;">{Q_IMAGES[r["id"]]}</div>' if r.get('id','') in Q_IMAGES
                else (f'<div style="margin-bottom:14px;">{r["svg"]}</div>' if r.get('svg') else '')) +
             f'<p style="font-size:16px;color:#e8edf5;line-height:1.6;margin:0 0 18px;font-weight:500;">{r["question"]}</p>' +
             f'{options_html}' +
@@ -4797,7 +4797,7 @@ elif st.session_state.page == "quiz":
                 f'color:{r_colour};margin-left:8px;">{Q_SUBTOPICS.get(r.get("id",""), (None,""))[1]}</span>'
                 if Q_SUBTOPICS.get(r.get("id","")) else "")
                 + f'</div>'
-                + (f'<div style="margin-bottom:14px;">{Q_IMAGES[r["id"]]}</div>' if r.get('id') in Q_IMAGES
+                + (f'<div style="margin-bottom:14px;">{Q_IMAGES[r["id"]]}</div>' if r.get('id','') in Q_IMAGES
                    else (f'<div style="margin-bottom:14px;">{r["svg"]}</div>' if r.get('svg') else ''))
                 + f'<p style="font-size:16px;color:#e8edf5;line-height:1.6;margin:0 0 16px;font-weight:500;">{r["question"]}</p>'
                 + f'{options_html}'
