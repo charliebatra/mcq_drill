@@ -2333,11 +2333,24 @@ if st.session_state.page == "home":
 
         bank = interleave_topics(unseen) + interleave_topics(seen)
 
+        def shuffle_answers(q):
+            """Return a copy of q with options shuffled so correct answer lands randomly across A-E."""
+            import copy
+            q = copy.deepcopy(q)
+            keys = list("ABCDE")
+            correct_text = q["options"][q["answer"]]
+            vals = list(q["options"].values())
+            random.shuffle(vals)
+            q["options"] = dict(zip(keys, vals))
+            # Update answer key to wherever the correct text landed
+            q["answer"] = next(k for k, v in q["options"].items() if v == correct_text)
+            return q
+
         use_fixed = mode_choice != "AI-generated only"
         use_ai    = mode_choice != "Fixed bank only"
 
         if use_fixed:
-            fixed_qs = bank[:n_questions]
+            fixed_qs = [shuffle_answers(q) for q in bank[:n_questions]]
         else:
             fixed_qs = []
 
@@ -2574,6 +2587,14 @@ elif st.session_state.page == "quiz":
                     topic = session["topic_filter"] or random.choice(list(TOPICS.keys()))
                     q = generate_question(topic, shown_ids)
                     if q:
+                        import copy as _copy
+                        q = _copy.deepcopy(q)
+                        _keys = list("ABCDE")
+                        _correct_text = q["options"][q["answer"]]
+                        _vals = list(q["options"].values())
+                        random.shuffle(_vals)
+                        q["options"] = dict(zip(_keys, _vals))
+                        q["answer"] = next(k for k, v in q["options"].items() if v == _correct_text)
                         shown_ids.append(q["id"])
                         session["shown_ids"] = shown_ids
                         st.session_state.current_q = q
@@ -2709,10 +2730,11 @@ elif st.session_state.page == "quiz":
         q_id_for_sub = q.get('id', '')
         subtopic_info = Q_SUBTOPICS.get(q_id_for_sub)
         subtopic_deck_id, subtopic_name = subtopic_info if subtopic_info else (None, None)
+        broad_topic_short = q['topic'].replace('Physics & Clinical Measurement','Physics').replace('Clinical Anaesthesia','Clinical')
         subtopic_badge = (
-            f'<span style="display:inline-block;background:{colour}15;border:1px solid {colour}44;'
-            f'border-radius:4px;padding:2px 10px;font-family:IBM Plex Mono,monospace;'
-            f'font-size:10px;color:{colour};letter-spacing:0.04em;margin-left:8px;">{subtopic_name}</span>'
+            f'<span style="display:inline-block;background:#252e42;border:1px solid #2e3a52;'
+            f'border-radius:4px;padding:2px 8px;font-family:IBM Plex Mono,monospace;'
+            f'font-size:9px;color:#6b7a99;letter-spacing:0.04em;margin-left:4px;">{broad_topic_short}</span>'
         ) if subtopic_name else ''
 
         st.markdown(
@@ -2724,7 +2746,7 @@ elif st.session_state.page == "quiz":
             '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;">'
             '<div style="display:flex;align-items:center;gap:8px;">'
             '<div style="width:3px;height:16px;background:' + colour + ';border-radius:2px;"></div>'
-            '<span style="font-family:IBM Plex Mono,monospace;font-size:12px;color:' + colour + ';">' + q["topic"] + '</span>'
+            '<span style="font-family:IBM Plex Mono,monospace;font-size:12px;color:' + colour + ';">' + (Q_SUBTOPICS.get(q.get('id',''), (None, q['topic']))[1]) + '</span>'
             '</div>'
             + subtopic_badge +
             '</div>'
