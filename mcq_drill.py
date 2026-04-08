@@ -5124,7 +5124,7 @@ Answer the student's follow-up question concisely and clearly. Focus on exam-rel
 
             st.markdown("")
 
-            # ── Navigation ─────────────────────────────────────────────────
+            # ── Navigation  ─────────────────────────────────────────────────
             nav_c1, nav_c2 = st.columns([3, 1])
             with nav_c1:
                 if st.button("Next Question →", use_container_width=True):
