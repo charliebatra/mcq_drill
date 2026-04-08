@@ -608,34 +608,6 @@ Q_IMAGES = {
     'phys020': '''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 200" style="width:100%;max-width:420px;background:#161b27;border-radius:8px;display:block;margin:0 auto 16px;"><line x1="52" y1="20.0" x2="404" y2="20.0" stroke="#252e42" stroke-width="1"/><line x1="52" y1="57.0" x2="404" y2="57.0" stroke="#252e42" stroke-width="1"/><line x1="52" y1="94.0" x2="404" y2="94.0" stroke="#252e42" stroke-width="1"/><line x1="52" y1="131.0" x2="404" y2="131.0" stroke="#252e42" stroke-width="1"/><line x1="52" y1="168.0" x2="404" y2="168.0" stroke="#252e42" stroke-width="1"/><line x1="52.0" y1="20" x2="52.0" y2="168" stroke="#252e42" stroke-width="1"/><line x1="122.4" y1="20" x2="122.4" y2="168" stroke="#252e42" stroke-width="1"/><line x1="192.8" y1="20" x2="192.8" y2="168" stroke="#252e42" stroke-width="1"/><line x1="263.2" y1="20" x2="263.2" y2="168" stroke="#252e42" stroke-width="1"/><line x1="333.6" y1="20" x2="333.6" y2="168" stroke="#252e42" stroke-width="1"/><line x1="404.0" y1="20" x2="404.0" y2="168" stroke="#252e42" stroke-width="1"/><line x1="52" y1="20" x2="52" y2="168" stroke="#6b7a99" stroke-width="1.5"/><line x1="52" y1="168" x2="404" y2="168" stroke="#6b7a99" stroke-width="1.5"/><polyline points="52.0,168.0 52.0,168.0 54.9,154.5 57.9,142.0 60.8,130.4 63.7,119.9 66.7,110.3 69.6,101.6 72.5,93.8 75.5,86.9 78.4,80.8 81.3,75.4 84.3,70.8 87.2,66.9 90.1,63.7 93.1,61.1 96.0,59.0 98.9,57.5 101.9,56.5 104.8,55.9 107.7,55.6 110.7,55.5 113.6,54.0 116.5,52.6 119.5,51.2 122.4,49.9 125.3,48.7 128.3,47.5 131.2,46.4 134.1,45.4 137.1,44.4 140.0,43.4 142.9,42.5 145.9,41.7 148.8,40.9 151.7,40.1 154.7,39.4 157.6,38.7 160.5,38.0 163.5,37.4 166.4,36.8 169.3,36.3 172.3,35.8 175.2,35.2 178.1,34.8 181.1,34.3 184.0,33.9 186.9,33.5 189.9,33.1 192.8,32.7 195.7,32.4 198.7,32.0 201.6,31.7 204.5,31.4 207.5,31.2 210.4,30.9 213.3,30.6 216.3,30.4 219.2,30.2 222.1,29.9 225.1,29.7 228.0,29.5 230.9,29.4 233.9,29.2 236.8,29.0 239.7,28.9 242.7,28.7 245.6,28.6 248.5,28.4 251.5,28.3 254.4,28.2 257.3,28.1 260.3,28.0 263.2,27.9 266.1,27.8 269.1,27.7 272.0,27.6 274.9,27.5 277.9,27.4 280.8,27.3 283.7,27.3 286.7,27.2 289.6,27.1 292.5,27.1 295.5,27.0 298.4,26.9 301.3,26.9 304.3,26.8 307.2,26.8 310.1,26.8 313.1,26.7 316.0,26.7 318.9,26.6 321.9,26.6 324.8,26.6 327.7,26.5 330.7,26.5 333.6,26.5 336.5,26.4 339.5,26.4 342.4,26.4 345.3,26.4 348.3,26.3 351.2,26.3 354.1,26.3 357.1,26.3 360.0,26.3 362.9,26.2 365.9,26.2 368.8,26.2 371.7,26.2 374.7,26.2 377.6,26.2 380.5,26.2 383.5,26.1 386.4,26.1 389.3,26.1 392.3,26.1 395.2,26.1 398.1,26.1 401.1,26.1 404.0,26.1" fill="none" stroke="#4ade80" stroke-width="2.5" stroke-linejoin="round"/><polyline points="52.0,168.0 52.0,168.0 54.9,160.9 57.9,154.3 60.8,148.2 63.7,142.7 66.7,137.6 69.6,133.1 72.5,129.0 75.5,125.3 78.4,122.1 81.3,119.3 84.3,116.8 87.2,114.8 90.1,113.1 93.1,111.7 96.0,110.7 98.9,109.9 101.9,109.3 104.8,109.0 107.7,108.8 110.7,108.8 113.6,105.8 116.5,102.9 119.5,100.2 122.4,97.6 125.3,95.1 128.3,92.8 131.2,90.6 134.1,88.5 137.1,86.5 140.0,84.6 142.9,82.8 145.9,81.1 148.8,79.5 151.7,78.0 154.7,76.5 157.6,75.2 160.5,73.9 163.5,72.6 166.4,71.4 169.3,70.3 172.3,69.3 175.2,68.3 178.1,67.3 181.1,66.4 184.0,65.5 186.9,64.7 189.9,63.9 192.8,63.2 195.7,62.5 198.7,61.9 201.6,61.2 204.5,60.6 207.5,60.1 210.4,59.5 213.3,59.0 216.3,58.5 219.2,58.1 222.1,57.7 225.1,57.2 228.0,56.9 230.9,56.5 233.9,56.1 236.8,55.8 239.7,55.5 242.7,55.2 245.6,54.9 248.5,54.6 251.5,54.4 254.4,54.1 257.3,53.9 260.3,53.7 263.2,53.5 266.1,53.3 269.1,53.1 272.0,52.9 274.9,52.7 277.9,52.6 280.8,52.4 283.7,52.3 286.7,52.1 289.6,52.0 292.5,51.9 295.5,51.8 298.4,51.7 301.3,51.6 304.3,51.5 307.2,51.4 310.1,51.3 313.1,51.2 316.0,51.1 318.9,51.0 321.9,51.0 324.8,50.9 327.7,50.8 330.7,50.8 333.6,50.7 336.5,50.6 339.5,50.6 342.4,50.5 345.3,50.5 348.3,50.4 351.2,50.4 354.1,50.4 357.1,50.3 360.0,50.3 362.9,50.2 365.9,50.2 368.8,50.2 371.7,50.2 374.7,50.1 377.6,50.1 380.5,50.1 383.5,50.0 386.4,50.0 389.3,50.0 392.3,50.0 395.2,50.0 398.1,49.9 401.1,49.9 404.0,49.9" fill="none" stroke="#fbbf24" stroke-width="2.5" stroke-linejoin="round"/><polyline points="52.0,168.0 52.0,168.0 54.9,159.5 57.9,151.5 60.8,144.3 63.7,137.6 66.7,131.6 69.6,126.1 72.5,121.2 75.5,116.8 78.4,112.9 81.3,109.5 84.3,106.6 87.2,104.1 90.1,102.1 93.1,100.5 96.0,99.2 98.9,98.2 101.9,97.6 104.8,97.2 107.7,97.0 110.7,97.0 113.6,96.1 116.5,95.2 119.5,94.4 122.4,93.6 125.3,92.9 128.3,92.2 131.2,91.5 134.1,90.9 137.1,90.3 140.0,89.7 142.9,89.2 145.9,88.7 148.8,88.2 151.7,87.7 154.7,87.3 157.6,86.9 160.5,86.5 163.5,86.1 166.4,85.8 169.3,85.4 172.3,85.1 175.2,84.8 178.1,84.5 181.1,84.2 184.0,84.0 186.9,83.7 189.9,83.5 192.8,83.3 195.7,83.1 198.7,82.9 201.6,82.7 204.5,82.5 207.5,82.3 210.4,82.2 213.3,82.0 216.3,81.9 219.2,81.7 222.1,81.6 225.1,81.5 228.0,81.4 230.9,81.3 233.9,81.2 236.8,81.1 239.7,81.0 242.7,80.9 245.6,80.8 248.5,80.7 251.5,80.6 254.4,80.6 257.3,80.5 260.3,80.4 263.2,80.4 266.1,80.3 269.1,80.2 272.0,80.2 274.9,80.1 277.9,80.1 280.8,80.0 283.7,80.0 286.7,80.0 289.6,79.9 292.5,79.9 295.5,79.9 298.4,79.8 301.3,79.8 304.3,79.8 307.2,79.7 310.1,79.7 313.1,79.7 316.0,79.7 318.9,79.6 321.9,79.6 324.8,79.6 327.7,79.6 330.7,79.5 333.6,79.5 336.5,79.5 339.5,79.5 342.4,79.5 345.3,79.5 348.3,79.5 351.2,79.4 354.1,79.4 357.1,79.4 360.0,79.4 362.9,79.4 365.9,79.4 368.8,79.4 371.7,79.4 374.7,79.4 377.6,79.3 380.5,79.3 383.5,79.3 386.4,79.3 389.3,79.3 392.3,79.3 395.2,79.3 398.1,79.3 401.1,79.3 404.0,79.3" fill="none" stroke="#60a5fa" stroke-width="2.5" stroke-linejoin="round"/><line x1="110.7" y1="20" x2="110.7" y2="168" stroke="#6b7a99" stroke-width="1" stroke-dasharray="4,3"/><text x="110.66666666666666" y="182" fill="#6b7a99" font-family="IBM Plex Mono,monospace" font-size="9" text-anchor="middle" font-weight="normal">1s</text><text x="46" y="171.0" fill="#6b7a99" font-family="IBM Plex Mono,monospace" font-size="9" text-anchor="end" font-weight="normal">0</text><text x="46" y="141.4" fill="#6b7a99" font-family="IBM Plex Mono,monospace" font-size="9" text-anchor="end" font-weight="normal">1</text><text x="46" y="111.8" fill="#6b7a99" font-family="IBM Plex Mono,monospace" font-size="9" text-anchor="end" font-weight="normal">2</text><text x="46" y="82.2" fill="#6b7a99" font-family="IBM Plex Mono,monospace" font-size="9" text-anchor="end" font-weight="normal">3</text><text x="46" y="52.599999999999994" fill="#6b7a99" font-family="IBM Plex Mono,monospace" font-size="9" text-anchor="end" font-weight="normal">4</text><text x="46" y="23.0" fill="#6b7a99" font-family="IBM Plex Mono,monospace" font-size="9" text-anchor="end" font-weight="normal">5</text><text x="52.0" y="182" fill="#6b7a99" font-family="IBM Plex Mono,monospace" font-size="9" text-anchor="middle" font-weight="normal">0</text><text x="169.33333333333331" y="182" fill="#6b7a99" font-family="IBM Plex Mono,monospace" font-size="9" text-anchor="middle" font-weight="normal">2</text><text x="286.66666666666663" y="182" fill="#6b7a99" font-family="IBM Plex Mono,monospace" font-size="9" text-anchor="middle" font-weight="normal">4</text><text x="404.0" y="182" fill="#6b7a99" font-family="IBM Plex Mono,monospace" font-size="9" text-anchor="middle" font-weight="normal">6</text><text x="210" y="198" fill="#6b7a99" font-family="IBM Plex Mono,monospace" font-size="9" text-anchor="middle" font-weight="normal">Time (s)</text><text x="12" y="100" fill="#6b7a99" font-family="IBM Plex Mono,monospace" font-size="9" text-anchor="middle" transform="rotate(-90,12,100)">Volume (L)</text><rect x="274" y="20" width="120" height="56" fill="#0e1117" rx="4" opacity="0.9"/><line x1="280" y1="32" x2="292" y2="32" stroke="#4ade80" stroke-width="2"/><text x="296" y="35" fill="#4ade80" font-family="IBM Plex Mono,monospace" font-size="8" text-anchor="start" font-weight="normal">Normal 79%</text><line x1="280" y1="48" x2="292" y2="48" stroke="#fbbf24" stroke-width="2"/><text x="296" y="51" fill="#fbbf24" font-family="IBM Plex Mono,monospace" font-size="8" text-anchor="start" font-weight="normal">Obstructive 50%</text><line x1="280" y1="64" x2="292" y2="64" stroke="#60a5fa" stroke-width="2"/><text x="296" y="67" fill="#60a5fa" font-family="IBM Plex Mono,monospace" font-size="8" text-anchor="start" font-weight="normal">Restrictive 83%</text></svg>''',
 }
 
-# ── Canonical flashcard deck structure ───────────────────────────────────────
-CANONICAL_DECKS = [
-    {"id": "phy_resp",    "name": "Respiratory Physiology",           "colour": "#2dd4bf", "cards": []},
-    {"id": "phy_cvs",     "name": "Cardiovascular Physiology",        "colour": "#2dd4bf", "cards": []},
-    {"id": "phy_neuro",   "name": "Neurophysiology & Pain",           "colour": "#2dd4bf", "cards": []},
-    {"id": "phy_renal",   "name": "Renal & Acid-Base",                "colour": "#2dd4bf", "cards": []},
-    {"id": "phy_gi",      "name": "Hepatic, GI & Metabolic",          "colour": "#2dd4bf", "cards": []},
-    {"id": "phy_haem",    "name": "Haematology & Immunology",         "colour": "#2dd4bf", "cards": []},
-    {"id": "phy_endo",    "name": "Endocrine & Obstetric Physiology",  "colour": "#2dd4bf", "cards": []},
-    {"id": "ph_inh",      "name": "Inhalational Agents",              "colour": "#a78bfa", "cards": []},
-    {"id": "ph_iv",       "name": "IV Induction Agents & Sedatives",  "colour": "#a78bfa", "cards": []},
-    {"id": "ph_opioid",   "name": "Opioids & Analgesics",             "colour": "#a78bfa", "cards": []},
-    {"id": "ph_nmb",      "name": "NMBs & Reversal",                  "colour": "#a78bfa", "cards": []},
-    {"id": "ph_la",       "name": "Local Anaesthetics",               "colour": "#a78bfa", "cards": []},
-    {"id": "ph_cvd",      "name": "Cardiovascular Drugs",             "colour": "#a78bfa", "cards": []},
-    {"id": "ph_other",    "name": "Antiemetics, Antacids & Other",    "colour": "#a78bfa", "cards": []},
-    {"id": "phx_elec",    "name": "Electricity, Safety & Equipment",  "colour": "#38bdf8", "cards": []},
-    {"id": "phx_gas",     "name": "Gas Laws & Vaporisers",            "colour": "#38bdf8", "cards": []},
-    {"id": "phx_mon",     "name": "Monitoring (CO, Neuro, Temp)",     "colour": "#38bdf8", "cards": []},
-    {"id": "phx_resp",    "name": "Respiratory Mechanics & Spirometry","colour": "#38bdf8", "cards": []},
-    {"id": "phx_stats",   "name": "Statistics & Clinical Trials",     "colour": "#38bdf8", "cards": []},
-    {"id": "ca_airway",   "name": "Airway Anatomy & Management",      "colour": "#fb923c", "cards": []},
-    {"id": "ca_regional", "name": "Regional Anatomy & Blocks",        "colour": "#fb923c", "cards": []},
-    {"id": "ca_preop",    "name": "Preoperative Assessment",          "colour": "#fb923c", "cards": []},
-    {"id": "ca_emerg",    "name": "Perioperative Emergencies",        "colour": "#fb923c", "cards": []},
-    {"id": "ca_obs",      "name": "Obstetric Anaesthesia",            "colour": "#fb923c", "cards": []},
-    {"id": "ca_paeds",    "name": "Paediatric Anaesthesia",           "colour": "#fb923c", "cards": []},
-]
 
 # ── Fixed question bank ───────────────────────────────────────────────────────
 FIXED_BANK = [
@@ -4101,28 +4073,16 @@ if "generating" not in st.session_state:
     st.session_state.generating = False
 if "textbook_docs" not in st.session_state:
     st.session_state.textbook_docs = None
-if "fc_data" not in st.session_state:
-    st.session_state.fc_data = None  # loaded lazily
-if "fc_study_queue" not in st.session_state:
-    st.session_state.fc_study_queue = []
-if "fc_study_idx" not in st.session_state:
-    st.session_state.fc_study_idx = 0
-if "fc_flipped" not in st.session_state:
-    st.session_state.fc_flipped = False
-if "fc_session_stats" not in st.session_state:
-    st.session_state.fc_session_stats = {"again": 0, "hard": 0, "good": 0, "easy": 0}
 if "chat_messages" not in st.session_state:
     st.session_state.chat_messages = []  # per-question chat history
 if "chat_q_id" not in st.session_state:
     st.session_state.chat_q_id = None  # which question the chat is about
-if "fc_editor_open" not in st.session_state:
-    st.session_state.fc_editor_open = False  # whether flashcard editor is showing
-if "fc_editor_q_id" not in st.session_state:
-    st.session_state.fc_editor_q_id = None
 if "quiz_review_idx" not in st.session_state:
     st.session_state.quiz_review_idx = None  # None = not in review mode; int = reviewing result at that index
 if "mid_session_review" not in st.session_state:
     st.session_state.mid_session_review = False
+if "confidence_rating" not in st.session_state:
+    st.session_state.confidence_rating = None  # 1=unsure, 2=think so, 3=certain
 
 stats = st.session_state.stats
 
@@ -4168,72 +4128,27 @@ def delete_textbook_doc(doc_id: str) -> bool:
         st.error(f"Could not delete: {e}")
         return False
 
-# ── SM-2 Spaced Repetition ────────────────────────────────────────────────────
-def sm2(card: dict, grade: int) -> dict:
-    """grade: 0=Again, 1=Hard, 2=Good, 3=Easy"""
-    interval    = card.get("interval", 1)
-    repetitions = card.get("repetitions", 0)
-    ease_factor = card.get("ease_factor", 2.5)
-    if grade == 0:
-        interval = 1; repetitions = 0
-    else:
-        if repetitions == 0:   interval = 1
-        elif repetitions == 1: interval = 6
-        else:                  interval = math.ceil(interval * ease_factor)
-        repetitions += 1
-    ef = ease_factor + (0.1 - (3 - grade) * (0.08 + (3 - grade) * 0.02))
-    ease_factor = max(1.3, round(ef, 3))
-    next_review = (datetime.now() + timedelta(days=interval)).isoformat()
-    return {**card, "interval": interval, "repetitions": repetitions,
-            "ease_factor": ease_factor, "next_review": next_review, "last_grade": grade}
-
-def fc_is_due(card: dict) -> bool:
-    if not card.get("next_review"): return True
-    return datetime.fromisoformat(card["next_review"]) <= datetime.now()
-
-def fc_days_until(card: dict) -> str:
-    if not card.get("next_review"): return "Now"
-    delta = datetime.fromisoformat(card["next_review"]) - datetime.now()
-    d = delta.days
-    return "Now" if d <= 0 else ("Tomorrow" if d == 1 else f"{d}d")
-
-# ── Flashcard Supabase ────────────────────────────────────────────────────────
-def load_flashcard_data() -> dict:
-    try:
-        sb = get_supabase()
-        r = sb.table("frca_flashcards").select("data").eq("id", 1).execute()
-        if r.data and r.data[0]["data"]:
-            d = r.data[0]["data"]
-            data = d if isinstance(d, dict) else json.loads(d)
-            # Merge in any new canonical decks not yet in stored data
-            existing_ids = {deck["id"] for deck in data.get("decks", [])}
-            for canonical in CANONICAL_DECKS:
-                if canonical["id"] not in existing_ids:
-                    data.setdefault("decks", []).append(dict(canonical))
-            return data
-    except Exception:
-        pass
-    return {"decks": [dict(d) for d in CANONICAL_DECKS]}
-
-def save_flashcard_data(fc_data: dict):
-    try:
-        sb = get_supabase()
-        sb.table("frca_flashcards").upsert({"id": 1, "data": fc_data}).execute()
-    except Exception as e:
-        st.error(f"Could not save flashcards: {e}")
-
 # ── Session Resume Supabase ───────────────────────────────────────────────────
 def save_session_state(session: dict):
+    """Persist quiz session for resume. Strips SVG data to keep payload small."""
     try:
+        import copy as _copy
+        slim = _copy.deepcopy(session)
+        for q in slim.get("queue", []):
+            q.pop("svg", None); q.pop("svg_caption", None)
+        for r in slim.get("results", []):
+            r.pop("svg", None); r.pop("svg_caption", None)
         sb = get_supabase()
         payload = {
             "id": 1,
-            "session": json.dumps(session),
+            "session": json.dumps(slim),
             "saved_at": datetime.now().isoformat(),
         }
         sb.table("session_resume").upsert(payload).execute()
-    except Exception:
-        pass
+        return True
+    except Exception as e:
+        print(f"[session_resume] save failed: {e}")
+        return False
 
 def load_saved_session() -> dict | None:
     try:
@@ -4255,6 +4170,34 @@ def clear_saved_session():
         sb.table("session_resume").upsert({"id": 1, "session": None, "saved_at": None}).execute()
     except Exception:
         pass
+
+
+# ── Flagged questions Supabase ────────────────────────────────────────────────
+def load_flags() -> list:
+    try:
+        sb = get_supabase()
+        r = sb.table("mcq_stats").select("data").eq("id", 1).execute()
+        if r.data and r.data[0]["data"]:
+            d = r.data[0]["data"]
+            data = d if isinstance(d, dict) else json.loads(d)
+            return data.get("flagged_ids", [])
+    except Exception:
+        pass
+    return []
+
+
+def save_flag(q_id: str, stats: dict):
+    flagged = stats.setdefault("flagged_ids", [])
+    if q_id not in flagged:
+        flagged.append(q_id)
+        save_stats(stats)
+
+
+def remove_flag(q_id: str, stats: dict):
+    flagged = stats.setdefault("flagged_ids", [])
+    if q_id in flagged:
+        flagged.remove(q_id)
+        save_stats(stats)
 
 
 
@@ -4282,8 +4225,6 @@ with st.sidebar:
         nav("stats")
     if st.button("Textbook", use_container_width=True):
         nav("textbook")
-    if st.button("Flashcards", use_container_width=True):
-        nav("flashcards")
 
     # Quick topic stats in sidebar
     st.markdown("""
@@ -4385,13 +4326,120 @@ if st.session_state.page == "home":
             key="cfg_timing",
         )
 
-    n_questions = st.slider("Questions", 5, 30, 10, key="cfg_n")
+    # Question count presets
+    st.markdown("""
+    <p style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);
+              text-transform:uppercase;letter-spacing:0.06em;margin:14px 0 8px;">Questions</p>
+    """, unsafe_allow_html=True)
+    preset_cols = st.columns(4)
+    preset_counts = [5, 10, 20, 30]
+    if "cfg_n" not in st.session_state:
+        st.session_state.cfg_n = 10
+    for i, (pc, pv) in enumerate(zip(preset_cols, preset_counts)):
+        with pc:
+            active = st.session_state.cfg_n == pv
+            label = f"**{pv}**" if active else str(pv)
+            if st.button(label, key=f"preset_{pv}", use_container_width=True):
+                st.session_state.cfg_n = pv
+                st.rerun()
+    n_questions = st.session_state.cfg_n
 
     st.markdown("</div>", unsafe_allow_html=True)
 
+    # ── Weak spots quick-start ─────────────────────────────────────────────────
+    topic_pcts_home = {
+        t: int(v["correct"] / v["total"] * 100)
+        for t, v in stats["topic_totals"].items()
+        if v["total"] >= 3
+    }
+    if len(topic_pcts_home) >= 2:
+        weakest_topics = sorted(topic_pcts_home, key=topic_pcts_home.get)[:2]
+        w1, w2 = weakest_topics
+        w1_pct = topic_pcts_home[w1]
+        w2_pct = topic_pcts_home[w2]
+        w_colour = "#f87171"
+        st.markdown(f"""
+        <div style="background:#1c0a0a;border:1px solid #7f1d1d;border-radius:10px;
+                    padding:16px 20px;margin-bottom:16px;display:flex;
+                    align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+            <div>
+                <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:{w_colour};
+                          text-transform:uppercase;letter-spacing:0.08em;margin:0 0 4px;">Weak spots drill</p>
+                <p style="font-size:13px;color:#e8edf5;margin:0;">
+                    {w1.split(" &")[0]} <span style="color:{w_colour};">{w1_pct}%</span>
+                    &nbsp;·&nbsp;
+                    {w2.split(" &")[0]} <span style="color:{w_colour};">{w2_pct}%</span>
+                </p>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        ws_c1, ws_c2 = st.columns(2)
+        with ws_c1:
+            if st.button(f"Drill {w1.split(' &')[0]} →", use_container_width=True, key="ws_drill1"):
+                st.session_state.cfg_topic_override = w1
+                st.session_state._start_session_now = True
+                st.rerun()
+        with ws_c2:
+            if st.button(f"Drill {w2.split(' &')[0]} →", use_container_width=True, key="ws_drill2"):
+                st.session_state.cfg_topic_override = w2
+                st.session_state._start_session_now = True
+                st.rerun()
+
+    # ── Flagged questions drill ────────────────────────────────────────────────
+    flagged_ids = stats.get("flagged_ids", [])
+    if flagged_ids:
+        st.markdown(f"""
+        <div style="background:#161b27;border:1px solid #2e3a52;border-left:3px solid #fbbf24;
+                    border-radius:6px;padding:14px 18px;margin-bottom:16px;
+                    display:flex;align-items:center;justify-content:space-between;">
+            <div>
+                <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#fbbf24;
+                          text-transform:uppercase;letter-spacing:0.08em;margin:0 0 2px;">Flagged for review</p>
+                <p style="font-size:13px;color:#e8edf5;margin:0;">{len(flagged_ids)} question{"s" if len(flagged_ids)!=1 else ""} saved</p>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button("Drill Flagged Questions →", use_container_width=True, key="drill_flagged"):
+            st.session_state._drill_flagged = True
+            st.rerun()
+
     if st.button("Start Session →", use_container_width=True):
+        st.session_state._start_session_now = True
+        st.rerun()
+
+    # ── Handle session start (normal or weak-spots override or flagged) ────────
+    if st.session_state.get("_drill_flagged"):
+        st.session_state._drill_flagged = False
+        flagged_bank = [q for q in FIXED_BANK if q["id"] in flagged_ids]
+        if flagged_bank:
+            import copy as _cp2
+            flagged_bank_shuffled = _cp2.deepcopy(flagged_bank)
+            random.shuffle(flagged_bank_shuffled)
+            st.session_state.session = {
+                "topic_filter": None,
+                "use_ai": False,
+                "ai_needed": 0,
+                "timed": False,
+                "queue": flagged_bank_shuffled,
+                "idx": 0,
+                "results": [],
+                "n_target": len(flagged_bank_shuffled),
+                "shown_ids": [q["id"] for q in flagged_bank_shuffled],
+            }
+            st.session_state.current_q = None
+            st.session_state.selected_answer = None
+            st.session_state.submitted = False
+            st.session_state.quiz_review_idx = None
+            st.session_state.mid_session_review = False
+            st.session_state.confidence_rating = None
+            nav("quiz")
+            st.rerun()
+
+    if st.session_state.get("_start_session_now"):
+        st.session_state._start_session_now = False
+        topic_override = st.session_state.pop("cfg_topic_override", None)
         # Build question queue
-        topic_filter = None if topic_choice == "All Topics" else topic_choice
+        topic_filter = topic_override or (None if topic_choice == "All Topics" else topic_choice)
 
         # Split bank into unseen-first, then seen — avoids repeats across sessions
         answered_ids = st.session_state.stats.get("answered_ids", [])
@@ -4400,12 +4448,10 @@ if st.session_state.page == "home":
         seen   = [q for q in full_bank if q["id"] in answered_ids]
 
         def interleave_topics(pool):
-            """Shuffle within each subtopic bucket then round-robin across all 26 subtopics
-            so consecutive questions are always from different subtopics."""
+            """Shuffle within each subtopic bucket then round-robin so consecutive questions differ."""
             from collections import defaultdict
             by_sub = defaultdict(list)
             for q in pool:
-                # Group by subtopic deck name; fall back to broad topic for AI questions
                 sub_key = Q_SUBTOPICS.get(q.get("id", ""), (None, q["topic"]))[1]
                 by_sub[sub_key].append(q)
             for s in by_sub:
@@ -4423,7 +4469,6 @@ if st.session_state.page == "home":
         bank = interleave_topics(unseen) + interleave_topics(seen)
 
         def shuffle_answers(q):
-            """Return a copy of q with options shuffled so correct answer lands randomly across A-E."""
             import copy
             q = copy.deepcopy(q)
             keys = list("ABCDE")
@@ -4431,7 +4476,6 @@ if st.session_state.page == "home":
             vals = list(q["options"].values())
             random.shuffle(vals)
             q["options"] = dict(zip(keys, vals))
-            # Update answer key to wherever the correct text landed
             q["answer"] = next(k for k, v in q["options"].items() if v == correct_text)
             return q
 
@@ -4461,6 +4505,7 @@ if st.session_state.page == "home":
         st.session_state.submitted = False
         st.session_state.quiz_review_idx = None
         st.session_state.mid_session_review = False
+        st.session_state.confidence_rating = None
         nav("quiz")
         st.rerun()
 
@@ -4639,14 +4684,40 @@ elif st.session_state.page == "quiz":
             if st.button("Next →", use_container_width=True, disabled=(ri == n_results - 1)):
                 st.session_state.quiz_review_idx = ri + 1
                 st.rerun()
-        if _eos_deck_id and _eos_sub_name:
-            if st.button(f"→ Go to {_eos_sub_name}", use_container_width=True, key=f"eos_deck_{ri}"):
-                st.session_state.fc_view = 'browse'
-                st.session_state.fc_active_deck_id = _eos_deck_id
-                nav('flashcards')
-                st.rerun()
 
         st.markdown("")
+        # Retry wrong answers
+        wrong_qs = [r for r in results if not r["correct"]]
+        if wrong_qs:
+            if st.button(f"Retry {len(wrong_qs)} Wrong Answer{'s' if len(wrong_qs)!=1 else ''} →",
+                         use_container_width=True, key="retry_wrong"):
+                import copy as _cp3
+                retry_bank = []
+                for r in wrong_qs:
+                    q_obj = next((q for q in FIXED_BANK if q.get("id") == r.get("id")), None)
+                    if q_obj:
+                        retry_bank.append(_cp3.deepcopy(q_obj))
+                    else:
+                        # Reconstruct from result entry for AI questions
+                        retry_bank.append({
+                            "id": r.get("id", ""), "topic": r["topic"],
+                            "question": r["question"], "options": r["options"],
+                            "answer": r["answer"], "explanation": r["explanation"],
+                        })
+                random.shuffle(retry_bank)
+                st.session_state.session = {
+                    "topic_filter": None, "use_ai": False, "ai_needed": 0, "timed": False,
+                    "queue": retry_bank, "idx": 0, "results": [],
+                    "n_target": len(retry_bank), "shown_ids": [q["id"] for q in retry_bank],
+                }
+                st.session_state.current_q = None
+                st.session_state.selected_answer = None
+                st.session_state.submitted = False
+                st.session_state.quiz_review_idx = None
+                st.session_state.confidence_rating = None
+                nav("quiz")
+                st.rerun()
+
         c1, c2 = st.columns(2)
         with c1:
             if st.button("Home", use_container_width=True):
@@ -4895,6 +4966,23 @@ elif st.session_state.page == "quiz":
                 label_visibility="collapsed",
             )
             st.markdown("")
+
+            # Confidence rating
+            st.markdown("""
+            <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;
+                      text-transform:uppercase;letter-spacing:0.06em;margin:0 0 8px;">Confidence</p>
+            """, unsafe_allow_html=True)
+            conf_cols = st.columns(3)
+            conf_labels = {1: "🤔  Not sure", 2: "🙂  Think so", 3: "✓  Certain"}
+            conf_colours = {1: "#f87171", 2: "#fbbf24", 3: "#4ade80"}
+            for ci, (cv, cl) in enumerate(conf_labels.items()):
+                with conf_cols[ci]:
+                    is_sel = st.session_state.confidence_rating == cv
+                    if st.button(cl, key=f"conf_{done}_{cv}", use_container_width=True):
+                        st.session_state.confidence_rating = cv
+                        st.rerun()
+
+            st.markdown("")
             if st.button("Submit →", use_container_width=True):
                 st.session_state.selected_answer = selected
                 st.session_state.submitted = True
@@ -4904,8 +4992,6 @@ elif st.session_state.page == "quiz":
             if session["timed"] and st.session_state.start_time:
                 if (time.time() - st.session_state.start_time) >= 90 and not st.session_state.submitted:
                     st.session_state.selected_answer = list(q["options"].keys())[0]
-                    st.session_state.submitted = True
-                    st.rerun()
                     st.session_state.submitted = True
                     st.rerun()
 
@@ -5023,1071 +5109,23 @@ Answer the student's follow-up question concisely and clearly. Focus on exam-rel
 
             # ── Save as flashcard + Go to deck ──────────────────────────────
             with chat_col2:
-                # Subtopic deck jump button (uses q_id_for_sub from header block above)
-                _sub_deck_id = Q_SUBTOPICS.get(q.get("id", ""), (None, None))[0]
-                _sub_name    = Q_SUBTOPICS.get(q.get("id", ""), (None, None))[1]
-                if _sub_deck_id and _sub_name:
-                    btn_label = f"→ {_sub_name.split('&')[0].strip()}"
-                    if st.button(btn_label, key=f"go_deck_{q_id}", use_container_width=True,
-                                 help=f"Go to {_sub_name} flashcard deck"):
-                        st.session_state.fc_view = "browse"
-                        st.session_state.fc_active_deck_id = _sub_deck_id
-                        nav("flashcards")
-                        st.rerun()
-                if st.button("+ Flashcard", key=f"fc_{q_id}", use_container_width=True):
-                    if st.session_state.fc_data is None:
-                        st.session_state.fc_data = load_flashcard_data()
-                    # Toggle editor open, reset if switching question
-                    if st.session_state.fc_editor_q_id != q_id:
-                        st.session_state.fc_editor_open = True
-                        st.session_state.fc_editor_q_id = q_id
+                # Flag for review button
+                _q_id_flag = q.get("id", "")
+                _is_flagged = _q_id_flag in st.session_state.stats.get("flagged_ids", [])
+                flag_label = "🚩 Flagged" if _is_flagged else "🚩 Flag"
+                if st.button(flag_label, key=f"flag_{q_id}", use_container_width=True):
+                    if _is_flagged:
+                        remove_flag(_q_id_flag, st.session_state.stats)
+                        st.toast("Removed from flagged questions")
                     else:
-                        st.session_state.fc_editor_open = not st.session_state.fc_editor_open
+                        save_flag(_q_id_flag, st.session_state.stats)
+                        st.toast("Flagged for review!")
                     st.rerun()
-
-            # ── Flashcard editor panel ──────────────────────────────────────
-            if st.session_state.fc_editor_open and st.session_state.fc_editor_q_id == q_id:
-                if st.session_state.fc_data is None:
-                    st.session_state.fc_data = load_flashcard_data()
-                fc_data = st.session_state.fc_data
-                decks = fc_data.get("decks", [])
-
-                default_back = q["answer"] + ". " + q["options"][q["answer"]] + "\n\n" + q["explanation"]
-
-                # Work out suggested decks for this topic
-                q_topic = q.get("topic", "")
-                q_colour = TOPICS.get(q_topic, {}).get("colour", "#4f9cf9")
-                suggestions = TOPIC_DECK_SUGGESTIONS.get(q_topic, [])
-                suggested_names = [name for _, name in suggestions]
-
-                # Build suggested deck chips HTML
-                chips_html = "".join(
-                    f'<span style="display:inline-block;background:{q_colour}18;border:1px solid {q_colour}55;' +
-                    f'border-radius:4px;padding:3px 10px;font-family:IBM Plex Mono,monospace;' +
-                    f'font-size:10px;color:{q_colour};margin:0 4px 4px 0;letter-spacing:0.04em;">{name}</span>'
-                    for _, name in suggestions
-                )
-
-                st.markdown(
-                    f'<div style="background:#161b27;border:1px solid #252e42;border-left:3px solid {q_colour};' +
-                    f'border-radius:8px;padding:16px 20px;margin:12px 0 4px;">' +
-                    f'<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">' +
-                    f'<div style="width:3px;height:14px;background:{q_colour};border-radius:2px;"></div>' +
-                    f'<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:{q_colour};' +
-                    f'text-transform:uppercase;letter-spacing:0.08em;margin:0;">Suggested decks — {q_topic}</p>' +
-                    f'</div>' +
-                    f'<div style="flex-wrap:wrap;display:flex;">{chips_html}</div>' +
-                    f'</div>',
-                    unsafe_allow_html=True
-                )
-
-                st.markdown(
-                    '<div style="background:#161b27;border:1px solid #252e42;border-radius:8px;padding:20px 24px;margin:4px 0;">',
-                    unsafe_allow_html=True
-                )
-
-                # Deck selector — pre-select first suggested deck if available
-                if decks:
-                    deck_names = [d["name"] for d in decks]
-                    # Find index of first suggested deck
-                    default_idx = 0
-                    for sname in suggested_names:
-                        if sname in deck_names:
-                            default_idx = deck_names.index(sname)
-                            break
-                    chosen_deck_name = st.selectbox(
-                        "Deck", deck_names,
-                        index=default_idx,
-                        key=f"fc_deck_sel_{q_id}",
-                        label_visibility="collapsed"
-                    )
-                    chosen_deck = next((d for d in decks if d["name"] == chosen_deck_name), decks[0])
-                    dc = chosen_deck.get("colour", "#4f9cf9")
-                    st.markdown(f'<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:{dc};margin:0 0 14px;">{len(chosen_deck["cards"])} cards in deck</p>', unsafe_allow_html=True)
-                else:
-                    st.warning("No decks found — create one in the Flashcards section first.")
-                    chosen_deck = None
-
-                st.markdown('<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 6px;">Front</p>', unsafe_allow_html=True)
-                edited_front = st.text_area(
-                    "Front", value=q["question"], height=100,
-                    key=f"fc_front_{q_id}", label_visibility="collapsed"
-                )
-
-                st.markdown('<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:0.08em;margin:6px 0;">Back</p>', unsafe_allow_html=True)
-                edited_back = st.text_area(
-                    "Back", value=default_back, height=160,
-                    key=f"fc_back_{q_id}", label_visibility="collapsed"
-                )
-
-                st.markdown("</div>", unsafe_allow_html=True)
-                st.markdown("</div>", unsafe_allow_html=True)
-
-                save_col, cancel_col = st.columns(2)
-                with save_col:
-                    if st.button("Save Card", key=f"fc_save_{q_id}", use_container_width=True,
-                                 disabled=(chosen_deck is None)):
-                        new_card = {
-                            "id": f"mcq_{uuid.uuid4().hex[:8]}",
-                            "front": edited_front.strip(),
-                            "back": edited_back.strip(),
-                            "topic": q["topic"],
-                            "interval": 1, "repetitions": 0, "ease_factor": 2.5,
-                            "next_review": None, "last_grade": None,
-                        }
-                        chosen_deck["cards"].append(new_card)
-                        save_flashcard_data(fc_data)
-                        st.session_state.fc_data = fc_data
-                        st.session_state.fc_editor_open = False
-                        st.toast(f"Saved to {chosen_deck['name']}!")
-                        st.rerun()
-                with cancel_col:
-                    if st.button("Cancel", key=f"fc_cancel_{q_id}", use_container_width=True):
-                        st.session_state.fc_editor_open = False
-                        st.rerun()
 
             st.markdown("")
 
             # ── Navigation ─────────────────────────────────────────────────
-            if st.button("Next Question →", use_container_width=True):
-                # Record result
-                result_entry = {
-                    "question": q["question"],
-                    "options": q["options"],
-                    "answer": q["answer"],
-                    "selected": sel,
-                    "correct": correct,
-                    "topic": q["topic"],
-                    "explanation": q["explanation"],
-                    "id": q.get("id", ""),
-                    "svg": q.get("svg"),
-                    "svg_caption": q.get("svg_caption"),
-                }
-                session["results"].append(result_entry)
-                session["idx"] += 1
-                # Persist this question ID so it won't be prioritised in future sessions
-                q_id = q.get("id", "")
-                if q_id and not q_id.startswith("ai_"):
-                    answered = st.session_state.stats.get("answered_ids", [])
-                    if q_id not in answered:
-                        answered.append(q_id)
-                        st.session_state.stats["answered_ids"] = answered
-                        save_stats(st.session_state.stats)
-                # Save for resume
-                save_session_state(session)
-                st.session_state.current_q = None
-                st.session_state.selected_answer = None
-                st.session_state.submitted = False
-                st.session_state.start_time = None
-                st.session_state.chat_messages = []
-                st.session_state.chat_q_id = None
-                st.rerun()
-
-
-# ─────────────────────────────────────────────────────────────────────────────
-# PAGE: STATS
-# ─────────────────────────────────────────────────────────────────────────────
-elif st.session_state.page == "stats":
-    st.markdown("""
-    <div style="padding-bottom:28px;border-bottom:1px solid #252e42;margin-bottom:28px;">
-        <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 8px;">Analytics</p>
-        <h2 style="font-family:Fraunces,serif;font-size:36px;font-weight:300;letter-spacing:-0.03em;margin:0;color:#e8edf5;">Performance</h2>
-    </div>
-    """, unsafe_allow_html=True)
-
-    total_q    = sum(v["total"] for v in stats["topic_totals"].values())
-    total_c    = sum(v["correct"] for v in stats["topic_totals"].values())
-    overall    = int(total_c / total_q * 100) if total_q else 0
-    n_sessions = len(stats["sessions"])
-
-    # ── Top metrics ──────────────────────────────────────────────────────────
-    c1, c2, c3 = st.columns(3)
-    c1.metric("Questions", total_q)
-    c2.metric("Overall", f"{overall}%")
-    c3.metric("Sessions", n_sessions)
-
-    # ── Weakest topic callout ─────────────────────────────────────────────────
-    topic_pcts = {
-        t: int(v["correct"] / v["total"] * 100) if v["total"] else None
-        for t, v in stats["topic_totals"].items()
-    }
-    scored = {t: p for t, p in topic_pcts.items() if p is not None}
-    if scored:
-        weakest = min(scored, key=scored.get)
-        strongest = max(scored, key=scored.get)
-        w_colour = TOPICS[weakest]["colour"] if weakest in TOPICS else "#f87171"
-        s_colour = TOPICS[strongest]["colour"] if strongest in TOPICS else "#4ade80"
-        wc1, wc2 = st.columns(2)
-        with wc1:
-            st.markdown(f"""
-            <div style="background:#1c0a0a;border:1px solid #7f1d1d;border-radius:10px;padding:18px 22px;margin-top:12px;">
-                <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#f87171;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 6px;">Focus here</p>
-                <p style="font-size:15px;color:#e8edf5;margin:0 0 2px;font-weight:500;">{weakest}</p>
-                <p style="font-family:Fraunces,serif;font-size:28px;font-weight:300;color:#f87171;margin:0;">{scored[weakest]}%</p>
-            </div>
-            """, unsafe_allow_html=True)
-        with wc2:
-            st.markdown(f"""
-            <div style="background:#0a1f14;border:1px solid #14532d;border-radius:10px;padding:18px 22px;margin-top:12px;">
-                <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#4ade80;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 6px;">Strongest</p>
-                <p style="font-size:15px;color:#e8edf5;margin:0 0 2px;font-weight:500;">{strongest}</p>
-                <p style="font-family:Fraunces,serif;font-size:28px;font-weight:300;color:#4ade80;margin:0;">{scored[strongest]}%</p>
-            </div>
-            """, unsafe_allow_html=True)
-
-    # ── Sparkline — last 10 sessions ─────────────────────────────────────────
-    if len(stats["sessions"]) >= 2:
-        recent_10 = stats["sessions"][-10:]
-        pts = [int(s["correct"] / s["total"] * 100) if s["total"] else 0 for s in recent_10]
-        n = len(pts)
-        W, H = 600, 80
-        x_step = W / max(n - 1, 1)
-        coords = [(i * x_step, H - (p / 100 * H)) for i, p in enumerate(pts)]
-        polyline = " ".join(f"{x:.1f},{y:.1f}" for x, y in coords)
-        # fill path
-        fill_path = f"M {coords[0][0]:.1f},{H} " + " ".join(f"L {x:.1f},{y:.1f}" for x, y in coords) + f" L {coords[-1][0]:.1f},{H} Z"
-        trend = pts[-1] - pts[0]
-        trend_c = "#4ade80" if trend >= 0 else "#f87171"
-        trend_str = f"+{trend}%" if trend >= 0 else f"{trend}%"
-        st.markdown(f"""
-        <div style="background:#161b27;border:1px solid #252e42;border-radius:10px;padding:20px 24px;margin:20px 0;">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-                <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:0.08em;margin:0;">Score trend — last {n} sessions</p>
-                <span style="font-family:IBM Plex Mono,monospace;font-size:12px;color:{trend_c};">{trend_str}</span>
-            </div>
-            <svg viewBox="0 0 {W} {H}" width="100%" height="80" preserveAspectRatio="none">
-                <defs>
-                    <linearGradient id="spark_fill" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#4f9cf9" stop-opacity="0.25"/>
-                        <stop offset="100%" stop-color="#4f9cf9" stop-opacity="0"/>
-                    </linearGradient>
-                </defs>
-                <path d="{fill_path}" fill="url(#spark_fill)"/>
-                <polyline points="{polyline}" fill="none" stroke="#4f9cf9" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
-                {"".join(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="4" fill="#4f9cf9"/>' for x, y in [coords[-1]])}
-                <line x1="0" y1="{H - 60/100*H:.1f}" x2="{W}" y2="{H - 60/100*H:.1f}"
-                      stroke="#252e42" stroke-width="1" stroke-dasharray="4,4"/>
-            </svg>
-            <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;margin:4px 0 0;text-align:right;">60% pass mark shown</p>
-        </div>
-        """, unsafe_allow_html=True)
-
-    # ── By topic ─────────────────────────────────────────────────────────────
-    st.markdown("""
-    <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;
-              text-transform:uppercase;letter-spacing:0.08em;margin:8px 0 14px;">By Topic</p>
-    """, unsafe_allow_html=True)
-
-    for topic, meta in TOPICS.items():
-        t = stats["topic_totals"].get(topic, {"correct": 0, "total": 0})
-        pct = int(t["correct"] / t["total"] * 100) if t["total"] else 0
-        c = meta["colour"]
-        st.markdown(f"""
-        <div style="background:#161b27;border:1px solid #252e42;border-radius:10px;
-                    padding:18px 22px;margin-bottom:8px;border-left:3px solid {c};">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-                <span style="font-family:IBM Plex Sans,sans-serif;font-size:15px;font-weight:400;color:#e8edf5;">{topic}</span>
-                <div style="text-align:right;">
-                    <span style="font-family:Fraunces,serif;font-size:22px;font-weight:300;color:{c};">{pct}%</span>
-                    <span style="font-family:IBM Plex Mono,monospace;font-size:11px;color:#6b7a99;margin-left:8px;">{t["correct"]}/{t["total"]}</span>
-                </div>
-            </div>
-            <div style="background:#252e42;border-radius:2px;height:4px;">
-                <div style="width:{pct}%;height:4px;background:{c};border-radius:2px;"></div>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-
-    st.markdown('<div style="height:16px;"></div>', unsafe_allow_html=True)
-    if st.button("Reset All Stats", key="reset_stats"):
-        st.session_state.stats = default_stats()
-        save_stats(st.session_state.stats)
-        st.success("Stats reset.")
-        st.rerun()
-
-
-# ─────────────────────────────────────────────────────────────────────────────
-# PAGE: TEXTBOOK
-# ─────────────────────────────────────────────────────────────────────────────
-elif st.session_state.page == "textbook":
-    import base64
-
-    st.markdown("""
-    <div style="padding-bottom:28px;border-bottom:1px solid #252e42;margin-bottom:28px;">
-        <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 8px;">Reference</p>
-        <h2 style="font-family:Fraunces,serif;font-size:36px;font-weight:300;letter-spacing:-0.03em;margin:0;color:#e8edf5;">Textbook Library</h2>
-    </div>
-    """, unsafe_allow_html=True)
-
-    # Load docs if not yet loaded
-    if st.session_state.textbook_docs is None:
-        with st.spinner("Loading library…"):
-            st.session_state.textbook_docs = load_textbook_docs()
-
-    docs = st.session_state.textbook_docs
-
-    # ── Upload section ────────────────────────────────────────────────────────
-    with st.expander("➕ Upload New Document"):
-        col_u1, col_u2 = st.columns(2)
-        with col_u1:
-            upload_name = st.text_input("Document title", placeholder="e.g. CV Physiology — Primary FRCA", key="tb_name")
-        with col_u2:
-            upload_topic = st.selectbox(
-                "Topic",
-                ["Physiology", "Pharmacology", "Physics & Clinical Measurement", "Clinical Anaesthesia", "Other"],
-                key="tb_topic"
-            )
-        uploaded_file = st.file_uploader("PDF file", type=["pdf"], key="tb_file")
-
-        if uploaded_file and upload_name.strip():
-            if st.button("Upload to Library", key="tb_upload_btn"):
-                with st.spinner("Uploading…"):
-                    raw = uploaded_file.read()
-                    b64 = base64.b64encode(raw).decode("utf-8")
-                    ok = save_textbook_doc(upload_name.strip(), upload_topic, b64)
-                    if ok:
-                        st.success(f"\'{upload_name}\' uploaded!")
-                        st.session_state.textbook_docs = None  # force reload
-                        st.rerun()
-
-    st.markdown("")
-
-    if not docs:
-        st.markdown("""
-        <div style="text-align:center;padding:60px 0;color:#6b7280;">
-            <p style="font-size:40px;margin-bottom:12px;">📄</p>
-            <p style="font-size:15px;">No documents yet — upload your first PDF above.</p>
-            <p style="font-size:13px;margin-top:8px;">Tip: Start with your CV Physiology, Pharmacology, and Physics guides.</p>
-        </div>
-        """, unsafe_allow_html=True)
-    else:
-        # Group by topic
-        from collections import defaultdict
-        by_topic = defaultdict(list)
-        for doc in docs:
-            by_topic[doc.get("topic", "Other")].append(doc)
-
-        # Check if a doc is open
-        if "open_doc_id" not in st.session_state:
-            st.session_state.open_doc_id = None
-
-        open_id = st.session_state.open_doc_id
-        open_doc = next((d for d in docs if d["id"] == open_id), None)
-
-        if open_doc:
-            # ── Split-screen: PDF + Flashcard panel ───────────────────────────
-            topic_colour = TOPICS.get(open_doc.get("topic", ""), {}).get("colour", "#4f9cf9")
-
-            # Header bar
-            hc1, hc2, hc3 = st.columns([1, 4, 2])
-            with hc1:
-                if st.button("← Back", key="tb_back"):
-                    st.session_state.open_doc_id = None
-                    st.rerun()
-            with hc2:
-                st.markdown(f"""
-                <div style="display:flex;align-items:center;gap:10px;padding:4px 0;">
-                    <div style="width:3px;height:20px;background:{topic_colour};border-radius:2px;flex-shrink:0;"></div>
-                    <span style="font-family:Fraunces,serif;font-size:20px;font-weight:300;color:#e8edf5;letter-spacing:-0.02em;">{open_doc["name"]}</span>
-                    <span style="font-family:IBM Plex Mono,monospace;font-size:10px;color:{topic_colour};border:1px solid {topic_colour}55;border-radius:3px;padding:2px 8px;flex-shrink:0;">{open_doc.get("topic","Other")}</span>
-                </div>
-                """, unsafe_allow_html=True)
-            with hc3:
-                b64 = open_doc["data"]
-                raw_bytes = base64.b64decode(b64)
-                st.download_button("Download PDF", data=raw_bytes,
-                    file_name=f"{open_doc['name'].replace(' ','_')}.pdf",
-                    mime="application/pdf", key="tb_dl", use_container_width=True)
-
-            st.markdown('<div style="border-bottom:1px solid #252e42;margin:12px 0 20px;"></div>', unsafe_allow_html=True)
-
-            # Load flashcard data
-            if st.session_state.fc_data is None:
-                st.session_state.fc_data = load_flashcard_data()
-            fc_data = st.session_state.fc_data
-            decks = fc_data.get("decks", [])
-
-            # Split layout: PDF left (60%), flashcard panel right (40%)
-            pdf_col, fc_col = st.columns([3, 2], gap="large")
-
-            with pdf_col:
-                try:
-                    from streamlit_pdf_viewer import pdf_viewer
-                    pdf_viewer(input=raw_bytes, width=700, height=860, key=f"pdf_{open_doc['id']}")
-                except ImportError:
-                    st.warning("PDF viewer not installed.")
-
-            with fc_col:
-                st.markdown("""
-                <div style="padding-bottom:12px;border-bottom:1px solid #252e42;margin-bottom:16px;">
-                    <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 4px;">Quick Add</p>
-                    <p style="font-family:Fraunces,serif;font-size:18px;font-weight:300;color:#e8edf5;margin:0;">Flashcard Panel</p>
-                </div>
-                """, unsafe_allow_html=True)
-
-                if decks:
-                    deck_names = [d["name"] for d in decks]
-                    selected_deck_name = st.selectbox("Deck", deck_names, key="tb_fc_deck", label_visibility="collapsed")
-                    active_deck = next((d for d in decks if d["name"] == selected_deck_name), decks[0])
-                    deck_colour = active_deck.get("colour", "#4f9cf9")
-                    st.markdown(f"""<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:{deck_colour};margin:0 0 16px;">{len(active_deck["cards"])} cards &middot; {sum(1 for c in active_deck["cards"] if fc_is_due(c))} due today</p>""", unsafe_allow_html=True)
-                else:
-                    st.info("No decks yet — create one in Flashcards first.")
-                    active_deck = None
-
-                st.markdown('<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 6px;">Front</p>', unsafe_allow_html=True)
-                tb_front = st.text_area("Front", height=100,
-                    placeholder="Concept or question from what you just read...",
-                    key="tb_fc_front", label_visibility="collapsed")
-
-                st.markdown('<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:0.08em;margin:6px 0;">Back</p>', unsafe_allow_html=True)
-                tb_back = st.text_area("Back", height=120,
-                    placeholder="Answer, mechanism, or key values...",
-                    key="tb_fc_back", label_visibility="collapsed")
-
-                if st.button("Save Card", key="tb_fc_save", use_container_width=True,
-                             disabled=(not (tb_front.strip() and tb_back.strip()) or active_deck is None)):
-                    new_card = {
-                        "id": str(uuid.uuid4()),
-                        "front": tb_front.strip(),
-                        "back": tb_back.strip(),
-                        "topic": open_doc.get("topic", ""),
-                        "interval": 1, "repetitions": 0, "ease_factor": 2.5,
-                        "next_review": None, "last_grade": None,
-                    }
-                    active_deck["cards"].append(new_card)
-                    save_flashcard_data(fc_data)
-                    st.session_state.fc_data = fc_data
-                    st.toast("Card saved!")
-                    st.rerun()
-
-                st.markdown('<div style="border-top:1px solid #252e42;margin:20px 0 14px;"></div>', unsafe_allow_html=True)
-                st.markdown('<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 10px;">Cards in this deck</p>', unsafe_allow_html=True)
-
-                if active_deck and active_deck["cards"]:
-                    recent_cards = list(reversed(active_deck["cards"]))[:6]
-                    for rc in recent_cards:
-                        due_colour = "#4ade80" if fc_is_due(rc) else "#6b7a99"
-                        due_label  = "Due" if fc_is_due(rc) else fc_days_until(rc)
-                        front_preview = rc["front"][:55] + ("..." if len(rc["front"]) > 55 else "")
-                        st.markdown(f"""
-                        <div style="background:#161b27;border:1px solid #252e42;border-radius:6px;padding:10px 14px;margin-bottom:6px;">
-                            <p style="font-size:13px;color:#e8edf5;margin:0 0 4px;line-height:1.4;">{front_preview}</p>
-                            <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:{due_colour};margin:0;">{due_label}</p>
-                        </div>
-                        """, unsafe_allow_html=True)
-                else:
-                    st.markdown('<p style="font-size:13px;color:#6b7a99;text-align:center;padding:20px 0;">No cards yet in this deck.</p>', unsafe_allow_html=True)
-        else:
-            # ── Library grid ─────────────────────────────────────────────────
-            topic_order = list(TOPICS.keys()) + ["Other"]
-            for topic in topic_order:
-                topic_docs = by_topic.get(topic, [])
-                if not topic_docs:
-                    continue
-
-                colour = TOPICS.get(topic, {}).get("colour", "#6b7280")
-                emoji  = TOPICS.get(topic, {}).get("emoji", "📄")
-                st.markdown(f"""
-                <div style="display:flex;align-items:center;gap:12px;margin:28px 0 12px;padding-bottom:10px;border-bottom:1px solid #252e42;">
-                    <div style="width:2px;height:20px;background:{colour};border-radius:1px;"></div>
-                    <h3 style="font-size:13px;font-weight:500;margin:0;letter-spacing:0.01em;color:#e8edf5;">{topic}</h3>
-                    <span style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;">
-                        {len(topic_docs)} doc{"s" if len(topic_docs) != 1 else ""}
-                    </span>
-                </div>
-                """, unsafe_allow_html=True)
-
-                for doc in topic_docs:
-                    uploaded_str = ""
-                    try:
-                        uploaded_str = datetime.fromisoformat(doc.get("uploaded","")).strftime("%d %b %Y")
-                    except Exception:
-                        pass
-
-                    col_info, col_open, col_del = st.columns([5, 1, 1])
-                    with col_info:
-                        st.markdown(f"""
-                        <div style="background:#161b27;border:1px solid #252e42;border-radius:6px;
-                                    padding:14px 18px;border-left:3px solid {colour};">
-                            <p style="font-size:14px;font-weight:500;margin:0 0 4px;color:#e8edf5;">{doc["name"]}</p>
-                            <p style="font-family:IBM Plex Mono,monospace;font-size:11px;color:#6b7a99;margin:0;">
-                                Uploaded {uploaded_str}
-                            </p>
-                        </div>
-                        """, unsafe_allow_html=True)
-                    with col_open:
-                        st.markdown("<div style=\"margin-top:8px;\">", unsafe_allow_html=True)
-                        if st.button("Open", key=f"open_{doc['id']}", use_container_width=True):
-                            st.session_state.open_doc_id = doc["id"]
-                            st.rerun()
-                        st.markdown("</div>", unsafe_allow_html=True)
-                    with col_del:
-                        st.markdown("<div style=\"margin-top:8px;\">", unsafe_allow_html=True)
-                        if st.button("🗑", key=f"del_tb_{doc['id']}", use_container_width=True):
-                            if delete_textbook_doc(doc["id"]):
-                                st.session_state.textbook_docs = None
-                                st.rerun()
-                        st.markdown("</div>", unsafe_allow_html=True)
-
-
-# ─────────────────────────────────────────────────────────────────────────────
-# PAGE: FLASHCARDS
-# ─────────────────────────────────────────────────────────────────────────────
-elif st.session_state.page == "flashcards":
-
-    # ── Load data ─────────────────────────────────────────────────────────────
-    if st.session_state.fc_data is None:
-        st.session_state.fc_data = load_flashcard_data()
-    fc_data = st.session_state.fc_data
-    decks = fc_data.get("decks", [])
-    if not decks:
-        decks = [
-        # ── Physiology ──────────────────────────────────────────────────────
-        {"id": "phy_resp",   "name": "Respiratory Physiology",         "colour": "#2dd4bf", "cards": []},
-        {"id": "phy_cvs",    "name": "Cardiovascular Physiology",      "colour": "#2dd4bf", "cards": []},
-        {"id": "phy_neuro",  "name": "Neurophysiology & Pain",         "colour": "#2dd4bf", "cards": []},
-        {"id": "phy_renal",  "name": "Renal & Acid-Base",              "colour": "#2dd4bf", "cards": []},
-        {"id": "phy_gi",     "name": "Hepatic, GI & Metabolic",        "colour": "#2dd4bf", "cards": []},
-        {"id": "phy_haem",   "name": "Haematology & Immunology",       "colour": "#2dd4bf", "cards": []},
-        {"id": "phy_endo",   "name": "Endocrine & Obstetric Physiology","colour": "#2dd4bf", "cards": []},
-        # ── Pharmacology ────────────────────────────────────────────────────
-        {"id": "ph_inh",     "name": "Inhalational Agents",            "colour": "#a78bfa", "cards": []},
-        {"id": "ph_iv",      "name": "IV Induction Agents & Sedatives","colour": "#a78bfa", "cards": []},
-        {"id": "ph_opioid",  "name": "Opioids & Analgesics",           "colour": "#a78bfa", "cards": []},
-        {"id": "ph_nmb",     "name": "NMBs & Reversal",                "colour": "#a78bfa", "cards": []},
-        {"id": "ph_la",      "name": "Local Anaesthetics",             "colour": "#a78bfa", "cards": []},
-        {"id": "ph_cvd",     "name": "Cardiovascular Drugs",           "colour": "#a78bfa", "cards": []},
-        {"id": "ph_other",   "name": "Antiemetics, Antacids & Other",  "colour": "#a78bfa", "cards": []},
-        # ── Physics & Clinical Measurement ──────────────────────────────────
-        {"id": "phx_elec",   "name": "Electricity, Safety & Equipment","colour": "#38bdf8", "cards": []},
-        {"id": "phx_gas",    "name": "Gas Laws & Vaporisers",          "colour": "#38bdf8", "cards": []},
-        {"id": "phx_mon",    "name": "Monitoring (CO, Neuro, Temp)",   "colour": "#38bdf8", "cards": []},
-        {"id": "phx_resp",   "name": "Respiratory Mechanics & Spirometry","colour": "#38bdf8","cards": []},
-        {"id": "phx_stats",  "name": "Statistics & Clinical Trials",   "colour": "#38bdf8", "cards": []},
-        # ── Clinical Anaesthesia ─────────────────────────────────────────────
-        {"id": "ca_airway",  "name": "Airway Anatomy & Management",    "colour": "#fb923c", "cards": []},
-        {"id": "ca_regional","name": "Regional Anatomy & Blocks",      "colour": "#fb923c", "cards": []},
-        {"id": "ca_preop",   "name": "Preoperative Assessment",        "colour": "#fb923c", "cards": []},
-        {"id": "ca_emerg",   "name": "Perioperative Emergencies",      "colour": "#fb923c", "cards": []},
-        {"id": "ca_obs",     "name": "Obstetric Anaesthesia",          "colour": "#fb923c", "cards": []},
-        {"id": "ca_paeds",   "name": "Paediatric Anaesthesia",         "colour": "#fb923c", "cards": []},
-    ]
-        fc_data["decks"] = decks
-
-    # ── Streak calculation ────────────────────────────────────────────────────
-    streak_data = fc_data.get("streak", {"last_study_date": None, "count": 0})
-    today_str = datetime.now().strftime("%Y-%m-%d")
-    yesterday_str = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
-    last_date = streak_data.get("last_study_date")
-    streak_count = streak_data.get("count", 0)
-    if last_date == today_str:
-        pass  # already studied today
-    elif last_date == yesterday_str:
-        pass  # streak intact, not yet studied today
-    elif last_date is None:
-        streak_count = 0
-    else:
-        streak_count = 0  # streak broken
-
-    fc_view = st.session_state.get("fc_view", "decks")
-
-    # ── DECK LIST VIEW ────────────────────────────────────────────────────────
-    if fc_view == "decks":
-
-        # Header
-        st.markdown("""
-        <div style="padding-bottom:24px;border-bottom:1px solid #252e42;margin-bottom:28px;">
-            <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;
-                      letter-spacing:0.1em;text-transform:uppercase;margin:0 0 8px;">Spaced Repetition</p>
-            <h2 style="font-family:Fraunces,serif;font-size:36px;font-weight:300;
-                       letter-spacing:-0.03em;margin:0;color:#e8edf5;">Flashcards</h2>
-        </div>
-        """, unsafe_allow_html=True)
-
-        # ── Streak + Study All row ────────────────────────────────────────────
-        all_due = [c for deck in decks for c in deck["cards"] if fc_is_due(c)]
-        all_due_count = len(all_due)
-        total_cards = sum(len(d["cards"]) for d in decks)
-
-        streak_icon = "🔥" if streak_count >= 1 else "○"
-        streak_label = f"{streak_count} day streak" if streak_count > 1 else ("1 day streak" if streak_count == 1 else "No streak yet")
-
-        col_streak, col_studyall = st.columns([1, 2])
-        with col_streak:
-            st.markdown(f"""
-            <div style="background:#161b27;border:1px solid #252e42;border-radius:10px;
-                        padding:18px 20px;text-align:center;">
-                <p style="font-size:28px;margin:0 0 4px;">{streak_icon}</p>
-                <p style="font-family:Fraunces,serif;font-size:24px;font-weight:300;
-                          color:#e8edf5;margin:0 0 2px;">{streak_count}</p>
-                <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;
-                          text-transform:uppercase;letter-spacing:0.06em;margin:0;">day streak</p>
-            </div>
-            """, unsafe_allow_html=True)
-        with col_studyall:
-            if all_due_count > 0:
-                st.markdown(f"""
-                <div style="background:#0a1f14;border:1.5px solid #14532d;border-radius:10px;
-                            padding:18px 20px;">
-                    <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#4ade80;
-                              text-transform:uppercase;letter-spacing:0.06em;margin:0 0 4px;">Reviews waiting</p>
-                    <p style="font-family:Fraunces,serif;font-size:32px;font-weight:300;
-                              color:#4ade80;margin:0 0 12px;line-height:1;">{all_due_count}
-                        <span style="font-size:14px;color:#6b7a99;font-family:IBM Plex Mono,monospace;">
-                            / {total_cards} cards
-                        </span>
-                    </p>
-                </div>
-                """, unsafe_allow_html=True)
-                if st.button(f"Study All Due ({all_due_count}) →", use_container_width=True, key="fc_study_all"):
-                    # Build cross-deck queue: store (deck_id, card_id) pairs
-                    import random as _random
-                    cross_queue = []
-                    for dk in decks:
-                        for c in dk["cards"]:
-                            if fc_is_due(c):
-                                cross_queue.append({"deck_id": dk["id"], "card_id": c["id"]})
-                    _random.shuffle(cross_queue)
-                    st.session_state.fc_study_queue = cross_queue
-                    st.session_state.fc_study_idx = 0
-                    st.session_state.fc_flipped = False
-                    st.session_state.fc_session_stats = {"again": 0, "hard": 0, "good": 0, "easy": 0}
-                    st.session_state.fc_active_deck_id = None  # cross-deck mode
-                    st.session_state.fc_view = "study"
-                    st.rerun()
-            else:
-                st.markdown("""
-                <div style="background:#161b27;border:1px solid #252e42;border-radius:10px;
-                            padding:18px 20px;">
-                    <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#4ade80;
-                              text-transform:uppercase;letter-spacing:0.06em;margin:0 0 4px;">All caught up</p>
-                    <p style="font-size:15px;color:#e8edf5;margin:0;">✓ No reviews due</p>
-                </div>
-                """, unsafe_allow_html=True)
-
-        st.markdown('<div style="height:12px;"></div>', unsafe_allow_html=True)
-
-        # ── New Deck ──────────────────────────────────────────────────────────
-        with st.expander("+ New Deck"):
-            nd_name   = st.text_input("Deck name", placeholder="e.g. Drug Mechanisms", key="nd_name")
-            nd_colours = {"Teal": "#2dd4bf", "Purple": "#a78bfa", "Blue": "#38bdf8",
-                          "Amber": "#fb923c", "Green": "#4ade80", "Red": "#f87171"}
-            nd_colour = st.selectbox("Colour", list(nd_colours.keys()), key="nd_colour")
-            if st.button("Create Deck", key="nd_create"):
-                if nd_name.strip():
-                    new_deck = {"id": str(uuid.uuid4()), "name": nd_name.strip(),
-                                "colour": nd_colours[nd_colour], "cards": []}
-                    fc_data["decks"].append(new_deck)
-                    save_flashcard_data(fc_data)
-                    st.session_state.fc_data = fc_data
-                    st.success(f"Deck '{nd_name}' created!")
-                    st.rerun()
-
-        st.markdown('<div style="height:8px;"></div>', unsafe_allow_html=True)
-
-        # ── Deck cards ────────────────────────────────────────────────────────
-        for deck in decks:
-            total  = len(deck["cards"])
-            due    = sum(1 for c in deck["cards"] if fc_is_due(c))
-            colour = deck.get("colour", "#4f9cf9")
-            learned = sum(1 for c in deck["cards"] if c.get("interval", 1) > 1)
-            mastery_pct = int(learned / total * 100) if total > 0 else 0
-
-            # Next review time when nothing due
-            if due == 0 and total > 0:
-                future_cards = [c for c in deck["cards"] if c.get("next_review")]
-                if future_cards:
-                    next_dt = min(datetime.fromisoformat(c["next_review"]) for c in future_cards)
-                    delta = next_dt - datetime.now()
-                    hrs = int(delta.total_seconds() / 3600)
-                    if hrs < 1:
-                        next_str = "< 1 hour"
-                    elif hrs < 24:
-                        next_str = f"{hrs}h"
-                    else:
-                        next_str = f"{delta.days}d"
-                    due_display = f"Next in {next_str}"
-                else:
-                    due_display = "No reviews scheduled"
-            else:
-                due_display = None
-
-            # Progress ring SVG
-            r = 18
-            circ = 2 * 3.14159 * r
-            filled = circ * mastery_pct / 100
-            ring_svg = (
-                f'<svg width="44" height="44" viewBox="0 0 44 44">'
-                f'<circle cx="22" cy="22" r="{r}" fill="none" stroke="#252e42" stroke-width="3"/>'
-                f'<circle cx="22" cy="22" r="{r}" fill="none" stroke="{colour}" stroke-width="3"'
-                f' stroke-dasharray="{filled:.1f} {circ:.1f}" stroke-linecap="round"'
-                f' transform="rotate(-90 22 22)"/>'
-                f'<text x="22" y="27" text-anchor="middle" font-family="IBM Plex Mono" font-size="9"'
-                f' fill="{colour}">{mastery_pct}%</text>'
-                f'</svg>'
-            )
-
-            # Deck card HTML
-            if due > 0:
-                due_html = (
-                    f'<p style="font-family:Fraunces,serif;font-size:36px;font-weight:300;'
-                    f'color:{colour};margin:0 0 2px;line-height:1;">{due}</p>'
-                    f'<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;'
-                    f'text-transform:uppercase;letter-spacing:0.06em;margin:0;">due</p>'
-                )
-            else:
-                due_html = (
-                    f'<p style="font-size:22px;margin:0 0 2px;">✓</p>'
-                    f'<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#4ade80;margin:0;">'
-                    + (due_display or "all done") + '</p>'
-                )
-
-            st.markdown(
-                f'<div style="background:#161b27;border:1px solid {"#" + colour.lstrip("#") if due > 0 else "252e42"};'
-                f'border-radius:12px;padding:20px 24px;margin-bottom:6px;border-left:3px solid {colour};">'
-                f'<div style="display:flex;align-items:center;justify-content:space-between;">'
-                f'<div style="flex:1;">'
-                f'<p style="font-size:16px;font-weight:500;color:#e8edf5;margin:0 0 3px;">{deck["name"]}</p>'
-                f'<p style="font-family:IBM Plex Mono,monospace;font-size:11px;color:#6b7a99;margin:0;">'
-                f'{total} cards</p>'
-                f'</div>'
-                f'<div style="display:flex;align-items:center;gap:20px;">'
-                f'{ring_svg}'
-                f'<div style="text-align:center;min-width:52px;">{due_html}</div>'
-                f'</div>'
-                f'</div>'
-                f'</div>',
-                unsafe_allow_html=True
-            )
-
-            # Action row — Study CTA dominant, rest in a slim row
-            if due > 0:
-                btn_study, btn_browse, btn_add, btn_del = st.columns([3, 1, 1, 1])
-            else:
-                btn_study, btn_browse, btn_add, btn_del = st.columns([3, 1, 1, 1])
-
-            with btn_study:
-                study_label = f"Study {due} due →" if due > 0 else "Browse cards"
-                if st.button(study_label, key=f"fc_study_{deck['id']}", use_container_width=True):
-                    if due > 0:
-                        due_cards = [c for c in deck["cards"] if fc_is_due(c)]
-                        st.session_state.fc_study_queue = [{"deck_id": deck["id"], "card_id": c["id"]} for c in due_cards]
-                        st.session_state.fc_study_idx = 0
-                        st.session_state.fc_flipped = False
-                        st.session_state.fc_session_stats = {"again": 0, "hard": 0, "good": 0, "easy": 0}
-                        st.session_state.fc_active_deck_id = deck["id"]
-                        st.session_state.fc_view = "study"
-                        st.rerun()
-                    else:
-                        st.session_state.fc_active_deck_id = deck["id"]
-                        st.session_state.fc_view = "browse"
-                        st.rerun()
-            with btn_browse:
-                if st.button("Browse", key=f"fc_browse_{deck['id']}", use_container_width=True):
-                    st.session_state.fc_active_deck_id = deck["id"]
-                    st.session_state.fc_view = "browse"
-                    st.rerun()
-            with btn_add:
-                if st.button("+ Card", key=f"fc_add_{deck['id']}", use_container_width=True):
-                    st.session_state.fc_active_deck_id = deck["id"]
-                    st.session_state.fc_view = "add"
-                    st.rerun()
-            with btn_del:
-                if st.button("🗑", key=f"fc_del_{deck['id']}", use_container_width=True):
-                    fc_data["decks"] = [d for d in fc_data["decks"] if d["id"] != deck["id"]]
-                    save_flashcard_data(fc_data)
-                    st.session_state.fc_data = fc_data
-                    st.rerun()
-
-            st.markdown('<div style="height:4px;"></div>', unsafe_allow_html=True)
-
-    # ── ADD CARD VIEW ─────────────────────────────────────────────────────────
-    elif fc_view == "add":
-        deck = next((d for d in decks if d["id"] == st.session_state.get("fc_active_deck_id")), decks[0])
-        colour = deck.get("colour", "#4f9cf9")
-        if st.button("← Decks", key="fc_back_add"):
-            st.session_state.fc_view = "decks"
-            st.rerun()
-        st.markdown(
-            f'<div style="margin:16px 0 24px;">'
-            f'<div style="display:flex;align-items:center;gap:10px;">'
-            f'<div style="width:3px;height:20px;background:{colour};border-radius:2px;"></div>'
-            f'<p style="font-family:Fraunces,serif;font-size:22px;font-weight:300;color:#e8edf5;margin:0;">Add Card — {deck["name"]}</p>'
-            f'</div></div>',
-            unsafe_allow_html=True
-        )
-        fc1, fc2 = st.columns(2)
-        with fc1:
-            st.markdown('<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Front</p>', unsafe_allow_html=True)
-            new_front = st.text_area("Front", height=160, placeholder="Question or concept...", key="fc_new_front", label_visibility="collapsed")
-        with fc2:
-            st.markdown('<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Back</p>', unsafe_allow_html=True)
-            new_back  = st.text_area("Back",  height=160, placeholder="Answer or explanation...", key="fc_new_back",  label_visibility="collapsed")
-        st.markdown("")
-        if st.button("Save Card", use_container_width=True, key="fc_save_card",
-                     disabled=not (new_front.strip() and new_back.strip())):
-            card = {"id": str(uuid.uuid4()), "front": new_front.strip(), "back": new_back.strip(),
-                    "topic": deck["name"], "interval": 1, "repetitions": 0,
-                    "ease_factor": 2.5, "next_review": None, "last_grade": None}
-            deck["cards"].append(card)
-            save_flashcard_data(fc_data)
-            st.session_state.fc_data = fc_data
-            st.toast("Card saved!")
-            st.rerun()
-
-    # ── BROWSE VIEW ───────────────────────────────────────────────────────────
-    elif fc_view == "browse":
-        deck = next((d for d in decks if d["id"] == st.session_state.get("fc_active_deck_id")), decks[0])
-        colour = deck.get("colour", "#4f9cf9")
-        b_col1, b_col2 = st.columns([1, 4])
-        with b_col1:
-            if st.button("← Decks", key="fc_back_browse"):
-                st.session_state.fc_view = "decks"
-                st.rerun()
-        with b_col2:
-            st.markdown(
-                f'<div style="display:flex;align-items:center;gap:10px;padding:4px 0;">'
-                f'<div style="width:3px;height:18px;background:{colour};border-radius:2px;"></div>'
-                f'<p style="font-family:Fraunces,serif;font-size:20px;font-weight:300;color:#e8edf5;margin:0;">{deck["name"]}</p>'
-                f'<span style="font-family:IBM Plex Mono,monospace;font-size:11px;color:#6b7a99;">'
-                f'{len(deck["cards"])} cards &middot; {sum(1 for c in deck["cards"] if fc_is_due(c))} due</span>'
-                f'</div>',
-                unsafe_allow_html=True
-            )
-        st.markdown('<div style="height:12px;"></div>', unsafe_allow_html=True)
-
-        if not deck["cards"]:
-            st.markdown('<p style="color:#6b7a99;text-align:center;padding:60px 0;">No cards yet — add your first one.</p>', unsafe_allow_html=True)
-            if st.button("+ Add Card", use_container_width=True, key="browse_add_cta"):
-                st.session_state.fc_view = "add"
-                st.rerun()
-        else:
-            for card in deck["cards"]:
-                is_due = fc_is_due(card)
-                due_label = "Due now" if is_due else fc_days_until(card)
-                badge_c = "#4ade80" if is_due else "#6b7a99"
-                with st.expander(card["front"][:80] + ("…" if len(card["front"]) > 80 else "")):
-                    bc1, bc2 = st.columns(2)
-                    with bc1:
-                        st.markdown('<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Front</p>', unsafe_allow_html=True)
-                        st.markdown(f'<div style="background:#1e2535;border:1px solid #252e42;border-radius:8px;padding:14px;font-size:14px;color:#e8edf5;line-height:1.6;white-space:pre-wrap;">{card["front"]}</div>', unsafe_allow_html=True)
-                    with bc2:
-                        st.markdown('<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Back</p>', unsafe_allow_html=True)
-                        st.markdown(f'<div style="background:#1e2535;border:1px solid #252e42;border-radius:8px;padding:14px;font-size:14px;color:#e8edf5;line-height:1.6;white-space:pre-wrap;">{card["back"]}</div>', unsafe_allow_html=True)
-                    st.markdown(
-                        f'<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:{badge_c};margin-top:10px;">'
-                        f'{due_label} &middot; interval {card.get("interval",1)}d &middot; EF {card.get("ease_factor",2.5):.2f}</p>',
-                        unsafe_allow_html=True
-                    )
-                    if st.button("Delete card", key=f"fc_del_card_{card['id']}"):
-                        deck["cards"] = [c for c in deck["cards"] if c["id"] != card["id"]]
-                        save_flashcard_data(fc_data)
-                        st.session_state.fc_data = fc_data
-                        st.rerun()
-
-    # ── STUDY VIEW ────────────────────────────────────────────────────────────
-    elif fc_view == "study":
-        queue   = st.session_state.fc_study_queue   # list of {deck_id, card_id}
-        idx     = st.session_state.fc_study_idx
-        ss      = st.session_state.fc_session_stats
-
-        # Support old format (list of strings) gracefully
-        if queue and isinstance(queue[0], str):
-            active_deck_id = st.session_state.get("fc_active_deck_id")
-            queue = [{"deck_id": active_deck_id, "card_id": cid} for cid in queue]
-            st.session_state.fc_study_queue = queue
-
-        # ── Session complete ──────────────────────────────────────────────────
-        if not queue or idx >= len(queue):
-            total_reviewed = idx
-
-            # Update streak
-            streak_data2 = fc_data.get("streak", {"last_study_date": None, "count": 0})
-            today_s = datetime.now().strftime("%Y-%m-%d")
-            yest_s  = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
-            last_s  = streak_data2.get("last_study_date")
-            cnt     = streak_data2.get("count", 0)
-            if last_s == today_s:
-                pass
-            elif last_s == yest_s:
-                cnt += 1
-            elif last_s is None:
-                cnt = 1
-            else:
-                cnt = 1
-            streak_data2 = {"last_study_date": today_s, "count": cnt}
-            fc_data["streak"] = streak_data2
-            save_flashcard_data(fc_data)
-            st.session_state.fc_data = fc_data
-
-            total_correct = ss["good"] + ss["easy"]
-            pct = int(total_correct / total_reviewed * 100) if total_reviewed else 0
-
-            st.markdown(f"""
-            <div style="text-align:center;padding:48px 0 36px;">
-                <p style="font-size:40px;margin:0 0 8px;">{"🔥" if cnt >= 2 else "✓"}</p>
-                <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;
-                          letter-spacing:0.1em;text-transform:uppercase;margin:0 0 12px;">Session complete</p>
-                <h2 style="font-family:Fraunces,serif;font-size:64px;font-weight:300;
-                           letter-spacing:-0.04em;margin:0 0 4px;color:#4ade80;line-height:1;">{total_reviewed}</h2>
-                <p style="font-size:14px;color:#6b7a99;margin:0 0 6px;">cards reviewed</p>
-                <p style="font-family:IBM Plex Mono,monospace;font-size:12px;color:#e8edf5;">
-                    {cnt} day streak 🔥</p>
-            </div>
-            """, unsafe_allow_html=True)
-
-            sc1, sc2, sc3, sc4 = st.columns(4)
-            for col, (label, key, col_c) in zip(
-                [sc1, sc2, sc3, sc4],
-                [("Again", "again", "#f87171"), ("Hard", "hard", "#fb923c"),
-                 ("Good",  "good",  "#fbbf24"), ("Easy", "easy",  "#4ade80")]
-            ):
-                with col:
-                    st.markdown(f"""
-                    <div style="background:#161b27;border:1px solid #252e42;border-radius:10px;
-                                padding:16px;text-align:center;">
-                        <p style="font-family:Fraunces,serif;font-size:32px;font-weight:300;
-                                  color:{col_c};margin:0 0 4px;">{ss[key]}</p>
-                        <p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;
-                                  text-transform:uppercase;letter-spacing:0.06em;margin:0;">{label}</p>
-                    </div>
-                    """, unsafe_allow_html=True)
-
-            st.markdown('<div style="height:20px;"></div>', unsafe_allow_html=True)
-            if st.button("Back to Decks →", use_container_width=True, key="fc_back_done"):
-                st.session_state.fc_view = "decks"
-                st.session_state.fc_study_queue = []
-                st.session_state.fc_study_idx = 0
-                st.session_state.fc_session_stats = {"again": 0, "hard": 0, "good": 0, "easy": 0}
-                st.rerun()
-
-        else:
-            # ── Active card ───────────────────────────────────────────────────
-            item     = queue[idx]
-            deck_id  = item["deck_id"]
-            card_id  = item["card_id"]
-            deck     = next((d for d in decks if d["id"] == deck_id), decks[0])
-            card     = next((c for c in deck["cards"] if c["id"] == card_id), None)
-
-            if not card:
-                st.session_state.fc_study_idx += 1
-                st.rerun()
-
-            colour = TOPICS.get(card.get("topic", ""), {}).get("colour", deck.get("colour", "#4f9cf9"))
-
-            # Progress bar + counter
-            prog_pct = int(idx / len(queue) * 100)
-            st.markdown(
-                f'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">'
-                f'<span style="font-family:IBM Plex Mono,monospace;font-size:11px;color:#6b7a99;">'
-                f'{idx + 1} / {len(queue)}</span>'
-                f'<span style="font-family:IBM Plex Mono,monospace;font-size:11px;color:{colour};">'
-                f'{deck["name"]}</span>'
-                f'</div>'
-                f'<div style="background:#252e42;border-radius:2px;height:3px;margin-bottom:28px;">'
-                f'<div style="width:{prog_pct}%;height:3px;background:{colour};border-radius:2px;"></div>'
-                f'</div>',
-                unsafe_allow_html=True
-            )
-
-            if not st.session_state.fc_flipped:
-                # ── Front ─────────────────────────────────────────────────────
-                st.markdown(
-                    f'<div style="background:#161b27;border:1px solid #252e42;border-radius:12px;'
-                    f'padding:48px 40px;text-align:center;min-height:240px;border-top:3px solid {colour};">'
-                    f'<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;'
-                    f'text-transform:uppercase;letter-spacing:0.08em;margin:0 0 24px;">Question</p>'
-                    f'<p style="font-family:Fraunces,serif;font-size:22px;font-weight:300;'
-                    f'line-height:1.6;color:#e8edf5;margin:0;white-space:pre-wrap;">{card["front"]}</p>'
-                    f'</div>',
-                    unsafe_allow_html=True
-                )
-                st.markdown('<div style="height:16px;"></div>', unsafe_allow_html=True)
-                if st.button("Reveal Answer →", use_container_width=True, key="fc_reveal"):
-                    st.session_state.fc_flipped = True
-                    st.rerun()
-
-            else:
-                # ── Back ──────────────────────────────────────────────────────
-                st.markdown(
-                    f'<div style="background:#161b27;border:1.5px solid {colour};border-radius:12px;'
-                    f'padding:48px 40px;min-height:240px;">'
-                    f'<p style="font-family:IBM Plex Mono,monospace;font-size:10px;color:#6b7a99;'
-                    f'text-transform:uppercase;letter-spacing:0.08em;margin:0 0 20px;">Answer</p>'
-                    f'<p style="font-family:IBM Plex Sans,sans-serif;font-size:16px;'
-                    f'line-height:1.8;color:#e8edf5;margin:0;white-space:pre-wrap;">{card["back"]}</p>'
-                    f'</div>',
-                    unsafe_allow_html=True
-                )
-                st.markdown('<div style="height:16px;"></div>', unsafe_allow_html=True)
-                st.markdown('<p style="font-family:IBM Plex Mono,monospace;font-size:11px;color:#6b7a99;text-align:center;margin-bottom:14px;">How well did you know this?</p>', unsafe_allow_html=True)
-
-                ef   = card.get("ease_factor", 2.5)
-                intv = card.get("interval", 1)
-                previews = ["< 1d", "tomorrow", f"{max(1,round(intv*ef))}d", f"{max(1,round(intv*ef*1.3))}d"]
-                grades   = [("Again", "again", 0, "#f87171"),
-                            ("Hard",  "hard",  1, "#fb923c"),
-                            ("Good",  "good",  2, "#fbbf24"),
-                            ("Easy",  "easy",  3, "#4ade80")]
-
-                # Style each grade button by its key using Streamlit's element id
-                # Inject CSS that targets buttons inside each column slot
-                st.markdown(f"""<style>
-                /* Grade button shared */
-                [data-testid="stHorizontalBlock"] .stButton > button {{
-                    padding: 14px 8px !important;
-                    min-height: 68px !important;
-                    white-space: pre-line !important;
-                    line-height: 1.5 !important;
-                    font-size: 13px !important;
-                    text-align: center !important;
-                }}
-                /* Again — col 1 */
-                [data-testid="stHorizontalBlock"] > div:nth-child(1) .stButton > button {{
-                    border-color: #f87171 !important; color: #f87171 !important;
-                }}
-                [data-testid="stHorizontalBlock"] > div:nth-child(1) .stButton > button:hover {{
-                    background: #f8717122 !important;
-                }}
-                /* Hard — col 2 */
-                [data-testid="stHorizontalBlock"] > div:nth-child(2) .stButton > button {{
-                    border-color: #fb923c !important; color: #fb923c !important;
-                }}
-                [data-testid="stHorizontalBlock"] > div:nth-child(2) .stButton > button:hover {{
-                    background: #fb923c22 !important;
-                }}
-                /* Good — col 3 */
-                [data-testid="stHorizontalBlock"] > div:nth-child(3) .stButton > button {{
-                    border-color: #fbbf24 !important; color: #fbbf24 !important;
-                }}
-                [data-testid="stHorizontalBlock"] > div:nth-child(3) .stButton > button:hover {{
-                    background: #fbbf2422 !important;
-                }}
-                /* Easy — col 4 */
-                [data-testid="stHorizontalBlock"] > div:nth-child(4) .stButton > button {{
-                    border-color: #4ade80 !important; color: #4ade80 !important;
-                }}
-                [data-testid="stHorizontalBlock"] > div:nth-child(4) .stButton > button:hover {{
-                    background: #4ade8022 !important;
-                }}
-                </style>""", unsafe_allow_html=True)
-
-                g_cols = st.columns(4)
-                for col, (label, key, grade, col_c) in zip(g_cols, grades):
-                    with col:
-                        if st.button(f"{previews[grade]}\n{label}", key=f"fc_grade_{grade}", use_container_width=True):
-                            updated = sm2(card, grade)
-                            card_idx = next((i for i, c in enumerate(deck["cards"]) if c["id"] == card["id"]), None)
-                            if card_idx is not None:
-                                deck["cards"][card_idx] = updated
-                            save_flashcard_data(fc_data)
-                            st.session_state.fc_data = fc_data
-                            st.session_state.fc_session_stats[key] += 1
-                            st.session_state.fc_study_idx += 1
-                            st.session_state.fc_flipped = False
-                            st.rerun()
-
-    # Persist fc_view in session state
-    if "fc_view" not in st.session_state:
-        st.session_state.fc_view = "decks"
+            nav_c1, nav_c2 = st.columns([3, 1])
+            with nav_c1:
+                if st.button("Next Question →", use_container_width=True):
+            
